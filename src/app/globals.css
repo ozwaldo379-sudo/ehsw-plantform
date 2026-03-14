@@ -1,0 +1,331 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+@import "../styles/animations.css";
+
+/* ============================================
+   EHSW² Design System — Dark Premium Theme
+   ============================================ */
+
+@theme {
+  /* ─── Core Palette ─── */
+  --color-bg-dark: #0f172a;
+  --color-bg-card: #1e293b;
+  --color-bg-elevated: #283548;
+  --color-primary: #38bdf8;
+  --color-primary-hover: #0ea5e9;
+  --color-primary-muted: rgba(56, 189, 248, 0.1);
+  --color-accent: #2dd4bf;
+  --color-accent-hover: #14b8a6;
+  --color-accent-muted: rgba(45, 212, 191, 0.1);
+  --color-text-main: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-text-subtle: #64748b;
+  --color-glass-bg: rgba(30, 41, 59, 0.7);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-border-hover: rgba(255, 255, 255, 0.15);
+
+  /* ─── Semantic Colors ─── */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
+
+  /* ─── Typography ─── */
+  --font-heading: "Outfit", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-display: "Playfair Display", serif;
+
+  /* ─── Fluid Typography ─── */
+  --text-xs: clamp(0.694rem, 0.05vw + 0.68rem, 0.75rem);
+  --text-sm: clamp(0.8rem, 0.1vw + 0.78rem, 0.875rem);
+  --text-base: clamp(0.875rem, 0.15vw + 0.85rem, 1rem);
+  --text-lg: clamp(1rem, 0.2vw + 0.95rem, 1.125rem);
+  --text-xl: clamp(1.125rem, 0.3vw + 1.05rem, 1.25rem);
+  --text-2xl: clamp(1.35rem, 0.5vw + 1.2rem, 1.5rem);
+  --text-3xl: clamp(1.6rem, 0.8vw + 1.35rem, 1.875rem);
+  --text-4xl: clamp(1.9rem, 1.2vw + 1.5rem, 2.25rem);
+  --text-5xl: clamp(2.2rem, 2vw + 1.5rem, 3rem);
+  --text-6xl: clamp(2.5rem, 3vw + 1.5rem, 3.75rem);
+  --text-7xl: clamp(3rem, 4vw + 1.5rem, 4.5rem);
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-heading);
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+p, li, input, select, textarea, label {
+  font-family: var(--font-body);
+}
+
+/* ─── Text Selection ─── */
+::selection {
+  background-color: rgba(56, 189, 248, 0.25);
+  color: var(--color-text-main);
+}
+
+/* ─── Focus Visible ─── */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   Glassmorphism Utilities
+   ============================================ */
+.glass-card {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.glass-nav {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-glass-border);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #0ea5e9 0%, #2dd4bf 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+.gradient-main {
+  background: linear-gradient(135deg, #0ea5e9 0%, #2dd4bf 100%);
+}
+
+/* ============================================
+   Button Styles
+   ============================================ */
+.btn-primary {
+  background: linear-gradient(135deg, #0ea5e9 0%, #2dd4bf 100%);
+  color: #0f172a;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-heading);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-text-main);
+  border: 1px solid var(--color-glass-border);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   Hero Grid Background
+   ============================================ */
+.hero-grid-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: 0;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+}
+
+/* ============================================
+   Service Cards
+   ============================================ */
+.service-mini-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid var(--color-glass-border);
+  padding: 1.5rem;
+  border-radius: 16px;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.service-mini-card:hover {
+  background: var(--color-bg-card);
+  transform: translateY(-4px);
+}
+
+/* ============================================
+   Norm Items
+   ============================================ */
+.norm-item {
+  font-family: monospace;
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--color-glass-border);
+  border-radius: 8px;
+  background: var(--color-bg-dark);
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.norm-item:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ============================================
+   Contact Form
+   ============================================ */
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  padding: 1rem;
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 8px;
+  color: white;
+  font-family: var(--font-body);
+  transition: border-color 0.3s;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(45, 212, 191, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(45, 212, 191, 0.6); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ============================================
+   Certificate Result
+   ============================================ */
+.cert-valid {
+  background-color: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #4ade80;
+}
+
+.cert-expired {
+  background-color: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--color-warning);
+}
+
+.cert-invalid {
+  background-color: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  color: #f87171;
+}
+
+/* ============================================
+   Admin Sidebar
+   ============================================ */
+.admin-sidebar {
+  background: var(--color-bg-card);
+  border-right: 1px solid var(--color-glass-border);
+  min-height: 100vh;
+}
+
+.admin-sidebar a {
+  transition: all 0.2s;
+}
+
+.admin-sidebar a:hover {
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.admin-sidebar a.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-right: 3px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-bg-card);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}

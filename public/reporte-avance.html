@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EHSW² — Informe de Avance del Proyecto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        /* ════════════════════════════════════════════
+           EHSW² Design System — Tokens
+           ════════════════════════════════════════════ */
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-elevated: #283548;
+            --primary: #38bdf8;
+            --primary-hover: #0ea5e9;
+            --accent: #2dd4bf;
+            --accent-hover: #14b8a6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-subtle: #64748b;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        /* ════════════════════════════════════════════
+           Reset & Base
+           ════════════════════════════════════════════ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        ::selection {
+            background: rgba(56, 189, 248, 0.25);
+            color: var(--text-main);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--bg-card); border-radius: 3px; }
+
+        /* ════════════════════════════════════════════
+           Layout
+           ════════════════════════════════════════════ */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ════════════════════════════════════════════
+           Header
+           ════════════════════════════════════════════ */
+        .report-header {
+            padding: 48px 0 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(56,189,248,0.12) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(45,212,191,0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .brand {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
+            position: relative;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .brand sup {
+            color: var(--primary);
+            font-size: 0.6em;
+        }
+
+        .report-title {
+            font-family: var(--font-heading);
+            font-size: clamp(1.4rem, 3vw, 1.75rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+            animation: fadeInDown 0.8s ease-out 0.15s both;
+        }
+
+        .report-date {
+            color: var(--text-subtle);
+            font-size: 0.8rem;
+            animation: fadeInDown 0.8s ease-out 0.3s both;
+        }
+
+        /* ════════════════════════════════════════════
+           Overall Progress Ring
+           ════════════════════════════════════════════ */
+        .progress-hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            padding: 40px 0;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .ring-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+        }
+
+        .ring-svg {
+            transform: rotate(-90deg);
+            width: 180px;
+            height: 180px;
+        }
+
+        .ring-bg {
+            fill: none;
+            stroke: var(--bg-card);
+            stroke-width: 10;
+        }
+
+        .ring-fill {
+            fill: none;
+            stroke: url(#gradient);
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            animation: ring-progress 2s ease-out 0.8s forwards;
+        }
+
+        @keyframes ring-progress {
+            to { stroke-dashoffset: 88; }
+        }
+
+        .ring-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ring-percent {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1;
+        }
+
+        .ring-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-top: 4px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            backdrop-filter: blur(12px);
+            text-align: center;
+            min-width: 130px;
+        }
+
+        .stat-number {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 2px;
+        }
+
+        /* ════════════════════════════════════════════
+           Section
+           ════════════════════════════════════════════ */
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        /* ════════════════════════════════════════════
+           Phase Cards
+           ════════════════════════════════════════════ */
+        .phase-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(12px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .phase-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        .phase-card.visible {
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .phase-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .phase-number {
+            font-family: var(--font-heading);
+            font-size: 0.65rem;
+            font-weight: 700;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .phase-name {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: white;
+        }
+
+        .status-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .status-done {
+            background: rgba(34, 197, 94, 0.12);
+            color: var(--success);
+            border: 1px solid rgba(34,197,94,0.2);
+        }
+
+        .status-progress {
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--primary);
+            border: 1px solid rgba(56,189,248,0.2);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .status-pending {
+            background: rgba(100, 116, 139, 0.12);
+            color: var(--text-subtle);
+            border: 1px solid rgba(100,116,139,0.2);
+        }
+
+        /* Phase number colors */
+        .pn-done { background: rgba(34,197,94,0.15); color: var(--success); }
+        .pn-progress { background: rgba(56,189,248,0.15); color: var(--primary); }
+        .pn-pending { background: rgba(100,116,139,0.15); color: var(--text-subtle); }
+
+        /* ─── Progress bar ─── */
+        .phase-progress {
+            height: 4px;
+            background: var(--bg-dark);
+            border-radius: 2px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .phase-progress-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 1.5s ease-out;
+        }
+
+        /* ─── Task list ─── */
+        .task-list {
+            list-style: none;
+            display: grid;
+            gap: 6px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .task-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.55rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .ti-done { background: rgba(34,197,94,0.15); color: var(--success); }
+        .ti-progress { background: rgba(56,189,248,0.15); color: var(--primary); animation: pulse-glow 2s ease-in-out infinite; }
+        .ti-pending { background: rgba(100,116,139,0.15); color: var(--text-subtle); }
+
+        .task-item.done .task-text { color: var(--text-muted); }
+        .task-item.progress .task-text { color: white; font-weight: 500; }
+        .task-item.pending .task-text { color: var(--text-subtle); }
+
+        /* ════════════════════════════════════════════
+           Timeline
+           ════════════════════════════════════════════ */
+        .timeline {
+            position: relative;
+            padding-left: 28px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 4px;
+            bottom: 4px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent), var(--text-subtle));
+            border-radius: 1px;
+        }
+
+        .tl-item {
+            position: relative;
+            padding-bottom: 20px;
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .tl-item.visible {
+            animation: slideRight 0.5s ease-out forwards;
+        }
+
+        .tl-dot {
+            position: absolute;
+            left: -24px;
+            top: 3px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid;
+        }
+
+        .tl-dot.done { border-color: var(--success); background: rgba(34,197,94,0.3); }
+        .tl-dot.current { border-color: var(--primary); background: rgba(56,189,248,0.3); animation: pulse-glow 2s ease-in-out infinite; }
+        .tl-dot.future { border-color: var(--text-subtle); background: rgba(100,116,139,0.2); }
+
+        .tl-date {
+            font-size: 0.7rem;
+            color: var(--text-subtle);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .tl-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .tl-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* ════════════════════════════════════════════
+           Pending items
+           ════════════════════════════════════════════ */
+        .pending-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .pending-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            backdrop-filter: blur(12px);
+            border-left: 3px solid;
+        }
+
+        .pending-card.high { border-left-color: var(--warning); }
+        .pending-card.medium { border-left-color: var(--info); }
+        .pending-card.low { border-left-color: var(--text-subtle); }
+
+        .pc-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .pc-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .pc-priority {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 8px;
+        }
+
+        .pc-priority.high { color: var(--warning); }
+        .pc-priority.medium { color: var(--info); }
+        .pc-priority.low { color: var(--text-subtle); }
+
+        /* ════════════════════════════════════════════
+           Footer
+           ════════════════════════════════════════════ */
+        .report-footer {
+            text-align: center;
+            padding: 32px 0 48px;
+            color: var(--text-subtle);
+            font-size: 0.7rem;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 24px;
+        }
+
+        /* ════════════════════════════════════════════
+           Animations
+           ════════════════════════════════════════════ */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideRight {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 4px rgba(56,189,248,0.2); }
+            50% { box-shadow: 0 0 16px rgba(56,189,248,0.4); }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ════════════════════════════════════════════
+           Responsive
+           ════════════════════════════════════════════ */
+        @media (max-width: 640px) {
+            .progress-hero { gap: 24px; flex-direction: column; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .phase-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ═══ HEADER ═══ -->
+        <header class="report-header">
+            <div class="brand">EHSW<sup>2</sup></div>
+            <h1 class="report-title">Informe de Avance del Proyecto</h1>
+            <p class="report-date">Generado el 12 de marzo de 2026 — Primera Generación</p>
+        </header>
+
+        <!-- ═══ OVERALL PROGRESS ═══ -->
+        <div class="progress-hero">
+            <div class="ring-container">
+                <svg class="ring-svg" viewBox="0 0 160 160">
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#38bdf8" />
+                            <stop offset="100%" stop-color="#2dd4bf" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="ring-bg" cx="80" cy="80" r="70" />
+                    <circle class="ring-fill" cx="80" cy="80" r="70" />
+                </svg>
+                <div class="ring-text">
+                    <span class="ring-percent" id="percentValue">0</span>
+                    <span class="ring-label">Completado</span>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--success);">38</div>
+                    <div class="stat-label">Archivos Activos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--primary);">16</div>
+                    <div class="stat-label">Npm Packages</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--accent);">8</div>
+                    <div class="stat-label">Rutas Activas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--warning);">0</div>
+                    <div class="stat-label">Errores Build</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ FASES DEL PROYECTO ═══ -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon" style="background:rgba(56,189,248,0.12);color:var(--primary);">⚡</span>
+                Fases del Proyecto
+            </h2>
+
+            <!-- Phase 1 -->
+            <div class="phase-card" data-delay="0">
+                <div class="phase-header">
+                    <div class="phase-left">
+                        <span class="phase-number pn-done">F1</span>
+                        <span class="phase-name">Infraestructura Base</span>
+                    </div>
+                    <span class="status-badge status-done">✓ Completado</span>
+                </div>
+                <div class="phase-progress"><div class="phase-progress-fill" data-width="100"></div></div>
+                <ul class="task-list">
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Next.js 16.1.6 (App Router) configurado y operativo</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">React 19.2.4 con TypeScript 5.9.3 (strict mode)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Tailwind CSS v4.2.1 + PostCSS configurado</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Prisma ORM 5.22 con schema de datos (User + Certificate)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Despliegue Vercel configurado y documentado</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Variables de entorno (.env) en producción</span></li>
+                </ul>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="phase-card" data-delay="100">
+                <div class="phase-header">
+                    <div class="phase-left">
+                        <span class="phase-number pn-done">F2</span>
+                        <span class="phase-name">Landing Page EHSW²</span>
+                    </div>
+                    <span class="status-badge status-done">✓ Completado</span>
+                </div>
+                <div class="phase-progress"><div class="phase-progress-fill" data-width="100"></div></div>
+                <ul class="task-list">
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Hero con validación de certificados (CertLookup) y QR</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Sección de Servicios (5 categorías con iconografía)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Sección de Normatividad (NOM-154, NOM-002, ISO 14001, COFEPRIS)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Sección de Cobertura Nacional (5 zonas / mapa visual)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Formulario de Contacto operativo</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Navbar responsive con menú móvil + Footer</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Diseño glassmorphism premium (dark theme)</span></li>
+                </ul>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="phase-card" data-delay="200">
+                <div class="phase-header">
+                    <div class="phase-left">
+                        <span class="phase-number pn-done">F3</span>
+                        <span class="phase-name">Panel Administrativo</span>
+                    </div>
+                    <span class="status-badge status-done">✓ Completado</span>
+                </div>
+                <div class="phase-progress"><div class="phase-progress-fill" data-width="100"></div></div>
+                <ul class="task-list">
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Sistema de autenticación (login JWT + cookies)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Dashboard con métricas (Total / Activos / Vencidos)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">CRUD de certificados (crear, listar, ver)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Sidebar con navegación admin</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Tabla de certificados recientes con acciones</span></li>
+                </ul>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="phase-card" data-delay="300">
+                <div class="phase-header">
+                    <div class="phase-left">
+                        <span class="phase-number pn-done">F4</span>
+                        <span class="phase-name">API & Certificación Digital</span>
+                    </div>
+                    <span class="status-badge status-done">✓ Completado</span>
+                </div>
+                <div class="phase-progress"><div class="phase-progress-fill" data-width="100"></div></div>
+                <ul class="task-list">
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">API REST: /api/auth, /api/certificados, /api/qr/[folio]</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Generación de QR codes por certificado</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Página pública de verificación /certificado/[folio]</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Generación de folios únicos (EHSW-YYYY-SVC-NNN)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Seed de datos demo con certificado de prueba</span></li>
+                </ul>
+            </div>
+
+            <!-- Phase 5 -->
+            <div class="phase-card" data-delay="400">
+                <div class="phase-header">
+                    <div class="phase-left">
+                        <span class="phase-number pn-done">F5</span>
+                        <span class="phase-name">Upgrade Arquitectónico (Design System)</span>
+                    </div>
+                    <span class="status-badge status-done">✓ Completado</span>
+                </div>
+                <div class="phase-progress"><div class="phase-progress-fill" data-width="100"></div></div>
+                <ul class="task-list">
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">16 paquetes NPM instalados (Framer Motion, Lucide, zod, etc.)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Design tokens CSS (colores semánticos, tipografía fluid, sombras)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Librería de animaciones (12 variantes Framer Motion + 8 keyframes CSS)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">7 secciones reutilizables de landing page (3 Heros, Features, Testimonials, CTA, Footer)</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Vercel Analytics + Speed Insights integrados</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Security headers (HSTS, X-Frame-Options, CSP) en next.config.ts</span></li>
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">4 documentos técnicos (STACK_BIBLE, COMPONENT_GUIDE, etc.)</span></li>
+                </ul>
+            </div>
+
+            <!-- Phase 6 -->
+            <div class="phase-card" data-delay="500">
+                <div class="phase-header">
+                    <div class="phase-left">
+                        <span class="phase-number pn-progress">F6</span>
+                        <span class="phase-name">QA, Testing & Pulido Final</span>
+                    </div>
+                    <span class="status-badge status-progress">🔄 En Progreso</span>
+                </div>
+                <div class="phase-progress"><div class="phase-progress-fill" data-width="30"></div></div>
+                <ul class="task-list">
+                    <li class="task-item done"><span class="task-icon ti-done">✓</span><span class="task-text">Build exitoso con 0 errores (7.6s con Turbopack)</span></li>
+                    <li class="task-item progress"><span class="task-icon ti-progress">◉</span><span class="task-text">Pruebas de integración Prisma ↔ PostgreSQL (Vercel Postgres)</span></li>
+                    <li class="task-item pending"><span class="task-icon ti-pending">○</span><span class="task-text">Pruebas de flujo end-to-end (login → crear cert → verificar QR)</span></li>
+                    <li class="task-item pending"><span class="task-icon ti-pending">○</span><span class="task-text">Optimización de rendimiento (Lighthouse ≥ 90)</span></li>
+                    <li class="task-item pending"><span class="task-icon ti-pending">○</span><span class="task-text">Revisión de responsive en dispositivos móviles</span></li>
+                </ul>
+            </div>
+
+            <!-- Phase 7 -->
+            <div class="phase-card" data-delay="600">
+                <div class="phase-header">
+                    <div class="phase-left">
+                        <span class="phase-number pn-pending">F7</span>
+                        <span class="phase-name">Despliegue a Producción & Demo</span>
+                    </div>
+                    <span class="status-badge status-pending">○ Pendiente</span>
+                </div>
+                <div class="phase-progress"><div class="phase-progress-fill" data-width="0"></div></div>
+                <ul class="task-list">
+                    <li class="task-item pending"><span class="task-icon ti-pending">○</span><span class="task-text">Migración de SQLite a Vercel Postgres (producción)</span></li>
+                    <li class="task-item pending"><span class="task-icon ti-pending">○</span><span class="task-text">Deploy final a Vercel con variables de entorno de producción</span></li>
+                    <li class="task-item pending"><span class="task-icon ti-pending">○</span><span class="task-text">Generación de sitemap.xml y robots.txt</span></li>
+                    <li class="task-item pending"><span class="task-icon ti-pending">○</span><span class="task-text">Demo ejecutiva con stakeholders</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ═══ TIMELINE ═══ -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon" style="background:rgba(45,212,191,0.12);color:var(--accent);">📅</span>
+                Timeline del Proyecto
+            </h2>
+
+            <div class="timeline">
+                <div class="tl-item" data-delay="0">
+                    <span class="tl-dot done"></span>
+                    <div class="tl-date">4 - 6 Mar 2026</div>
+                    <div class="tl-title">Fundación del Proyecto</div>
+                    <div class="tl-desc">Next.js, Prisma, schema de datos, API routes, generación de QR y PDF de certificados.</div>
+                </div>
+                <div class="tl-item" data-delay="100">
+                    <span class="tl-dot done"></span>
+                    <div class="tl-date">7 - 9 Mar 2026</div>
+                    <div class="tl-title">Landing Page & Admin Panel</div>
+                    <div class="tl-desc">7 componentes de landing, panel admin con auth, dashboard con métricas, CRUD de certificados.</div>
+                </div>
+                <div class="tl-item" data-delay="200">
+                    <span class="tl-dot done"></span>
+                    <div class="tl-date">10 - 11 Mar 2026</div>
+                    <div class="tl-title">Branding & Refinamiento</div>
+                    <div class="tl-desc">Estandarización "EHSW²" en toda la UI, correcciones de certificados, deploy en Vercel.</div>
+                </div>
+                <div class="tl-item" data-delay="300">
+                    <span class="tl-dot done"></span>
+                    <div class="tl-date">12 Mar 2026</div>
+                    <div class="tl-title">Upgrade Arquitectónico</div>
+                    <div class="tl-desc">Design system completo, 16 npm packages, 7 secciones reutilizables, animaciones Framer Motion, security headers.</div>
+                </div>
+                <div class="tl-item" data-delay="400">
+                    <span class="tl-dot current"></span>
+                    <div class="tl-date">12 - 13 Mar 2026</div>
+                    <div class="tl-title">QA & Testing</div>
+                    <div class="tl-desc">Pruebas de integración, flujos E2E, optimización Lighthouse, revisión responsive.</div>
+                </div>
+                <div class="tl-item" data-delay="500">
+                    <span class="tl-dot future"></span>
+                    <div class="tl-date">16 - 17 Mar 2026</div>
+                    <div class="tl-title">Deploy & Demo Final</div>
+                    <div class="tl-desc">Migración a Postgres prod, deploy Vercel, sitemap, demo ejecutiva.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ LO QUE FALTA ═══ -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon" style="background:rgba(245,158,11,0.12);color:var(--warning);">🎯</span>
+                Lo que Falta para Entrega
+            </h2>
+
+            <div class="pending-grid">
+                <div class="pending-card high">
+                    <div class="pc-title">Migración a PostgreSQL</div>
+                    <div class="pc-desc">Cambiar provider de SQLite a Vercel Postgres. Actualizar schema.prisma y validar todas las queries.</div>
+                    <div class="pc-priority high">● Prioridad Alta</div>
+                </div>
+                <div class="pending-card high">
+                    <div class="pc-title">Testing de Flujos Críticos</div>
+                    <div class="pc-desc">Login admin → Crear certificado → Verificar QR público. Validar el ciclo completo end-to-end.</div>
+                    <div class="pc-priority high">● Prioridad Alta</div>
+                </div>
+                <div class="pending-card medium">
+                    <div class="pc-title">Lighthouse ≥ 90</div>
+                    <div class="pc-desc">Performance, accesibilidad, SEO. Optimizar imágenes, eliminar Font Awesome CDN de componentes nuevos.</div>
+                    <div class="pc-priority medium">● Prioridad Media</div>
+                </div>
+                <div class="pending-card medium">
+                    <div class="pc-title">Deploy de Producción</div>
+                    <div class="pc-desc">Variables de entorno finales en Vercel, DNS, HTTPS, smoke test en dominio real.</div>
+                    <div class="pc-priority medium">● Prioridad Media</div>
+                </div>
+                <div class="pending-card low">
+                    <div class="pc-title">Documentación de Usuario</div>
+                    <div class="pc-desc">Manual breve para el administrador: cómo generar certificados, consultar vencidos, generar QR.</div>
+                    <div class="pc-priority low">● Prioridad Baja</div>
+                </div>
+                <div class="pending-card low">
+                    <div class="pc-title">Demo Ejecutiva</div>
+                    <div class="pc-desc">Presentación del sistema funcionando en vivo con stakeholders. Martes 17 de marzo.</div>
+                    <div class="pc-priority low">● Prioridad Baja</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ FOOTER ═══ -->
+        <footer class="report-footer">
+            EHSW² — Plataforma de Higiene, Seguridad y Medio Ambiente<br/>
+            Informe generado automáticamente • 12 de marzo de 2026
+        </footer>
+
+    </div>
+
+    <!-- ═══ SCROLL ANIMATION SCRIPT ═══ -->
+    <script>
+        // ─── Intersection Observer for scroll animations ───
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, Number(delay));
+
+                    // Animate progress bars inside
+                    const bar = entry.target.querySelector('.phase-progress-fill');
+                    if (bar) {
+                        setTimeout(() => {
+                            bar.style.width = bar.dataset.width + '%';
+                        }, Number(delay) + 300);
+                    }
+
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.phase-card, .tl-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ─── Count-up animation for the percentage ───
+        const percentEl = document.getElementById('percentValue');
+        let current = 0;
+        const target = 80;
+        const duration = 2000;
+        const startTime = performance.now();
+
+        function animateCount(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease out quart
+            const ease = 1 - Math.pow(1 - progress, 4);
+            current = Math.round(ease * target);
+            percentEl.textContent = current + '%';
+            if (progress < 1) requestAnimationFrame(animateCount);
+        }
+
+        // Start after the ring animation delay
+        setTimeout(() => requestAnimationFrame(animateCount), 800);
+    </script>
+</body>
+</html>
