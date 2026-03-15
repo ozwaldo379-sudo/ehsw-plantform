@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-        const { clientName, company, serviceType, chemicalUsed, issueDate, expirationDate } = body;
+        const { clientName, company, address, serviceType, chemicalUsed, issueDate, expirationDate } = body;
 
         if (!clientName || !company || !serviceType || !chemicalUsed || !issueDate || !expirationDate) {
             return NextResponse.json(
@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
                 folio,
                 clientName,
                 company,
+                address,
                 serviceType,
                 chemicalUsed,
                 issueDate: new Date(issueDate),

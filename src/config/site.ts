@@ -5,9 +5,9 @@ export const siteConfig = {
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://ehsw2.com",
     locale: "es_MX",
     contact: {
-        phone: "+52 55 0000 0000",
+        phone: "+52 22 1305 0039",
         email: "contacto@ehsw2.com",
-        whatsapp: "https://wa.me/5255000000000",
+        whatsapp: "https://wa.me/522213050039",
     },
     social: {
         facebook: "https://facebook.com/ehsw2",

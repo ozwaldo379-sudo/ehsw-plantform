@@ -5,6 +5,7 @@ interface CertificateData {
     folio: string;
     clientName: string;
     company: string;
+    address?: string;
     serviceType: string;
     chemicalUsed: string;
     issueDate: string;
@@ -120,6 +121,11 @@ export default async function CertificadoPage({
                                     icon: "fa-building",
                                     label: "Empresa / Establecimiento",
                                     value: data.company,
+                                },
+                                {
+                                    icon: "fa-location-dot",
+                                    label: "Dirección del Establecimiento",
+                                    value: data.address || "No especificada",
                                 },
                                 {
                                     icon: "fa-vial",

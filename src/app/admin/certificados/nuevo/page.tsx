@@ -10,6 +10,7 @@ export default function NewCertificatePage() {
     const [formData, setFormData] = useState({
         clientName: "",
         company: "",
+        address: "",
         serviceType: "",
         chemicalUsed: "",
         issueDate: "",
@@ -86,6 +87,7 @@ export default function NewCertificatePage() {
                                     setFormData({
                                         clientName: "",
                                         company: "",
+                                        address: "",
                                         serviceType: "",
                                         chemicalUsed: "",
                                         issueDate: "",
@@ -178,6 +180,10 @@ export default function NewCertificatePage() {
                                     <p className="text-sm font-bold uppercase text-slate-500 tracking-wider">Razón Social</p>
                                     <p className="text-2xl font-bold uppercase">{successData.company}</p>
                                 </div>
+                                <div>
+                                    <p className="text-sm font-bold uppercase text-slate-500 tracking-wider">Dirección</p>
+                                    <p className="text-xl font-medium uppercase">{successData.address || "N/A"}</p>
+                                </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
                                         <p className="text-xs font-bold uppercase text-slate-500 tracking-wider">Fecha Servicio</p>
@@ -238,6 +244,20 @@ export default function NewCertificatePage() {
                             onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                             className="w-full p-3 bg-[rgba(15,23,42,0.6)] border border-[var(--color-glass-border)] rounded-lg text-white outline-none focus:border-[var(--color-primary)] transition-colors"
                             placeholder="Nombre de la empresa"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="text-sm text-[var(--color-text-muted)] block mb-2 font-medium">
+                            Dirección del Establecimiento
+                        </label>
+                        <input
+                            type="text"
+                            value={formData.address}
+                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                            className="w-full p-3 bg-[rgba(15,23,42,0.6)] border border-[var(--color-glass-border)] rounded-lg text-white outline-none focus:border-[var(--color-primary)] transition-colors"
+                            placeholder="Ej: Av. Juárez 123, Col. Centro"
                             required
                         />
                     </div>

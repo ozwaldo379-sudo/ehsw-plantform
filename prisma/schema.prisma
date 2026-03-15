@@ -20,6 +20,7 @@ model Certificate {
   folio          String   @unique
   clientName     String
   company        String
+  address        String?
   serviceType    String
   chemicalUsed   String
   issueDate      DateTime

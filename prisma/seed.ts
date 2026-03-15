@@ -30,6 +30,7 @@ async function main() {
         {
             folio: "EHSW-2026-FUM-001",
             company: "FarmaMedic Norte",
+            address: "Av. Universidad 123, CDMX",
             serviceType: "Control de Plagas",
             chemicalUsed: "Deltametrina 2.5% CE",
             clientName: "Juan Pérez",
@@ -40,6 +41,7 @@ async function main() {
         {
             folio: "EHSW-2026-FUM-002",
             company: "Hospital San Lucas",
+            address: "Calle Dr. Galvez 45, CDMX",
             serviceType: "Gestión Ambiental",
             chemicalUsed: "Hipoclorito de Sodio 6%",
             clientName: "Laura Ramírez",
@@ -50,11 +52,23 @@ async function main() {
         {
             folio: "EHSW-2026-FUM-003",
             company: "Planta Industrial Atlas",
+            address: "Zona Industrial Vallejo",
             serviceType: "Seguridad Industrial",
             chemicalUsed: "Polvo Químico Seco ABC",
             clientName: "Carlos Mendoza",
             issueDate: new Date("2026-01-10"),
             expirationDate: new Date("2026-07-10"),
+            status: "VALID",
+        },
+        {
+            folio: "DEMO-2213050039",
+            company: "CLIENTE DEMO S.A. DE C.V.",
+            address: "CALLE TEMPORAL #123, PUEBLA",
+            serviceType: "CONTROL DE PLAGAS",
+            chemicalUsed: "PRODUCTO QUÍMICO DEMO",
+            clientName: "ADMINISTRACIÓN",
+            issueDate: new Date(),
+            expirationDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
             status: "VALID",
         },
     ];
