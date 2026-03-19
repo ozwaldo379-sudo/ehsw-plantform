@@ -62,7 +62,7 @@ export default function Navbar() {
                 <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[var(--color-primary)] transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
-            <a href="#contacto" className="btn-primary text-sm !py-2 !px-5">
+            <a href="https://wa.me/522213050039?text=Hola,%20me%20interesa%20conocer%20sus%20servicios%20EHS" target="_blank" rel="noopener noreferrer" className="btn-primary text-sm !py-2 !px-5">
               Cotizar
             </a>
           </div>
@@ -107,7 +107,9 @@ export default function Navbar() {
               </motion.a>
             ))}
             <motion.a
-              href="#contacto"
+              href="https://wa.me/522213050039?text=Hola,%20me%20interesa%20conocer%20sus%20servicios%20EHS"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setMobileOpen(false)}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
