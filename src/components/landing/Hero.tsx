@@ -7,11 +7,13 @@ export default function Hero() {
             className="relative min-h-screen flex items-center justify-center px-6 pt-32 pb-20"
             style={{
                 backgroundImage:
-                    "radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.1) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(45, 212, 191, 0.05) 0%, transparent 40%)",
+                    "linear-gradient(rgba(20, 50, 73, 0.5), rgba(20, 50, 73, 0.5)), url('/Images/Servicios/empleado-plagas-ehsw2.png')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
             }}
         >
-            {/* Grid background */}
-            <div className="hero-grid-bg"></div>
+            {/* Grid background (optional, can keep for texture) */}
+            <div className="hero-grid-bg opacity-30"></div>
 
             <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 items-center relative z-10">
                 {/* Text Side */}

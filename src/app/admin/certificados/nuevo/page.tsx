@@ -48,22 +48,42 @@ export default function NewCertificatePage() {
 
     const downloadPDF = async () => {
         if (!certificateRef.current) return;
-        const canvas = await html2canvas(certificateRef.current, { scale: 2 });
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("p", "mm", "a4");
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`Certificado-${successData.folio}.pdf`);
+        try {
+            const canvas = await html2canvas(certificateRef.current, { 
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: "#ffffff"
+            });
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("p", "mm", "a4");
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`Certificado-${successData.folio}.pdf`);
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+            alert("Error al generar el PDF. Por favor, intente de nuevo.");
+        }
     };
 
     const downloadSticker = async () => {
         if (!stickerRef.current) return;
-        const canvas = await html2canvas(stickerRef.current, { scale: 3 });
-        const link = document.createElement("a");
-        link.download = `Etiqueta-QR-${successData.folio}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
+        try {
+            const canvas = await html2canvas(stickerRef.current, { 
+                scale: 3,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: "#ffffff"
+            });
+            const link = document.createElement("a");
+            link.download = `${successData.folio}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        } catch (error) {
+            console.error("Error generating image:", error);
+            alert("Error al generar la imagen. Por favor, intente de nuevo.");
+        }
     };
 
     if (successData) {

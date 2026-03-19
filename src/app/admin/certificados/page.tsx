@@ -149,9 +149,16 @@ export default function CertificadosListPage() {
                                                     <td className="p-4 text-right">
                                                         <div className="flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
                                                             <Link
+                                                                href={`/admin/certificados/${cert.folio}`}
+                                                                className="p-2 hover:bg-white/10 rounded-lg text-[var(--color-primary)] transition-colors"
+                                                                title="Detalles y Descargas"
+                                                            >
+                                                                <i className="fa-solid fa-file-invoice text-xs"></i>
+                                                            </Link>
+                                                            <Link
                                                                 href={`/certificado/${cert.folio}`}
                                                                 target="_blank"
-                                                                className="p-2 hover:bg-white/10 rounded-lg text-[var(--color-primary)] transition-colors"
+                                                                className="p-2 hover:bg-white/10 rounded-lg text-emerald-400 transition-colors"
                                                                 title="Ver público"
                                                             >
                                                                 <i className="fa-solid fa-eye text-xs"></i>

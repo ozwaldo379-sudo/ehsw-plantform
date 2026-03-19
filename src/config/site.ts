@@ -7,7 +7,7 @@ export const siteConfig = {
     contact: {
         phone: "+52 22 1305 0039",
         email: "contacto@ehsw2.com",
-        whatsapp: "https://wa.me/522213050039",
+        whatsapp: "https://wa.me/522213050039?text=Hola,%20me%20interesa%20conocer%20sus%20servicios%20EHS",
     },
     social: {
         facebook: "https://facebook.com/ehsw2",

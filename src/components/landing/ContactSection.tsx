@@ -4,11 +4,39 @@ import { useState } from "react";
 
 export default function ContactSection() {
     const [submitted, setSubmitted] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        setSubmitted(true);
-        setTimeout(() => setSubmitted(false), 3000);
+        setLoading(true);
+        setError("");
+
+        const form = e.currentTarget;
+        const data = {
+            name: (form.elements.namedItem("name") as HTMLInputElement).value,
+            email: (form.elements.namedItem("email") as HTMLInputElement).value,
+            interest: (form.elements.namedItem("interest") as HTMLSelectElement).value,
+            message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
+        };
+
+        try {
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            if (!res.ok) throw new Error("Error al enviar");
+
+            setSubmitted(true);
+            form.reset();
+            setTimeout(() => setSubmitted(false), 5000);
+        } catch {
+            setError("Hubo un problema al enviar. Contáctanos directamente por WhatsApp.");
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -27,24 +55,35 @@ export default function ContactSection() {
                     <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-12 p-10">
                         {/* Contact Details */}
                         <div className="flex flex-col gap-6 justify-center">
-                            <div className="flex items-center gap-4 text-lg">
+                            <a
+                                href="tel:+525563792273"
+                                className="flex items-center gap-4 text-lg hover:text-[var(--color-primary)] transition-colors no-underline text-white"
+                            >
                                 <div className="w-12 h-12 bg-[rgba(255,255,255,0.1)] text-[var(--color-primary)] rounded-full flex items-center justify-center shrink-0">
                                     <i className="fa-solid fa-phone"></i>
                                 </div>
                                 <span>(55) 6379-2273</span>
-                            </div>
-                            <div className="flex items-center gap-4 text-lg">
+                            </a>
+                            <a
+                                href="mailto:contacto@ehsw2.com"
+                                className="flex items-center gap-4 text-lg hover:text-[var(--color-primary)] transition-colors no-underline text-white"
+                            >
                                 <div className="w-12 h-12 bg-[rgba(255,255,255,0.1)] text-[var(--color-primary)] rounded-full flex items-center justify-center shrink-0">
                                     <i className="fa-solid fa-envelope"></i>
                                 </div>
                                 <span>contacto@ehsw2.com</span>
-                            </div>
-                            <div className="flex items-center gap-4 text-lg">
+                            </a>
+                            <a
+                                href="https://wa.me/522213050039?text=Hola,%20me%20interesa%20conocer%20sus%20servicios%20EHS"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-4 text-lg hover:text-[var(--color-primary)] transition-colors cursor-pointer no-underline text-white"
+                            >
                                 <div className="w-12 h-12 bg-[rgba(255,255,255,0.1)] text-[var(--color-primary)] rounded-full flex items-center justify-center shrink-0">
                                     <i className="fa-brands fa-whatsapp"></i>
                                 </div>
                                 <span>WhatsApp Directo</span>
-                            </div>
+                            </a>
                         </div>
 
                         {/* Form */}
@@ -54,36 +93,54 @@ export default function ContactSection() {
                         >
                             <input
                                 type="text"
+                                name="name"
                                 placeholder="Nombre completo"
                                 required
                                 className="w-full"
                             />
                             <input
                                 type="email"
+                                name="email"
                                 placeholder="Correo corporativo"
                                 required
                                 className="w-full"
                             />
-                            <select className="w-full" required>
+                            <select name="interest" className="w-full" required>
                                 <option value="">Interés principal...</option>
                                 <option>Control de Plagas</option>
                                 <option>Extintores</option>
                                 <option>Seguridad Industrial</option>
                                 <option>Gestión Ambiental</option>
+                                <option>Protección Civil</option>
+                                <option>Desinfección</option>
                                 <option>Otro</option>
                             </select>
                             <textarea
+                                name="message"
                                 placeholder="Mensaje (opcional)"
                                 rows={3}
                                 className="w-full resize-none"
                             ></textarea>
+
+                            {error && (
+                                <p className="text-red-400 text-sm flex items-center gap-2">
+                                    <i className="fa-solid fa-circle-exclamation"></i>
+                                    {error}
+                                </p>
+                            )}
+
                             <button
                                 type="submit"
-                                className="btn-primary w-full justify-center"
+                                disabled={loading || submitted}
+                                className="btn-primary w-full justify-center disabled:opacity-70 disabled:cursor-not-allowed"
                             >
                                 {submitted ? (
                                     <>
                                         <i className="fa-solid fa-check"></i> ¡Mensaje Enviado!
+                                    </>
+                                ) : loading ? (
+                                    <>
+                                        <i className="fa-solid fa-spinner fa-spin"></i> Enviando…
                                     </>
                                 ) : (
                                     <>Enviar Mensaje</>

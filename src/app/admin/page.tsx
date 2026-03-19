@@ -145,8 +145,15 @@ export default async function AdminDashboard() {
                                                 <td className="p-4 text-right">
                                                     <div className="flex gap-3 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
                                                         <Link
-                                                            href={`/certificado/${cert.folio}`}
+                                                            href={`/admin/certificados/${cert.folio}`}
                                                             className="text-[var(--color-primary)] hover:text-white transition-colors"
+                                                            title="Detalles y Descargas"
+                                                        >
+                                                            <i className="fa-solid fa-file-invoice"></i>
+                                                        </Link>
+                                                        <Link
+                                                            href={`/certificado/${cert.folio}`}
+                                                            className="text-emerald-400 hover:text-white transition-colors"
                                                             title="Ver validación"
                                                             target="_blank"
                                                         >
@@ -155,9 +162,9 @@ export default async function AdminDashboard() {
                                                         <Link
                                                             href={`/admin/certificados`}
                                                             className="text-[var(--color-accent)] hover:text-white transition-colors"
-                                                            title="Gestionar"
+                                                            title="Gestionar todos"
                                                         >
-                                                            <i className="fa-solid fa-gear"></i>
+                                                            <i className="fa-solid fa-list-check"></i>
                                                         </Link>
                                                     </div>
                                                 </td>

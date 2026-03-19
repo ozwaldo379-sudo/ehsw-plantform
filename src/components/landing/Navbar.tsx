@@ -20,7 +20,7 @@ export default function Navbar() {
         >
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center py-4">
                 <Link href="/" className="flex gap-2 items-center text-2xl font-bold text-white no-underline tracking-tight">
-                    <img src="/logo-ehsw.png" alt="EHSW²" style={{ height: 40 }} />
+                    <img src="/logo-ehsw.png" alt="EHSW²" className="h-[40px] md:h-[52px] w-auto object-contain" />
                 </Link>
 
                 {/* Desktop Nav */}
@@ -28,6 +28,7 @@ export default function Navbar() {
                     <ul className="flex gap-8 list-none">
                         {[
                             { href: "#inicio", label: "Inicio" },
+                            { href: "#quienes-somos", label: "Quiénes Somos" },
                             { href: "#servicios", label: "Servicios" },
                             { href: "#normatividad", label: "Normatividad" },
                             { href: "#cobertura", label: "Cobertura" },
@@ -50,7 +51,7 @@ export default function Navbar() {
                     <Link href="/admin/login" className="btn-secondary text-sm">
                         <i className="fa-solid fa-user-lock"></i> Portal Admin
                     </Link>
-                    <a href="#contacto" className="btn-primary text-sm">
+                    <a href="https://wa.me/522213050039?text=Hola,%20me%20interesa%20conocer%20sus%20servicios%20EHS" target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">
                         <i className="fa-brands fa-whatsapp"></i> Cotizar Ahora
                     </a>
                 </div>
@@ -69,15 +70,22 @@ export default function Navbar() {
                 <div className="md:hidden px-6 pb-6 animate-fade-in-up">
                     <nav>
                         <ul className="flex flex-col gap-4 list-none">
-                            {["Inicio", "Servicios", "Normatividad", "Cobertura", "Contacto"].map(
+                            {[
+                                { href: "#inicio", label: "Inicio" },
+                                { href: "#quienes-somos", label: "Quiénes Somos" },
+                                { href: "#servicios", label: "Servicios" },
+                                { href: "#normatividad", label: "Normatividad" },
+                                { href: "#cobertura", label: "Cobertura" },
+                                { href: "#contacto", label: "Contacto" }
+                            ].map(
                                 (item) => (
-                                    <li key={item}>
+                                    <li key={item.href}>
                                         <a
-                                            href={`#${item.toLowerCase()}`}
+                                            href={item.href}
                                             className="text-[var(--color-text-muted)] no-underline font-medium text-base hover:text-white transition-colors"
                                             onClick={() => setMobileOpen(false)}
                                         >
-                                            {item}
+                                            {item.label}
                                         </a>
                                     </li>
                                 )
@@ -88,7 +96,7 @@ export default function Navbar() {
                         <Link href="/admin/login" className="btn-secondary text-sm justify-center">
                             <i className="fa-solid fa-user-lock"></i> Portal Admin
                         </Link>
-                        <a href="#contacto" className="btn-primary text-sm justify-center">
+                        <a href="https://wa.me/522213050039?text=Hola,%20me%20interesa%20conocer%20sus%20servicios%20EHS" target="_blank" rel="noopener noreferrer" className="btn-primary text-sm justify-center">
                             <i className="fa-brands fa-whatsapp"></i> Cotizar Ahora
                         </a>
                     </div>
