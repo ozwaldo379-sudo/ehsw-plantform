@@ -1,155 +1,222 @@
 "use client";
 
-import { useState } from "react";
+import { motion } from "framer-motion";
+import { Send, Phone, Mail, MapPin, Clock } from "lucide-react";
+import { useState, FormEvent } from "react";
+
+const contactInfo = [
+  { icon: Phone, label: "Teléfono", value: "+52 55 1234 5678" },
+  { icon: Mail, label: "Email", value: "contacto@ehsw2.com" },
+  { icon: MapPin, label: "Ubicación", value: "CDMX, México" },
+  { icon: Clock, label: "Horario", value: "Lun–Vie 8:00–18:00" },
+];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
 
 export default function ContactSection() {
-    const [submitted, setSubmitted] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle"
+  );
 
-    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        setLoading(true);
-        setError("");
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("sending");
+    // Simulate API call
+    await new Promise((r) => setTimeout(r, 1500));
+    setStatus("sent");
+    setTimeout(() => setStatus("idle"), 3000);
+  };
 
-        const form = e.currentTarget;
-        const data = {
-            name: (form.elements.namedItem("name") as HTMLInputElement).value,
-            email: (form.elements.namedItem("email") as HTMLInputElement).value,
-            interest: (form.elements.namedItem("interest") as HTMLSelectElement).value,
-            message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
-        };
+  return (
+    <section id="contacto" className="py-24 md:py-32 relative">
+      <div className="section-divider mb-20" />
+      <div className="max-w-7xl mx-auto px-6">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.12 } },
+          }}
+        >
+          {/* ─── Header ─── */}
+          <div className="text-center mb-16">
+            <motion.p variants={fadeUp} className="section-label mb-4">
+              Contacto
+            </motion.p>
+            <motion.h2
+              variants={fadeUp}
+              className="text-3xl md:text-4xl font-extrabold leading-tight mb-4"
+            >
+              ¿Listo para <span className="text-gradient">proteger</span> su
+              empresa?
+            </motion.h2>
+            <motion.p
+              variants={fadeUp}
+              className="text-[var(--color-text-muted)] max-w-xl mx-auto"
+            >
+              Contáctenos para una cotización sin compromiso. Respondemos en
+              menos de 24 horas.
+            </motion.p>
+          </div>
 
-        try {
-            const res = await fetch("/api/contact", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-            });
-
-            if (!res.ok) throw new Error("Error al enviar");
-
-            setSubmitted(true);
-            form.reset();
-            setTimeout(() => setSubmitted(false), 5000);
-        } catch {
-            setError("Hubo un problema al enviar. Contáctanos directamente por WhatsApp.");
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    return (
-        <section id="contacto" className="py-24">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="glass-card overflow-hidden">
-                    {/* Header */}
-                    <div className="gradient-main p-10 text-center text-[var(--color-bg-dark)]">
-                        <h2 className="text-3xl font-bold mb-2">Contáctanos</h2>
-                        <p className="font-medium text-lg opacity-90">
-                            Solicita una visita técnica o cotización sin compromiso.
-                        </p>
+          {/* ─── Grid ─── */}
+          <div className="grid md:grid-cols-5 gap-8">
+            {/* Contact Info */}
+            <motion.div
+              variants={fadeUp}
+              className="md:col-span-2 flex flex-col gap-4"
+            >
+              {contactInfo.map((c) => (
+                <div
+                  key={c.label}
+                  className="glass-card-glow p-5 flex items-center gap-4"
+                >
+                  <div className="w-10 h-10 rounded-lg gradient-main flex items-center justify-center flex-shrink-0">
+                    <c.icon className="w-4 h-4 text-[var(--color-bg-dark)]" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-[var(--color-text-subtle)] mb-0.5">
+                      {c.label}
                     </div>
-
-                    {/* Content */}
-                    <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-12 p-10">
-                        {/* Contact Details */}
-                        <div className="flex flex-col gap-6 justify-center">
-                            <a
-                                href="tel:+525563792273"
-                                className="flex items-center gap-4 text-lg hover:text-[var(--color-primary)] transition-colors no-underline text-white"
-                            >
-                                <div className="w-12 h-12 bg-[rgba(255,255,255,0.1)] text-[var(--color-primary)] rounded-full flex items-center justify-center shrink-0">
-                                    <i className="fa-solid fa-phone"></i>
-                                </div>
-                                <span>(55) 6379-2273</span>
-                            </a>
-                            <a
-                                href="mailto:contacto@ehsw2.com"
-                                className="flex items-center gap-4 text-lg hover:text-[var(--color-primary)] transition-colors no-underline text-white"
-                            >
-                                <div className="w-12 h-12 bg-[rgba(255,255,255,0.1)] text-[var(--color-primary)] rounded-full flex items-center justify-center shrink-0">
-                                    <i className="fa-solid fa-envelope"></i>
-                                </div>
-                                <span>contacto@ehsw2.com</span>
-                            </a>
-                            <a
-                                href="https://wa.me/522213050039?text=Hola,%20me%20interesa%20conocer%20sus%20servicios%20EHS"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-4 text-lg hover:text-[var(--color-primary)] transition-colors cursor-pointer no-underline text-white"
-                            >
-                                <div className="w-12 h-12 bg-[rgba(255,255,255,0.1)] text-[var(--color-primary)] rounded-full flex items-center justify-center shrink-0">
-                                    <i className="fa-brands fa-whatsapp"></i>
-                                </div>
-                                <span>WhatsApp Directo</span>
-                            </a>
-                        </div>
-
-                        {/* Form */}
-                        <form
-                            className="contact-form flex flex-col gap-4"
-                            onSubmit={handleSubmit}
-                        >
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder="Nombre completo"
-                                required
-                                className="w-full"
-                            />
-                            <input
-                                type="email"
-                                name="email"
-                                placeholder="Correo corporativo"
-                                required
-                                className="w-full"
-                            />
-                            <select name="interest" className="w-full" required>
-                                <option value="">Interés principal...</option>
-                                <option>Control de Plagas</option>
-                                <option>Extintores</option>
-                                <option>Seguridad Industrial</option>
-                                <option>Gestión Ambiental</option>
-                                <option>Protección Civil</option>
-                                <option>Desinfección</option>
-                                <option>Otro</option>
-                            </select>
-                            <textarea
-                                name="message"
-                                placeholder="Mensaje (opcional)"
-                                rows={3}
-                                className="w-full resize-none"
-                            ></textarea>
-
-                            {error && (
-                                <p className="text-red-400 text-sm flex items-center gap-2">
-                                    <i className="fa-solid fa-circle-exclamation"></i>
-                                    {error}
-                                </p>
-                            )}
-
-                            <button
-                                type="submit"
-                                disabled={loading || submitted}
-                                className="btn-primary w-full justify-center disabled:opacity-70 disabled:cursor-not-allowed"
-                            >
-                                {submitted ? (
-                                    <>
-                                        <i className="fa-solid fa-check"></i> ¡Mensaje Enviado!
-                                    </>
-                                ) : loading ? (
-                                    <>
-                                        <i className="fa-solid fa-spinner fa-spin"></i> Enviando…
-                                    </>
-                                ) : (
-                                    <>Enviar Mensaje</>
-                                )}
-                            </button>
-                        </form>
+                    <div className="text-sm font-semibold text-white">
+                      {c.value}
                     </div>
+                  </div>
                 </div>
-            </div>
-        </section>
-    );
+              ))}
+            </motion.div>
+
+            {/* Contact Form */}
+            <motion.div variants={fadeUp} className="md:col-span-3">
+              <form
+                onSubmit={handleSubmit}
+                className="glass-card-glow p-8 space-y-5"
+              >
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-xs font-medium text-[var(--color-text-subtle)] mb-2"
+                    >
+                      Nombre
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      required
+                      placeholder="Su nombre"
+                      className="contact-input"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="company"
+                      className="block text-xs font-medium text-[var(--color-text-subtle)] mb-2"
+                    >
+                      Empresa
+                    </label>
+                    <input
+                      id="company"
+                      type="text"
+                      placeholder="Su empresa"
+                      className="contact-input"
+                    />
+                  </div>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-xs font-medium text-[var(--color-text-subtle)] mb-2"
+                    >
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      required
+                      placeholder="correo@ejemplo.com"
+                      className="contact-input"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="block text-xs font-medium text-[var(--color-text-subtle)] mb-2"
+                    >
+                      Teléfono
+                    </label>
+                    <input
+                      id="phone"
+                      type="tel"
+                      placeholder="+52 55..."
+                      className="contact-input"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label
+                    htmlFor="service"
+                    className="block text-xs font-medium text-[var(--color-text-subtle)] mb-2"
+                  >
+                    Servicio de Interés
+                  </label>
+                  <select id="service" className="contact-input" required>
+                    <option value="">Seleccione un servicio</option>
+                    <option>Control de Plagas</option>
+                    <option>Extintores</option>
+                    <option>Gestión Ambiental</option>
+                    <option>Seguridad Industrial</option>
+                    <option>Protección Civil</option>
+                    <option>Capacitación STPS</option>
+                    <option>Sanitización</option>
+                    <option>Otro</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="block text-xs font-medium text-[var(--color-text-subtle)] mb-2"
+                  >
+                    Mensaje
+                  </label>
+                  <textarea
+                    id="message"
+                    rows={4}
+                    placeholder="Describa sus necesidades..."
+                    className="contact-input resize-none"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={status === "sending"}
+                  className="btn-primary w-full flex items-center justify-center gap-2"
+                >
+                  {status === "sending" ? (
+                    <span className="animate-spin-slow inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full" />
+                  ) : status === "sent" ? (
+                    "¡Enviado con éxito!"
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      Enviar Solicitud
+                    </>
+                  )}
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
 }

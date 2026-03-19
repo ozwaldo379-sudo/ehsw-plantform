@@ -87,6 +87,39 @@
     }
 }
 
+/* Float animation for decorative elements */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+/* Gentle pulse glow */
+@keyframes pulse-glow {
+    0%, 100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Scroll indicator bounce */
+@keyframes scroll-bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0) translateX(-50%);
+    }
+    40% {
+        transform: translateY(8px) translateX(-50%);
+    }
+    60% {
+        transform: translateY(4px) translateX(-50%);
+    }
+}
+
 /* ─── Utility Classes ─── */
 .animate-shimmer {
     animation: shimmer 2.5s linear infinite;
@@ -116,4 +149,16 @@
 
 .animate-pulse-ring {
     animation: pulse-ring 1.5s ease-in-out infinite;
+}
+
+.animate-float {
+    animation: float 5s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+    animation: pulse-glow 4s ease-in-out infinite;
+}
+
+.animate-scroll-bounce {
+    animation: scroll-bounce 2.5s ease-in-out infinite;
 }

@@ -29,12 +29,7 @@ export default function RootLayout({
             lang="es"
             className={`${outfit.variable} ${inter.variable} ${playfair.variable}`}
         >
-            <head>
-                <link
-                    rel="stylesheet"
-                    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-                />
-            </head>
+            <head />
             <body className="antialiased">
                 {children}
                 <Analytics />

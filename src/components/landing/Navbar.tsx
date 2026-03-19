@@ -1,107 +1,125 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
+
+const navLinks = [
+  { label: "Inicio", href: "#inicio" },
+  { label: "Nosotros", href: "#nosotros" },
+  { label: "Servicios", href: "#servicios" },
+  { label: "Normatividad", href: "#normatividad" },
+  { label: "Cobertura", href: "#cobertura" },
+  { label: "Contacto", href: "#contacto" },
+];
 
 export default function Navbar() {
-    const [scrolled, setScrolled] = useState(false);
-    const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 50);
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-    return (
-        <header
-            className={`glass-nav fixed w-full z-50 transition-all duration-300 ${scrolled ? "py-2 shadow-lg" : "py-0"
-                }`}
-        >
-            <div className="max-w-7xl mx-auto px-6 flex justify-between items-center py-4">
-                <Link href="/" className="flex gap-2 items-center text-2xl font-bold text-white no-underline tracking-tight">
-                    <img src="/logo-ehsw.png" alt="EHSW²" className="h-[40px] md:h-[52px] w-auto object-contain" />
-                </Link>
+  // Lock body scroll when mobile nav is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:block">
-                    <ul className="flex gap-8 list-none">
-                        {[
-                            { href: "#inicio", label: "Inicio" },
-                            { href: "#quienes-somos", label: "Quiénes Somos" },
-                            { href: "#servicios", label: "Servicios" },
-                            { href: "#normatividad", label: "Normatividad" },
-                            { href: "#cobertura", label: "Cobertura" },
-                            { href: "#contacto", label: "Contacto" },
-                        ].map((item) => (
-                            <li key={item.href}>
-                                <a
-                                    href={item.href}
-                                    className="text-[var(--color-text-muted)] no-underline font-medium text-sm hover:text-white transition-colors"
-                                >
-                                    {item.label}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
+  return (
+    <>
+      <nav
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+          scrolled
+            ? "glass-nav py-3 shadow-lg shadow-black/20"
+            : "py-5 bg-transparent"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+          {/* ─── Brand ─── */}
+          <a
+            href="#inicio"
+            className="text-xl font-extrabold tracking-tight text-white"
+          >
+            EHSW<span className="text-gradient">²</span>
+          </a>
 
-                {/* Desktop Actions */}
-                <div className="hidden md:flex gap-3 items-center">
-                    <Link href="/admin/login" className="btn-secondary text-sm">
-                        <i className="fa-solid fa-user-lock"></i> Portal Admin
-                    </Link>
-                    <a href="https://wa.me/522213050039?text=Hola,%20me%20interesa%20conocer%20sus%20servicios%20EHS" target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">
-                        <i className="fa-brands fa-whatsapp"></i> Cotizar Ahora
-                    </a>
-                </div>
+          {/* ─── Desktop Links ─── */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="relative text-sm font-medium text-[var(--color-text-muted)] hover:text-white transition-colors duration-300 group"
+              >
+                {link.label}
+                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[var(--color-primary)] transition-all duration-300 group-hover:w-full" />
+              </a>
+            ))}
+            <a href="#contacto" className="btn-primary text-sm !py-2 !px-5">
+              Cotizar
+            </a>
+          </div>
 
-                {/* Mobile Toggle */}
-                <button
-                    className="md:hidden text-white text-xl bg-transparent border-none cursor-pointer"
-                    onClick={() => setMobileOpen(!mobileOpen)}
-                >
-                    <i className={`fa-solid ${mobileOpen ? "fa-xmark" : "fa-bars"}`}></i>
-                </button>
-            </div>
-
-            {/* Mobile Menu */}
-            {mobileOpen && (
-                <div className="md:hidden px-6 pb-6 animate-fade-in-up">
-                    <nav>
-                        <ul className="flex flex-col gap-4 list-none">
-                            {[
-                                { href: "#inicio", label: "Inicio" },
-                                { href: "#quienes-somos", label: "Quiénes Somos" },
-                                { href: "#servicios", label: "Servicios" },
-                                { href: "#normatividad", label: "Normatividad" },
-                                { href: "#cobertura", label: "Cobertura" },
-                                { href: "#contacto", label: "Contacto" }
-                            ].map(
-                                (item) => (
-                                    <li key={item.href}>
-                                        <a
-                                            href={item.href}
-                                            className="text-[var(--color-text-muted)] no-underline font-medium text-base hover:text-white transition-colors"
-                                            onClick={() => setMobileOpen(false)}
-                                        >
-                                            {item.label}
-                                        </a>
-                                    </li>
-                                )
-                            )}
-                        </ul>
-                    </nav>
-                    <div className="flex flex-col gap-3 mt-4">
-                        <Link href="/admin/login" className="btn-secondary text-sm justify-center">
-                            <i className="fa-solid fa-user-lock"></i> Portal Admin
-                        </Link>
-                        <a href="https://wa.me/522213050039?text=Hola,%20me%20interesa%20conocer%20sus%20servicios%20EHS" target="_blank" rel="noopener noreferrer" className="btn-primary text-sm justify-center">
-                            <i className="fa-brands fa-whatsapp"></i> Cotizar Ahora
-                        </a>
-                    </div>
-                </div>
+          {/* ─── Hamburger ─── */}
+          <button
+            className="md:hidden p-2 text-white"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+          >
+            {mobileOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
             )}
-        </header>
-    );
+          </button>
+        </div>
+      </nav>
+
+      {/* ─── Mobile Drawer ─── */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 bg-[var(--color-bg-dark)]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-6"
+          >
+            {navLinks.map((link, i) => (
+              <motion.a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ delay: i * 0.06, duration: 0.4 }}
+                className="text-2xl font-semibold text-white hover:text-[var(--color-primary)] transition-colors"
+              >
+                {link.label}
+              </motion.a>
+            ))}
+            <motion.a
+              href="#contacto"
+              onClick={() => setMobileOpen(false)}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ delay: navLinks.length * 0.06, duration: 0.4 }}
+              className="btn-primary mt-4"
+            >
+              Cotizar
+            </motion.a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
 }
