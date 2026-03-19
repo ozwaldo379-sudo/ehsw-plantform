@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { siteConfig } from "@/config/site";
 
 const navLinks = [
   { label: "Inicio", href: "#inicio" },
@@ -38,16 +40,24 @@ export default function Navbar() {
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
           scrolled
             ? "glass-nav py-3 shadow-lg shadow-black/20"
-            : "py-5 bg-transparent"
+            : "py-4 bg-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           {/* ─── Brand ─── */}
           <a
             href="#inicio"
-            className="text-xl font-extrabold tracking-tight text-white"
+            className="flex items-center"
+            aria-label="EHSW2 Inicio"
           >
-            EHSW<span className="text-gradient">²</span>
+            <Image
+              src="/logo-ehsw2.png"
+              alt="EHSW2"
+              width={240}
+              height={80}
+              priority
+              className="h-11 md:h-14 w-auto"
+            />
           </a>
 
           {/* ─── Desktop Links ─── */}
@@ -62,7 +72,12 @@ export default function Navbar() {
                 <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[var(--color-primary)] transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
-            <a href="https://wa.me/522213050039?text=Hola,%20me%20interesa%20conocer%20sus%20servicios%20EHS" target="_blank" rel="noopener noreferrer" className="btn-primary text-sm !py-2 !px-5">
+            <a
+              href={siteConfig.contact.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary text-sm !py-2 !px-5"
+            >
               Cotizar
             </a>
           </div>
@@ -107,7 +122,7 @@ export default function Navbar() {
               </motion.a>
             ))}
             <motion.a
-              href="https://wa.me/522213050039?text=Hola,%20me%20interesa%20conocer%20sus%20servicios%20EHS"
+              href={siteConfig.contact.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileOpen(false)}

@@ -1,4 +1,4 @@
-import { Inter, Outfit, Playfair_Display } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 
 export const inter = Inter({
     subsets: ["latin"],
@@ -6,14 +6,8 @@ export const inter = Inter({
     display: "swap",
 });
 
-export const outfit = Outfit({
+export const spaceGrotesk = Space_Grotesk({
     subsets: ["latin"],
     variable: "--font-heading",
-    display: "swap",
-});
-
-export const playfair = Playfair_Display({
-    subsets: ["latin"],
-    variable: "--font-display",
     display: "swap",
 });

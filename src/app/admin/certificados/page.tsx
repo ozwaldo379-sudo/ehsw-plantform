@@ -79,7 +79,7 @@ export default function CertificadosListPage() {
                                 className="w-full pl-12 pr-4 py-3 bg-[rgba(15,23,42,0.4)] border border-[var(--color-glass-border)] rounded-xl text-white outline-none focus:border-[var(--color-primary)] transition-colors"
                             />
                         </div>
-                        <button type="submit" className="btn-secondary px-6">
+                        <button type="submit" className="btn-ghost px-6">
                             Buscar
                         </button>
                         {search && (

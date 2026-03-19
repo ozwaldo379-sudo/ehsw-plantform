@@ -7,7 +7,12 @@ export async function GET(
 ) {
     try {
         const { folio } = await params;
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+        const forwardedHost = request.headers.get("x-forwarded-host");
+        const forwardedProto = request.headers.get("x-forwarded-proto") || "https";
+        const requestOrigin = forwardedHost
+            ? `${forwardedProto}://${forwardedHost}`
+            : request.nextUrl.origin;
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || requestOrigin;
         const verificationUrl = `${siteUrl}/certificado/${encodeURIComponent(folio)}`;
 
         const qrDataUrl = await QRCode.toDataURL(verificationUrl, {

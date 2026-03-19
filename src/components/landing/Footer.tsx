@@ -1,22 +1,34 @@
+import Image from "next/image";
 import { Phone, Mail, MapPin } from "lucide-react";
+import { siteConfig } from "@/config/site";
 
 const footerLinks = [
   {
     title: "Servicios",
     links: [
-      "Control de Plagas",
-      "Extintores",
-      "Gestión Ambiental",
-      "Seguridad Industrial",
+      { label: "Control de Plagas", href: "#servicios" },
+      { label: "Extintores", href: "#servicios" },
+      { label: "Gestión Ambiental", href: "#servicios" },
+      { label: "Seguridad Industrial", href: "#servicios" },
     ],
   },
   {
     title: "Normatividad",
-    links: ["COFEPRIS", "STPS", "SEMARNAT", "Protección Civil"],
+    links: [
+      { label: "COFEPRIS", href: "#normatividad" },
+      { label: "STPS", href: "#normatividad" },
+      { label: "SEMARNAT", href: "#normatividad" },
+      { label: "Protección Civil", href: "#normatividad" },
+    ],
   },
   {
     title: "Empresa",
-    links: ["Nosotros", "Cobertura", "Contacto", "Verificar Certificado"],
+    links: [
+      { label: "Nosotros", href: "#nosotros" },
+      { label: "Cobertura", href: "#cobertura" },
+      { label: "Contacto", href: "#contacto" },
+      { label: "Verificar Certificado", href: "#certificados" },
+    ],
   },
 ];
 
@@ -27,24 +39,36 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-10 mb-14">
           {/* Brand */}
           <div>
-            <div className="text-xl font-extrabold tracking-tight text-white mb-4">
-              EHSW<span className="text-gradient">²</span>
-            </div>
+            <Image
+              src="/logo-ehsw2.png"
+              alt="EHSW2"
+              width={210}
+              height={72}
+              className="h-11 w-auto mb-4"
+            />
             <p className="text-sm text-[var(--color-text-muted)] leading-relaxed mb-5">
               Especialistas en higiene, seguridad y medio ambiente para
               empresas de todos los giros.
             </p>
             <div className="flex flex-col gap-2 text-sm text-[var(--color-text-subtle)]">
               <span className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5" /> +52 55 1234 5678
+                <Phone className="w-3.5 h-3.5" /> {siteConfig.contact.phone}
               </span>
               <span className="flex items-center gap-2">
-                <Mail className="w-3.5 h-3.5" /> contacto@ehsw2.com
+                <Mail className="w-3.5 h-3.5" /> {siteConfig.contact.email}
               </span>
               <span className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5" /> CDMX, México
+                <MapPin className="w-3.5 h-3.5" /> México, zona centro
               </span>
             </div>
+            <a
+              href={siteConfig.contact.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary text-sm mt-6"
+            >
+              Cotizar por WhatsApp
+            </a>
           </div>
 
           {/* Link Columns */}
@@ -55,10 +79,13 @@ export default function Footer() {
               </h4>
               <ul className="space-y-2.5">
                 {col.links.map((link) => (
-                  <li key={link}>
-                    <span className="text-sm text-[var(--color-text-muted)] hover:text-white transition-colors cursor-pointer">
-                      {link}
-                    </span>
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-sm text-[var(--color-text-muted)] hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -72,7 +99,7 @@ export default function Footer() {
             © {new Date().getFullYear()} EHSW². Todos los derechos reservados.
           </p>
           <p className="text-xs text-[var(--color-text-subtle)]">
-            Desarrollado con tecnología de última generación
+            Certificación digital y servicios técnicos para cumplimiento EHS
           </p>
         </div>
       </div>

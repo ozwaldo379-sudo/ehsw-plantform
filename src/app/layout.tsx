@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { inter, outfit, playfair } from "@/lib/fonts";
+import { inter, spaceGrotesk } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default function RootLayout({
     return (
         <html
             lang="es"
-            className={`${outfit.variable} ${inter.variable} ${playfair.variable}`}
+            className={`${spaceGrotesk.variable} ${inter.variable}`}
         >
             <head />
             <body className="antialiased">

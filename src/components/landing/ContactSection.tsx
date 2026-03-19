@@ -1,13 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Send, Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Send, Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 import { useState, FormEvent } from "react";
+import { siteConfig } from "@/config/site";
 
 const contactInfo = [
-  { icon: Phone, label: "Teléfono", value: "+52 55 1234 5678" },
-  { icon: Mail, label: "Email", value: "contacto@ehsw2.com" },
-  { icon: MapPin, label: "Ubicación", value: "CDMX, México" },
+  { icon: Phone, label: "Teléfono", value: siteConfig.contact.phone },
+  { icon: Mail, label: "Email", value: siteConfig.contact.email },
+  { icon: MapPin, label: "Ubicación", value: "México, zona centro" },
   { icon: Clock, label: "Horario", value: "Lun–Vie 8:00–18:00" },
 ];
 
@@ -75,6 +76,15 @@ export default function ContactSection() {
               variants={fadeUp}
               className="md:col-span-2 flex flex-col gap-4"
             >
+              <a
+                href={siteConfig.contact.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary w-full justify-center"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Cotizar por WhatsApp
+              </a>
               {contactInfo.map((c) => (
                 <div
                   key={c.label}
@@ -93,6 +103,12 @@ export default function ContactSection() {
                   </div>
                 </div>
               ))}
+              <div className="glass-card p-5">
+                <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">
+                  También podemos apoyar con seguimiento de folios, validación
+                  de constancias y programación de visitas técnicas.
+                </p>
+              </div>
             </motion.div>
 
             {/* Contact Form */}
