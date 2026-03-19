@@ -9,7 +9,7 @@ export default function AdminSidebar() {
     return (
         <aside className="admin-sidebar w-64 p-6 hidden lg:block shrink-0">
             <div className="text-xl font-bold text-white mb-8 flex items-center gap-2">
-                <img src="/logo-ehsw.png" alt="EHSW²" style={{ height: 32 }} />
+                <img src="/logo-ehsw2.png" alt="EHSW²" style={{ height: 36 }} />
             </div>
             <nav className="space-y-1">
                 <Link

@@ -1,44 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { ShieldCheck, Award, Building2 } from "lucide-react";
-
-const logos = [
-  { src: "/Images/Arkema.png", alt: "Arkema" },
-  { src: "/Images/bostik.png", alt: "Bostik" },
-  { src: "/Images/global denim.png", alt: "Global Denim" },
-  { src: "/Images/imesa.png", alt: "IMESA" },
-  { src: "/Images/inovatitive group.png", alt: "Inovatitive Group" },
-  { src: "/Images/las migas.png", alt: "Las Migas" },
-  { src: "/Images/sushiroll.png", alt: "Sushi Roll" },
-];
-
-const trustCards = [
-  {
-    icon: ShieldCheck,
-    title: "Certificados COFEPRIS",
-    desc: "Licencia sanitaria vigente para control de plagas y servicios asociados.",
-  },
-  {
-    icon: Award,
-    title: "Cumplimiento STPS",
-    desc: "Procesos alineados a normas de seguridad laboral y soporte documental.",
-  },
-  {
-    icon: Building2,
-    title: "Protección Civil",
-    desc: "Atención técnica y operativa para programas internos y brigadas de emergencia.",
-  },
-];
-
-const sectionVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
-};
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
@@ -46,134 +11,112 @@ const fadeUp = {
   },
 };
 
+const stats = [
+  { value: "15+", label: "Anos de experiencia" },
+  { value: "500+", label: "Empresas atendidas" },
+  { value: "5", label: "Zonas nacionales" },
+];
+
 export default function AboutSection() {
   return (
-    <section id="nosotros" className="py-24 md:py-32 relative">
-      <div className="section-divider mb-20" />
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center"
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          <motion.div variants={fadeUp} className="relative">
-            <div className="absolute -inset-3 rounded-[30px] bg-[radial-gradient(circle_at_top,rgba(0,188,212,0.2),transparent_60%)] blur-2xl" />
-            <div className="relative glass-card-glow p-3 rounded-[28px]">
-              <div className="overflow-hidden rounded-[22px]">
-                <Image
-                  src="/Images/Servicios/quienes-somos.png"
-                  alt="Equipo EHSW2"
-                  width={920}
-                  height={740}
-                  className="w-full h-[420px] md:h-[520px] object-cover"
-                />
+    <section id="nosotros" className="relative py-12 lg:py-20">
+      <div className="absolute inset-0 pattern-dots opacity-60" />
+      <div className="section-divider mb-16" />
+
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+        className="relative max-w-7xl mx-auto px-6"
+      >
+        <div className="grid lg:grid-cols-[45%_55%] gap-8 lg:gap-12 items-center">
+          <motion.div variants={fadeUp} className="order-2 lg:order-1">
+            <div className="relative rounded-2xl overflow-hidden border border-cyan/20 shadow-[0_0_40px_rgba(0,188,212,0.08)] bg-[linear-gradient(180deg,rgba(30,58,79,0.92),rgba(13,31,45,0.98))] p-8 md:p-10 min-h-[360px] flex flex-col justify-between">
+              <div className="absolute inset-0 pattern-dots opacity-70" />
+              <div className="relative">
+                <div className="inline-flex items-center gap-2 border border-cyan/25 bg-cyan/10 text-cyan text-xs font-semibold uppercase tracking-[0.18em] px-4 py-2 rounded-full">
+                  Operacion certificada
+                </div>
+              </div>
+
+              <div className="relative grid gap-4">
+                <div className="rounded-2xl border border-white/8 bg-white/4 p-5">
+                  <p className="text-cyan text-sm font-semibold uppercase tracking-[0.16em] mb-2">
+                    Cobertura
+                  </p>
+                  <p className="text-white text-2xl font-bold leading-tight">
+                    Seguridad, higiene y medio ambiente en una sola operacion.
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="rounded-2xl border border-white/8 bg-navy-light/60 p-5">
+                    <p className="text-cyan text-sm font-semibold mb-1">
+                      Prevencion
+                    </p>
+                    <p className="text-silver text-sm leading-relaxed">
+                      Riesgo controlado con evidencia tecnica y ejecucion en campo.
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-white/8 bg-navy-light/60 p-5">
+                    <p className="text-cyan text-sm font-semibold mb-1">
+                      Cumplimiento
+                    </p>
+                    <p className="text-silver text-sm leading-relaxed">
+                      Documentacion clara para auditorias, clientes e inspecciones.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute bottom-4 left-4 bg-navy-deep/90 border border-cyan/40 text-white text-sm font-semibold px-4 py-2 rounded-lg backdrop-blur-md">
+                15+ anos de experiencia
               </div>
             </div>
           </motion.div>
 
-          <div>
-            <motion.p variants={fadeUp} className="section-label mb-4">
-              ¿Quiénes Somos?
-            </motion.p>
-            <motion.h2
-              variants={fadeUp}
-              className="text-3xl md:text-4xl font-extrabold leading-tight mb-6"
-            >
-              Operación técnica, atención cercana y{" "}
-              <span className="text-gradient">evidencia certificable</span>
-            </motion.h2>
-            <motion.p
-              variants={fadeUp}
-              className="text-[var(--color-text-muted)] leading-relaxed mb-5"
-            >
-              En EHSW2 acompañamos a industrias, comercios y centros de trabajo
-              con servicios de higiene, seguridad y medio ambiente orientados a
-              cumplimiento, prevención y trazabilidad.
-            </motion.p>
+          <motion.div variants={fadeUp} className="order-1 lg:order-2 text-center lg:text-left">
+            <p className="text-xs uppercase tracking-[0.15em] text-cyan font-semibold mb-4">
+              SOBRE NOSOTROS
+            </p>
+            <h2 className="font-heading font-bold text-white text-4xl mb-6">
+              ¿Quienes somos?
+            </h2>
+            <p className="text-silver text-base leading-relaxed mb-4 max-w-2xl mx-auto lg:mx-0">
+              Somos profesionales especializados en brindar servicios para la
+              conservacion del medio ambiente y la Seguridad e Higiene en los
+              centros de trabajo.
+            </p>
+            <p className="text-silver text-base leading-relaxed mb-8 max-w-2xl mx-auto lg:mx-0">
+              Nos especializamos en el control de plagas, pero nuestra amplia
+              experiencia en el campo laboral nos permite asesorarte en temas de
+              seguridad, higiene industrial y gestion ambiental con el mas alto
+              nivel de cumplimiento.
+            </p>
 
-            <motion.div variants={fadeUp} className="grid grid-cols-3 gap-4">
-              {[
-                { value: "10+", label: "Años de experiencia" },
-                { value: "500+", label: "Clientes atendidos" },
-                { value: "24h", label: "Tiempo de respuesta" },
-              ].map((stat) => (
+            <div className="grid grid-cols-3 gap-4 mb-8 max-w-xl mx-auto lg:mx-0">
+              {stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="text-center p-4 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[var(--color-glass-border)]"
+                  className="bg-navy-light rounded-xl p-5 border border-white/5"
                 >
-                  <div className="text-2xl font-extrabold text-white">
+                  <div className="text-cyan font-heading font-bold text-3xl">
                     {stat.value}
                   </div>
-                  <div className="text-xs text-[var(--color-text-subtle)] mt-1">
-                    {stat.label}
-                  </div>
+                  <div className="text-silver text-sm mt-1">{stat.label}</div>
                 </div>
               ))}
-            </motion.div>
+            </div>
 
-            <motion.p
-              variants={fadeUp}
-              className="text-[var(--color-text-muted)] leading-relaxed mt-6 mb-6"
+            <a
+              href="#servicios"
+              className="inline-flex items-center justify-center lg:justify-start text-cyan font-semibold hover:underline hover:text-cyan-dark transition-colors"
             >
-              Integramos levantamiento en sitio, ejecución técnica, QR de
-              validación y documentación para que cada servicio tenga sustento
-              operativo y una presentación profesional frente a auditorías,
-              clientes o inspecciones.
-            </motion.p>
-
-            {trustCards.map((card, index) => (
-              <motion.div
-                key={card.title}
-                variants={fadeUp}
-                className={`glass-card-glow p-6 flex items-start gap-4 ${
-                  index < trustCards.length - 1 ? "mb-4" : ""
-                }`}
-              >
-                <div className="flex-shrink-0 w-11 h-11 rounded-xl gradient-main flex items-center justify-center">
-                  <card.icon className="w-5 h-5 text-[var(--color-bg-dark)]" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-white mb-1">{card.title}</h3>
-                  <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">
-                    {card.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={sectionVariants}
-          className="mt-16 glass-card px-6 py-8 logo-strip"
-        >
-          <motion.p variants={fadeUp} className="section-label text-center mb-6">
-            Empresas que han confiado en EHSW2
-          </motion.p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4 items-center">
-            {logos.map((logo) => (
-              <motion.div
-                key={logo.alt}
-                variants={fadeUp}
-                className="h-20 rounded-2xl bg-white/90 flex items-center justify-center px-4 py-3"
-              >
-                <Image
-                  src={logo.src}
-                  alt={logo.alt}
-                  width={140}
-                  height={64}
-                  className="max-h-10 w-auto object-contain"
-                />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
+              Conocer nuestros servicios →
+            </a>
+          </motion.div>
+        </div>
+      </motion.div>
     </section>
   );
 }

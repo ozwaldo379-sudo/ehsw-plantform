@@ -68,7 +68,7 @@ export default function CertificadosListPage() {
                     </div>
 
                     {/* Search Bar */}
-                    <form onSubmit={handleSearch} className="mb-8 flex gap-3">
+                    <form onSubmit={handleSearch} className="mb-8 flex flex-col md:flex-row gap-3">
                         <div className="relative flex-1">
                             <i className="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]"></i>
                             <input
@@ -76,17 +76,17 @@ export default function CertificadosListPage() {
                                 placeholder="Buscar por folio, cliente o empresa..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="w-full pl-12 pr-4 py-3 bg-[rgba(15,23,42,0.4)] border border-[var(--color-glass-border)] rounded-xl text-white outline-none focus:border-[var(--color-primary)] transition-colors"
+                                className="w-full pl-12 pr-4 py-3 bg-navy-light/70 border border-white/10 rounded-xl text-white outline-none focus:border-cyan/60 transition-colors"
                             />
                         </div>
-                        <button type="submit" className="btn-ghost px-6">
+                        <button type="submit" className="btn-ghost px-6 md:w-auto w-full">
                             Buscar
                         </button>
                         {search && (
                             <button
                                 type="button"
                                 onClick={() => { setSearch(""); fetchCertificates(""); }}
-                                className="bg-white/5 hover:bg-white/10 text-white px-4 rounded-xl border border-white/10 transition-colors"
+                                className="bg-white/5 hover:bg-white/10 text-white px-4 py-3 rounded-xl border border-white/10 transition-colors"
                             >
                                 Limpiar
                             </button>
@@ -147,28 +147,31 @@ export default function CertificadosListPage() {
                                                         </span>
                                                     </td>
                                                     <td className="p-4 text-right">
-                                                        <div className="flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <div className="flex flex-wrap gap-2 justify-end">
                                                             <Link
                                                                 href={`/admin/certificados/${cert.folio}`}
-                                                                className="p-2 hover:bg-white/10 rounded-lg text-[var(--color-primary)] transition-colors"
-                                                                title="Detalles y Descargas"
+                                                                className="border border-cyan/40 text-cyan bg-transparent hover:bg-cyan/10 px-3 py-1.5 rounded-md text-sm transition-colors inline-flex items-center gap-2"
+                                                                title="Ver"
                                                             >
-                                                                <i className="fa-solid fa-file-invoice text-xs"></i>
+                                                                <i className="fa-solid fa-eye text-xs"></i>
+                                                                <span className="hidden md:inline">Ver</span>
                                                             </Link>
                                                             <Link
                                                                 href={`/certificado/${cert.folio}`}
                                                                 target="_blank"
-                                                                className="p-2 hover:bg-white/10 rounded-lg text-emerald-400 transition-colors"
+                                                                className="bg-cyan text-white hover:bg-cyan-dark px-3 py-1.5 rounded-md text-sm transition-colors inline-flex items-center gap-2"
                                                                 title="Ver público"
                                                             >
-                                                                <i className="fa-solid fa-eye text-xs"></i>
+                                                                <i className="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                                                                <span className="hidden md:inline">Ver publico</span>
                                                             </Link>
                                                             <button
                                                                 onClick={() => handleDelete(cert.folio)}
-                                                                className="p-2 hover:bg-red-500/10 rounded-lg text-red-400 transition-colors"
+                                                                className="border border-invalid/40 text-invalid bg-transparent hover:bg-invalid/10 px-3 py-1.5 rounded-md text-sm transition-colors inline-flex items-center gap-2"
                                                                 title="Eliminar"
                                                             >
                                                                 <i className="fa-solid fa-trash-can text-xs"></i>
+                                                                <span className="hidden md:inline">Eliminar</span>
                                                             </button>
                                                         </div>
                                                     </td>

@@ -24,8 +24,8 @@ const fadeUp = {
 
 export default function NormatividadSection() {
   return (
-    <section id="normatividad" className="py-24 md:py-32 relative">
-      <div className="section-divider mb-20" />
+    <section id="normatividad" className="py-12 lg:py-20 relative">
+      <div className="section-divider mb-16" />
       <div className="max-w-5xl mx-auto px-6">
         <motion.div
           initial="hidden"
@@ -45,7 +45,7 @@ export default function NormatividadSection() {
           </motion.h2>
           <motion.p
             variants={fadeUp}
-            className="text-[var(--color-text-muted)] max-w-xl mx-auto mb-12 leading-relaxed"
+            className="text-silver max-w-xl mx-auto mb-12 leading-relaxed"
           >
             Trabajamos bajo las normas oficiales mexicanas que regulan la
             seguridad, higiene y medio ambiente.

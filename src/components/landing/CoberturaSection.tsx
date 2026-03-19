@@ -21,8 +21,8 @@ const fadeUp = {
 
 export default function CoberturaSection() {
   return (
-    <section id="cobertura" className="py-24 md:py-32 relative">
-      <div className="section-divider mb-20" />
+    <section id="cobertura" className="py-12 lg:py-20 relative">
+      <div className="section-divider mb-16" />
       <div className="max-w-5xl mx-auto px-6">
         <motion.div
           initial="hidden"
@@ -43,7 +43,7 @@ export default function CoberturaSection() {
             </motion.h2>
             <motion.p
               variants={fadeUp}
-              className="text-[var(--color-text-muted)] max-w-xl mx-auto leading-relaxed"
+              className="text-silver max-w-xl mx-auto leading-relaxed"
             >
               Cubrimos CDMX y estados del centro de México con atención
               personalizada y tiempos de respuesta rápidos.
@@ -67,7 +67,7 @@ export default function CoberturaSection() {
                   key={city}
                   className="flex items-center gap-2 p-3 rounded-xl bg-[var(--color-bg-card)] border border-[var(--color-glass-border)]"
                 >
-                  <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-valid flex-shrink-0" />
                   <span className="text-sm font-medium text-white">
                     {city}
                   </span>

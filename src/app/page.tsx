@@ -2,6 +2,7 @@ import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
 import CertLookup from "@/components/landing/CertLookup";
 import AboutSection from "@/components/landing/AboutSection";
+import ClientCarousel from "@/components/landing/ClientCarousel";
 import ServicesSection from "@/components/landing/ServicesSection";
 import NormatividadSection from "@/components/landing/NormatividadSection";
 import CoberturaSection from "@/components/landing/CoberturaSection";
@@ -20,6 +21,7 @@ export default function Home() {
                     </div>
                 </section>
                 <AboutSection />
+                <ClientCarousel />
                 <ServicesSection />
                 <NormatividadSection />
                 <CoberturaSection />

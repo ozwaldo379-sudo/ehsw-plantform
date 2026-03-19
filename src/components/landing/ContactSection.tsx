@@ -36,8 +36,8 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contacto" className="py-24 md:py-32 relative">
-      <div className="section-divider mb-20" />
+    <section id="contacto" className="py-12 lg:py-20 relative">
+      <div className="section-divider mb-16" />
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial="hidden"
@@ -62,7 +62,7 @@ export default function ContactSection() {
             </motion.h2>
             <motion.p
               variants={fadeUp}
-              className="text-[var(--color-text-muted)] max-w-xl mx-auto"
+              className="text-silver max-w-xl mx-auto"
             >
               Contáctenos para una cotización sin compromiso. Respondemos en
               menos de 24 horas.
@@ -104,7 +104,7 @@ export default function ContactSection() {
                 </div>
               ))}
               <div className="glass-card p-5">
-                <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">
+                <p className="text-sm text-silver leading-relaxed">
                   También podemos apoyar con seguimiento de folios, validación
                   de constancias y programación de visitas técnicas.
                 </p>

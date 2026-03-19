@@ -34,7 +34,7 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[var(--color-glass-border)] pt-16 pb-8">
+    <footer className="border-t border-[var(--color-glass-border)] pt-12 lg:pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-10 mb-14">
           {/* Brand */}
@@ -46,7 +46,7 @@ export default function Footer() {
               height={72}
               className="h-11 w-auto mb-4"
             />
-            <p className="text-sm text-[var(--color-text-muted)] leading-relaxed mb-5">
+            <p className="text-sm text-silver leading-relaxed mb-5">
               Especialistas en higiene, seguridad y medio ambiente para
               empresas de todos los giros.
             </p>
@@ -82,7 +82,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-sm text-[var(--color-text-muted)] hover:text-white transition-colors"
+                      className="text-sm text-silver hover:text-white transition-colors"
                     >
                       {link.label}
                     </a>

@@ -1,150 +1,107 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
-import {
-  ChevronDown,
-  ShieldCheck,
-  Award,
-  Building2,
-  ArrowRight,
-} from "lucide-react";
-import { siteConfig } from "@/config/site";
 
 const trustBadges = [
-  { icon: ShieldCheck, label: "COFEPRIS" },
-  { icon: Award, label: "STPS" },
-  { icon: Building2, label: "Protección Civil" },
+  "🏛️ COFEPRIS Reg. 871",
+  "✓ ISO 14001",
+  "⚡ STPS Certificado",
 ];
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30, filter: "blur(4px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
-  },
-};
 
 export default function Hero() {
   return (
     <section
       id="inicio"
-      className="relative min-h-screen flex items-center overflow-hidden pt-28 md:pt-32"
+      className="relative min-h-[80vh] lg:min-h-[90vh] overflow-hidden bg-navy-deep"
     >
       <div className="gradient-radial-hero" />
-      <div className="dot-grid-bg" />
+      <div className="dot-grid-bg opacity-70" />
 
-      <div
-        className="orb orb-primary animate-float"
-        style={{ width: 420, height: 420, top: "-8%", left: "-8%" }}
-      />
-      <div
-        className="orb orb-accent animate-float"
-        style={{
-          width: 320,
-          height: 320,
-          bottom: "5%",
-          right: "-3%",
-          animationDelay: "2s",
-        }}
-      />
+      <div className="absolute inset-0 md:hidden">
+        <Image
+          src="/Images/Servicios/empleado-plagas-ehsw2.png"
+          alt="Tecnico EHSW2"
+          fill
+          priority
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,31,45,0.75)_0%,rgba(13,31,45,0.58)_40%,rgba(13,31,45,0.88)_100%)]" />
+      </div>
 
-      <motion.div
-        className="relative z-10 max-w-7xl mx-auto px-6 w-full"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <div className="grid lg:grid-cols-[1.08fr_0.92fr] gap-12 xl:gap-16 items-center">
-          <div className="max-w-3xl">
-            <motion.p variants={itemVariants} className="section-label mb-6">
-              Certificación digital y cumplimiento normativo
-            </motion.p>
-
-            <motion.h1
-              variants={itemVariants}
-              className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.02] tracking-tight mb-6"
+      <div className="relative z-10 max-w-7xl mx-auto px-6 min-h-[80vh] lg:min-h-[90vh] flex items-center py-12 lg:py-20">
+        <div className="grid lg:grid-cols-[55%_45%] items-center gap-8 lg:gap-12 w-full">
+          <div className="text-center lg:text-left max-w-2xl lg:max-w-3xl mx-auto lg:mx-0">
+            <p
+              className="hero-reveal text-xs uppercase tracking-[0.15em] text-cyan font-semibold mb-4"
+              style={{ animationDelay: "0.1s" }}
             >
-              Servicios EHS con respaldo
-              <span className="text-gradient"> real en campo</span>
-            </motion.h1>
+              CERTIFICACION INDUSTRIAL PROFESIONAL
+            </p>
 
-            <motion.p
-              variants={itemVariants}
-              className="text-lg md:text-xl text-[var(--color-text-muted)] max-w-2xl mb-10 leading-relaxed"
+            <h1
+              className="hero-reveal font-heading font-bold text-white text-[1.8rem] md:text-[2.2rem] lg:text-[3.5rem] leading-tight mb-6"
+              style={{ animationDelay: "0.2s" }}
             >
-              Control integral de plagas, extintores, gestión ambiental y
-              seguridad industrial para empresas mexicanas que necesitan
-              atención rápida, evidencia clara y cumplimiento verificable.
-            </motion.p>
+              Protegemos tu empresa del riesgo industrial
+            </h1>
 
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-10"
+            <p
+              className="hero-reveal text-silver text-base md:text-lg leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0"
+              style={{ animationDelay: "0.3s" }}
             >
-              <a
-                href={siteConfig.contact.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary"
-              >
-                Solicitar cotización
-                <ArrowRight className="w-4 h-4" />
-              </a>
-              <a href="#certificados" className="btn-ghost">
-                <ShieldCheck className="w-4 h-4" />
-                Verificar certificado
-              </a>
-            </motion.div>
+              Especialistas en Control de Plagas, Seguridad Industrial y
+              Gestion Ambiental. Cumplimiento estricto con COFEPRIS · STPS ·
+              ISO 14001 · Proteccion Civil.
+            </p>
 
-            <motion.div
-              variants={itemVariants}
-              className="flex items-center gap-8 flex-wrap"
+            <div
+              className="hero-reveal flex flex-wrap justify-center lg:justify-start gap-3 mb-8"
+              style={{ animationDelay: "0.4s" }}
             >
               {trustBadges.map((badge) => (
-                <div
-                  key={badge.label}
-                  className="flex items-center gap-2 text-[var(--color-text-subtle)] text-sm"
+                <span
+                  key={badge}
+                  className="border border-cyan/40 bg-navy/50 text-cyan text-xs font-semibold px-4 py-2 rounded-full backdrop-blur-sm"
                 >
-                  <badge.icon className="w-4 h-4 text-[var(--color-primary)]" />
-                  <span>{badge.label}</span>
-                </div>
+                  {badge}
+                </span>
               ))}
-            </motion.div>
+            </div>
+
+            <div
+              className="hero-reveal flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+              style={{ animationDelay: "0.5s" }}
+            >
+              <a
+                href="#servicios"
+                className="w-full sm:w-auto bg-cyan text-white font-semibold px-7 py-3.5 rounded-lg hover:bg-cyan-dark transition-all duration-300 shadow-lg shadow-cyan/20 inline-flex items-center justify-center"
+              >
+                Explorar Servicios
+              </a>
+              <a
+                href="#certificados"
+                className="w-full sm:w-auto border-2 border-cyan text-cyan font-semibold px-7 py-3 rounded-lg bg-transparent hover:bg-cyan/10 transition-all duration-300 inline-flex items-center justify-center"
+              >
+                Validar Certificado
+              </a>
+            </div>
           </div>
 
-          <motion.div
-            variants={itemVariants}
-            className="relative lg:justify-self-end w-full max-w-xl"
-          >
-            <div className="absolute -inset-3 rounded-[32px] bg-[radial-gradient(circle_at_top,rgba(0,188,212,0.24),transparent_58%)] blur-2xl" />
-            <div className="relative glass-card-glow p-3 md:p-4 rounded-[28px]">
-              <div className="relative overflow-hidden rounded-[22px] min-h-[420px] md:min-h-[560px]">
-                <Image
-                  src="/Images/Servicios/empleado-plagas-ehsw2.png"
-                  alt="Técnico EHSW2"
-                  width={600}
-                  height={700}
-                  priority
-                  className="h-full w-full object-cover"
-                />
+          <div className="relative hidden lg:block">
+            <div className="relative rounded-[28px] overflow-hidden min-h-[680px] border border-white/10 shadow-[0_24px_80px_-32px_rgba(0,0,0,0.6)] hero-image-panel">
+              <Image
+                src="/Images/Servicios/empleado-plagas-ehsw2.png"
+                alt="Tecnico EHSW2"
+                fill
+                priority
+                className="object-cover object-center"
+              />
+              <div className="absolute bottom-6 left-6 bg-navy-deep/90 border border-cyan text-cyan font-bold text-sm px-4 py-2 rounded-md backdrop-blur-md">
+                COFEPRIS REG. 871
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
-
-      <div className="absolute bottom-8 left-1/2 animate-scroll-bounce">
-        <ChevronDown className="w-6 h-6 text-[var(--color-text-subtle)]" />
       </div>
     </section>
   );
