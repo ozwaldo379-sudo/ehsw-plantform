@@ -55,7 +55,7 @@ export default function CoberturaSection() {
             className="glass-card-glow p-8 md:p-10"
           >
             <div className="flex items-center gap-3 mb-8">
-              <MapPin className="w-6 h-6 text-[var(--color-primary)]" />
+              <MapPin className="w-6 h-6 text-cyan" />
               <h3 className="text-xl font-bold text-white">
                 Áreas de Servicio
               </h3>
@@ -65,7 +65,7 @@ export default function CoberturaSection() {
               {cities.map((city) => (
                 <div
                   key={city}
-                  className="flex items-center gap-2 p-3 rounded-xl bg-[var(--color-bg-card)] border border-[var(--color-glass-border)]"
+                  className="flex items-center gap-2 rounded-xl border border-white/10 bg-navy-card p-3"
                 >
                   <CheckCircle className="w-4 h-4 text-valid flex-shrink-0" />
                   <span className="text-sm font-medium text-white">

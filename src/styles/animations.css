@@ -140,6 +140,15 @@
     }
 }
 
+@keyframes scroll-logos {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
 /* ─── Utility Classes ─── */
 .animate-shimmer {
     animation: shimmer 2.5s linear infinite;
@@ -185,4 +194,10 @@
 
 .animate-scroll-bounce {
     animation: scroll-bounce 2.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .carousel-track {
+        animation-play-state: paused !important;
+    }
 }

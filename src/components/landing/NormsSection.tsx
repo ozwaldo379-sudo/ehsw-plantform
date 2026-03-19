@@ -10,9 +10,9 @@ const norms = [
     title: "Control de Plagas",
     desc: "Requisitos para prestadores de servicios en control de plagas.",
     icon: ShieldCheck,
-    color: "from-emerald-500/20 to-teal-500/20",
-    border: "border-emerald-500/30",
-    dot: "bg-emerald-400",
+    color: "from-cyan/12 to-navy-card",
+    border: "border-cyan/25",
+    dot: "bg-cyan",
   },
   {
     id: "NOM-002",
@@ -20,9 +20,9 @@ const norms = [
     title: "Prevención de Incendios",
     desc: "Condiciones de seguridad contra incendio en centros de trabajo.",
     icon: HardHat,
-    color: "from-orange-500/20 to-red-500/20",
-    border: "border-orange-500/30",
-    dot: "bg-orange-400",
+    color: "from-white/8 to-navy-card",
+    border: "border-white/12",
+    dot: "bg-white/70",
   },
   {
     id: "NOM-017",
@@ -30,9 +30,9 @@ const norms = [
     title: "Equipo de Protección",
     desc: "Selección, uso y manejo de equipo de protección personal.",
     icon: Award,
-    color: "from-blue-500/20 to-indigo-500/20",
-    border: "border-blue-500/30",
-    dot: "bg-blue-400",
+    color: "from-cyan/10 to-navy-card",
+    border: "border-cyan/20",
+    dot: "bg-cyan/80",
   },
   {
     id: "NOM-030",
@@ -40,9 +40,9 @@ const norms = [
     title: "Servicios Preventivos",
     desc: "Servicios preventivos de seguridad y salud en el trabajo.",
     icon: FileText,
-    color: "from-violet-500/20 to-purple-500/20",
-    border: "border-violet-500/30",
-    dot: "bg-violet-400",
+    color: "from-white/6 to-navy-card",
+    border: "border-white/10",
+    dot: "bg-white/60",
   },
   {
     id: "ISO14001",
@@ -50,9 +50,9 @@ const norms = [
     title: "Gestión Ambiental",
     desc: "Sistema de gestión ambiental para reducir impactos negativos.",
     icon: Leaf,
-    color: "from-green-500/20 to-lime-500/20",
-    border: "border-green-500/30",
-    dot: "bg-green-400",
+    color: "from-valid/12 to-navy-card",
+    border: "border-valid/25",
+    dot: "bg-valid",
   },
   {
     id: "COFEPRIS",
@@ -60,9 +60,9 @@ const norms = [
     title: "Licencia Sanitaria",
     desc: "Licencia sanitaria vigente emitida por COFEPRIS para operar.",
     icon: CheckCircle2,
-    color: "from-cyan-500/20 to-sky-500/20",
-    border: "border-cyan-500/30",
-    dot: "bg-cyan-400",
+    color: "from-cyan/12 to-navy-card",
+    border: "border-cyan/25",
+    dot: "bg-cyan",
   },
 ];
 
@@ -87,7 +87,7 @@ export default function NormsSection() {
       className="py-24 md:py-32 relative overflow-hidden"
     >
       {/* Subtle background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--color-primary)]/[0.03] to-transparent pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-cyan/5 to-transparent" />
       <div className="section-divider mb-20" />
 
       <div className="max-w-7xl mx-auto px-6">
@@ -111,7 +111,7 @@ export default function NormsSection() {
           </motion.h2>
           <motion.p
             variants={cardVariants}
-            className="text-[var(--color-text-muted)] leading-relaxed"
+            className="leading-relaxed text-silver"
           >
             Operamos bajo los marcos regulatorios más exigentes de México,
             garantizando cumplimiento total en cada servicio.
@@ -169,12 +169,12 @@ export default function NormsSection() {
           transition={{ delay: 0.5, duration: 0.6 }}
           className="mt-14 glass-card-glow p-6 flex flex-col sm:flex-row items-center justify-center gap-6 text-center sm:text-left"
         >
-          <CheckCircle2 className="w-8 h-8 text-[var(--color-primary)] flex-shrink-0" />
+          <CheckCircle2 className="h-8 w-8 flex-shrink-0 text-cyan" />
           <div>
             <p className="text-white font-semibold">
               Documentación disponible en todo momento
             </p>
-            <p className="text-sm text-[var(--color-text-muted)]">
+            <p className="text-sm text-silver/80">
               Todas nuestras licencias y certificaciones pueden ser verificadas
               con las autoridades correspondientes.
             </p>

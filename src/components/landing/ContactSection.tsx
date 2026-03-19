@@ -94,7 +94,7 @@ export default function ContactSection() {
                     <c.icon className="w-4 h-4 text-[var(--color-bg-dark)]" />
                   </div>
                   <div>
-                    <div className="text-xs text-[var(--color-text-subtle)] mb-0.5">
+                    <div className="mb-0.5 text-xs text-silver/70">
                       {c.label}
                     </div>
                     <div className="text-sm font-semibold text-white">
@@ -121,7 +121,7 @@ export default function ContactSection() {
                   <div>
                     <label
                       htmlFor="name"
-                      className="block text-xs font-medium text-[var(--color-text-subtle)] mb-2"
+                      className="mb-2 block text-xs font-medium text-silver/70"
                     >
                       Nombre
                     </label>
@@ -136,7 +136,7 @@ export default function ContactSection() {
                   <div>
                     <label
                       htmlFor="company"
-                      className="block text-xs font-medium text-[var(--color-text-subtle)] mb-2"
+                      className="mb-2 block text-xs font-medium text-silver/70"
                     >
                       Empresa
                     </label>
@@ -152,7 +152,7 @@ export default function ContactSection() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-xs font-medium text-[var(--color-text-subtle)] mb-2"
+                      className="mb-2 block text-xs font-medium text-silver/70"
                     >
                       Email
                     </label>
@@ -167,7 +167,7 @@ export default function ContactSection() {
                   <div>
                     <label
                       htmlFor="phone"
-                      className="block text-xs font-medium text-[var(--color-text-subtle)] mb-2"
+                      className="mb-2 block text-xs font-medium text-silver/70"
                     >
                       Teléfono
                     </label>
@@ -182,7 +182,7 @@ export default function ContactSection() {
                 <div>
                   <label
                     htmlFor="service"
-                    className="block text-xs font-medium text-[var(--color-text-subtle)] mb-2"
+                    className="mb-2 block text-xs font-medium text-silver/70"
                   >
                     Servicio de Interés
                   </label>
@@ -201,7 +201,7 @@ export default function ContactSection() {
                 <div>
                   <label
                     htmlFor="message"
-                    className="block text-xs font-medium text-[var(--color-text-subtle)] mb-2"
+                    className="mb-2 block text-xs font-medium text-silver/70"
                   >
                     Mensaje
                   </label>

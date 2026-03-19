@@ -1,106 +1,96 @@
 "use client";
 
-import Image from "next/image";
+import CertBadge from "@/components/landing/CertBadge";
+import CertLookup from "@/components/landing/CertLookup";
 
 const trustBadges = [
-  "🏛️ COFEPRIS Reg. 871",
-  "✓ ISO 14001",
-  "⚡ STPS Certificado",
+  {
+    label: "COFEPRIS",
+    tooltip:
+      "Comisión Federal para la Protección contra Riesgos Sanitarios — Registro de proveedor autorizado",
+  },
+  {
+    label: "STPS",
+    tooltip:
+      "Secretaría del Trabajo y Previsión Social — Norma de equipo de protección personal",
+  },
+  {
+    label: "Protección Civil",
+    tooltip:
+      "Programa Interno de Protección Civil — Formación de brigadas y simulacros",
+  },
 ];
 
 export default function Hero() {
   return (
     <section
       id="inicio"
-      className="relative min-h-[80vh] lg:min-h-[90vh] overflow-hidden bg-navy-deep"
+      className="relative overflow-hidden bg-navy-deep"
     >
+      <div className="hero-grid-bg" />
       <div className="gradient-radial-hero" />
-      <div className="dot-grid-bg opacity-70" />
 
-      <div className="absolute inset-0 md:hidden">
-        <Image
-          src="/Images/Servicios/empleado-plagas-ehsw2.png"
-          alt="Tecnico EHSW2"
-          fill
-          priority
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,31,45,0.75)_0%,rgba(13,31,45,0.58)_40%,rgba(13,31,45,0.88)_100%)]" />
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 min-h-[80vh] lg:min-h-[90vh] flex items-center py-12 lg:py-20">
-        <div className="grid lg:grid-cols-[55%_45%] items-center gap-8 lg:gap-12 w-full">
-          <div className="text-center lg:text-left max-w-2xl lg:max-w-3xl mx-auto lg:mx-0">
-            <p
-              className="hero-reveal text-xs uppercase tracking-[0.15em] text-cyan font-semibold mb-4"
-              style={{ animationDelay: "0.1s" }}
-            >
-              CERTIFICACION INDUSTRIAL PROFESIONAL
-            </p>
-
-            <h1
-              className="hero-reveal font-heading font-bold text-white text-[1.8rem] md:text-[2.2rem] lg:text-[3.5rem] leading-tight mb-6"
-              style={{ animationDelay: "0.2s" }}
-            >
-              Protegemos tu empresa del riesgo industrial
-            </h1>
-
-            <p
-              className="hero-reveal text-silver text-base md:text-lg leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0"
-              style={{ animationDelay: "0.3s" }}
-            >
-              Especialistas en Control de Plagas, Seguridad Industrial y
-              Gestion Ambiental. Cumplimiento estricto con COFEPRIS · STPS ·
-              ISO 14001 · Proteccion Civil.
-            </p>
-
-            <div
-              className="hero-reveal flex flex-wrap justify-center lg:justify-start gap-3 mb-8"
-              style={{ animationDelay: "0.4s" }}
-            >
-              {trustBadges.map((badge) => (
-                <span
-                  key={badge}
-                  className="border border-cyan/40 bg-navy/50 text-cyan text-xs font-semibold px-4 py-2 rounded-full backdrop-blur-sm"
-                >
-                  {badge}
-                </span>
-              ))}
-            </div>
-
-            <div
-              className="hero-reveal flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-              style={{ animationDelay: "0.5s" }}
-            >
-              <a
-                href="#servicios"
-                className="w-full sm:w-auto bg-cyan text-white font-semibold px-7 py-3.5 rounded-lg hover:bg-cyan-dark transition-all duration-300 shadow-lg shadow-cyan/20 inline-flex items-center justify-center"
-              >
-                Explorar Servicios
-              </a>
-              <a
-                href="#certificados"
-                className="w-full sm:w-auto border-2 border-cyan text-cyan font-semibold px-7 py-3 rounded-lg bg-transparent hover:bg-cyan/10 transition-all duration-300 inline-flex items-center justify-center"
-              >
-                Validar Certificado
-              </a>
-            </div>
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-8 px-6 py-12 md:gap-8 lg:grid-cols-[55%_45%] lg:gap-12 lg:py-20 md:grid-cols-[50%_50%]">
+        <div className="max-w-2xl text-center md:text-left">
+          <div
+            className="hero-reveal inline-flex rounded-full border border-cyan/50 bg-transparent px-4 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-cyan mb-6"
+            style={{ animationDelay: "0.08s" }}
+          >
+            Cobertura Nacional
           </div>
 
-          <div className="relative hidden lg:block">
-            <div className="relative rounded-[28px] overflow-hidden min-h-[680px] border border-white/10 shadow-[0_24px_80px_-32px_rgba(0,0,0,0.6)] hero-image-panel">
-              <Image
-                src="/Images/Servicios/empleado-plagas-ehsw2.png"
-                alt="Tecnico EHSW2"
-                fill
-                priority
-                className="object-cover object-center"
+          <h1
+            className="hero-reveal mb-6 font-heading text-3xl font-bold leading-tight text-white md:text-4xl lg:text-5xl"
+            style={{ animationDelay: "0.16s" }}
+          >
+            Soluciones Integrales en
+            <span className="block text-cyan">Seguridad &amp; Medio Ambiente</span>
+          </h1>
+
+          <p
+            className="hero-reveal mb-8 max-w-xl text-base leading-relaxed text-silver"
+            style={{ animationDelay: "0.24s" }}
+          >
+            Especialistas en <strong>Control de Plagas</strong>, Gestión
+            Ambiental y Seguridad Industrial. Protegemos su empresa cumpliendo
+            estrictamente con COFEPRIS, STPS y Protección Civil.
+          </p>
+
+          <div
+            className="hero-reveal flex flex-wrap justify-center gap-4 md:justify-start"
+            style={{ animationDelay: "0.32s" }}
+          >
+            <a href="#servicios" className="btn-primary">
+              Explorar Servicios
+            </a>
+            <a
+              href="#certificados"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/50 px-7 py-3 font-semibold text-white transition-all duration-300 ease-out hover:border-white hover:bg-white/5"
+            >
+              🔍 Validar Certificado
+            </a>
+          </div>
+
+          <div
+            className="hero-reveal mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-silver md:justify-start md:gap-4"
+            style={{ animationDelay: "0.4s" }}
+          >
+            {trustBadges.map((badge) => (
+              <CertBadge
+                key={badge.label}
+                label={badge.label}
+                tooltip={badge.tooltip}
               />
-              <div className="absolute bottom-6 left-6 bg-navy-deep/90 border border-cyan text-cyan font-bold text-sm px-4 py-2 rounded-md backdrop-blur-md">
-                COFEPRIS REG. 871
-              </div>
-            </div>
+            ))}
           </div>
+        </div>
+
+        <div
+          id="certificados"
+          className="hero-reveal rounded-2xl border border-cyan/30 bg-navy-card p-7 shadow-[0_0_40px_rgba(0,188,212,0.12)]"
+          style={{ animationDelay: "0.2s" }}
+        >
+          <CertLookup />
         </div>
       </div>
     </section>

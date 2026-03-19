@@ -4,13 +4,16 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 const logos = [
-  { src: "/Images/Arkema.png", alt: "Arkema" },
-  { src: "/Images/bostik.png", alt: "Bostik" },
-  { src: "/Images/global%20denim.png", alt: "Global Denim" },
-  { src: "/Images/imesa.png", alt: "IMESA" },
-  { src: "/Images/inovatitive%20group.png", alt: "Inovatitive Group" },
-  { src: "/Images/las%20migas.png", alt: "Las Migas" },
-  { src: "/Images/sushiroll.png", alt: "Sushi Roll" },
+  { src: "/Images/Arkema.png", alt: "Logo de Arkema" },
+  { src: "/Images/bostik.png", alt: "Logo de Bostik" },
+  { src: "/Images/global%20denim.png", alt: "Logo de Global Denim" },
+  { src: "/Images/imesa.png", alt: "Logo de IMESA" },
+  {
+    src: "/Images/inovatitive%20group.png",
+    alt: "Logo de Inovatitive Group",
+  },
+  { src: "/Images/las%20migas.png", alt: "Logo de Las Migas" },
+  { src: "/Images/sushiroll.png", alt: "Logo de Sushi Roll" },
 ];
 
 const fadeUp = {
@@ -40,23 +43,23 @@ export default function ClientCarousel() {
             NUESTROS CLIENTES
           </p>
           <h2 className="font-heading font-bold text-white text-3xl md:text-4xl">
-            Empresas que confian en EHSW<sup>2</sup>
+            Empresas que confían en nosotros
           </h2>
         </motion.div>
 
         <motion.div variants={fadeUp} className="client-carousel-mask overflow-hidden relative">
-          <div className="flex w-max animate-scroll">
+          <div className="carousel-track">
             {loopedLogos.map((logo, index) => (
               <div
                 key={`${logo.alt}-${index}`}
-                className="flex-shrink-0 w-[180px] h-[90px] mx-3 bg-navy-light rounded-xl border border-white/5 flex items-center justify-center p-5"
+                className="flex min-w-[150px] h-[70px] flex-shrink-0 items-center justify-center rounded-lg border border-white/6 bg-navy-card px-5 py-3"
               >
                 <Image
                   src={logo.src}
                   alt={logo.alt}
                   width={140}
                   height={50}
-                  className="object-contain max-h-[50px] w-auto grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                  className="max-h-[45px] w-auto object-contain grayscale-[80%] opacity-60 transition-all duration-300 hover:grayscale-0 hover:opacity-100"
                 />
               </div>
             ))}
@@ -65,16 +68,16 @@ export default function ClientCarousel() {
 
         <motion.div
           variants={fadeUp}
-          className="mt-12 border-2 border-dashed border-cyan/30 rounded-2xl p-8 text-center bg-navy-light/30 backdrop-blur-sm"
+          className="mt-12 rounded-2xl border-2 border-dashed border-cyan/30 bg-navy-card/30 p-8 text-center backdrop-blur-sm"
         >
           <p className="text-silver text-lg mb-4">
-            ¿Tu empresa podria ser la siguiente?
+            ¿Tu empresa podría ser la siguiente?
           </p>
           <a
             href="#contacto"
             className="inline-flex items-center justify-center bg-cyan text-white px-6 py-3 rounded-lg hover:bg-cyan-dark transition-all duration-300"
           >
-            Contactanos →
+            Contáctanos →
           </a>
         </motion.div>
       </motion.div>

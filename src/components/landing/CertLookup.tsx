@@ -4,7 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ShieldCheck, Search, CircleCheckBig, CircleAlert, QrCode } from "lucide-react";
+import {
+  ShieldCheck,
+  Search,
+  CircleCheckBig,
+  CircleAlert,
+  QrCode,
+  LockKeyhole,
+} from "lucide-react";
 
 export default function CertLookup() {
   const [folio, setFolio] = useState("");
@@ -47,7 +54,7 @@ export default function CertLookup() {
     switch (normalizedStatus) {
       case "VALID":
         return {
-          title: "Certificado valido",
+          title: "Certificado válido",
           icon: CircleCheckBig,
           containerClass: "cert-valid",
           iconClass: "text-valid",
@@ -57,9 +64,8 @@ export default function CertLookup() {
         return {
           title: "Certificado vencido",
           icon: CircleAlert,
-          containerClass:
-            "bg-gradient-to-r from-amber-500/8 to-navy-light border-l-4 border-amber-400 rounded-xl p-6 mt-6",
-          iconClass: "text-amber-400",
+          containerClass: "cert-expired",
+          iconClass: "text-silver",
           stateLabel: "Vencido",
         };
       default:
@@ -67,7 +73,7 @@ export default function CertLookup() {
           title: "Certificado no encontrado",
           icon: CircleAlert,
           containerClass: "cert-invalid",
-          iconClass: "text-invalid",
+          iconClass: "text-silver",
           stateLabel: "No encontrado",
         };
     }
@@ -76,132 +82,166 @@ export default function CertLookup() {
   const resultConfig = result ? getStatusConfig(result.status) : null;
 
   return (
-    <section id="certificados" className="relative py-12">
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-gradient-to-b from-navy to-navy-deep border border-cyan/20 rounded-2xl shadow-[0_0_60px_rgba(0,188,212,0.06)] p-6 md:p-10">
-          <div className="text-center mb-6">
-            <div className="w-14 h-14 rounded-2xl bg-cyan/10 border border-cyan/20 flex items-center justify-center mx-auto mb-4">
-              <ShieldCheck className="w-7 h-7 text-cyan" />
+    <div className="relative">
+      <div className="mb-6 flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan/20 bg-cyan/10">
+              <ShieldCheck className="h-6 w-6 text-cyan" />
             </div>
-            <h2 className="font-heading font-bold text-2xl text-white text-center">
-              Validacion de Certificados
-            </h2>
-            <p className="text-muted text-center mt-2">
-              Verifique la autenticidad de los servicios
-            </p>
-            <div className="inline-flex items-center gap-2 bg-valid/10 text-valid text-xs font-semibold px-3 py-1 rounded-full mt-4">
-              <span className="w-2 h-2 bg-valid rounded-full animate-pulse"></span>
-              Sistema en Linea
-            </div>
-          </div>
-
-          <div className="border border-white/10 rounded-xl overflow-hidden focus-within:border-cyan/60 focus-within:ring-1 focus-within:ring-cyan/30 transition-all bg-navy-light/80">
-            <div className="flex flex-col sm:flex-row">
-              <input
-                type="text"
-                value={folio}
-                onChange={(e) => setFolio(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Ingrese el folio del certificado..."
-                className="h-14 flex-1 bg-navy-light text-white px-5 placeholder:text-muted text-base outline-none border-none"
-              />
-              <button
-                onClick={handleSearch}
-                disabled={loading}
-                className="bg-cyan text-white px-6 h-14 hover:bg-cyan-dark transition-colors flex items-center justify-center gap-2 shrink-0"
-              >
-                <Search className="w-4 h-4" />
-                <span className="font-semibold">
-                  {loading ? "Buscando..." : "Buscar"}
-                </span>
-              </button>
-            </div>
-          </div>
-
-          {result && resultConfig ? (
-            <div className={`${resultConfig.containerClass} rounded-xl p-6 mt-6 animate-fade-in-up`}>
-              <div className="flex items-start gap-4 mb-5">
-                <resultConfig.icon className={`w-8 h-8 ${resultConfig.iconClass} shrink-0`} />
-                <div>
-                  <p className="text-white font-semibold text-lg">
-                    {resultConfig.title}
-                  </p>
-                  <p className="text-muted text-sm">
-                    La informacion coincide con nuestros registros operativos.
-                  </p>
-                </div>
+            <div>
+              <h2 className="font-heading text-2xl font-bold text-white">
+                Validación de Certificados
+              </h2>
+              <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-valid/10 px-3 py-1 text-xs font-semibold text-valid">
+                <span className="h-2 w-2 rounded-full bg-valid animate-pulse" />
+                Sistema Online
               </div>
-
-              <div className="grid sm:grid-cols-2 gap-4">
-                {[
-                  { label: "Folio", value: result.folio },
-                  { label: "Empresa", value: result.company },
-                  { label: "Servicio", value: result.serviceType },
-                  {
-                    label: "Fecha de emision",
-                    value: new Date(result.issueDate).toLocaleDateString("es-MX"),
-                  },
-                  {
-                    label: "Vigencia",
-                    value: new Date(result.expirationDate).toLocaleDateString("es-MX"),
-                  },
-                  { label: "Estado", value: resultConfig.stateLabel },
-                ].map((item) => (
-                  <div key={item.label} className="rounded-xl bg-navy-light/70 border border-white/5 p-4">
-                    <p className="text-muted text-xs uppercase tracking-wider">
-                      {item.label}
-                    </p>
-                    <p className="text-white text-sm font-semibold mt-1 break-words">
-                      {item.value}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                onClick={() => router.push(`/certificado/${result.folio}`)}
-                className="btn-primary w-full justify-center mt-5 text-sm"
-              >
-                Ver detalle completo
-              </button>
-            </div>
-          ) : null}
-
-          {error ? (
-            <div className="bg-gradient-to-r from-invalid/5 to-navy-light border-l-4 border-invalid rounded-xl p-6 mt-6 animate-fade-in-up">
-              <div className="flex items-start gap-4">
-                <CircleAlert className="w-8 h-8 text-invalid shrink-0" />
-                <div>
-                  <p className="text-white font-semibold text-lg">
-                    Certificado no encontrado
-                  </p>
-                  <p className="text-muted text-sm">
-                    {error}. Verifique el folio e intente nuevamente.
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : null}
-
-          <div className="mt-8 pt-6 border-t border-white/10 flex flex-col items-center gap-2">
-            <div className="bg-white rounded-xl p-3 shadow-lg">
-              <Link href="/certificado/EHSW-2026-FUM-001" className="block">
-                <Image
-                  src="/qrcodes/EHSW-2026-FUM-001.png"
-                  alt="QR Certificado Demo"
-                  width={120}
-                  height={120}
-                  className="w-full max-w-[120px] h-auto block"
-                />
-              </Link>
-            </div>
-            <div className="flex items-center gap-2 text-muted text-xs text-center mt-2">
-              <QrCode className="w-3.5 h-3.5" />
-              Escanea para validar
             </div>
           </div>
         </div>
+        <p className="text-sm leading-relaxed text-silver">
+          Garantice la autenticidad de sus servicios. Ingrese el folio o
+          escanee el código QR.
+        </p>
       </div>
-    </section>
+
+      <div className="rounded-xl border border-white/10 bg-navy-deep/80 p-2 transition-all duration-300 ease-out focus-within:border-cyan focus-within:ring-2 focus-within:ring-cyan/30">
+        <div className="flex flex-col gap-2 md:flex-row">
+          <input
+            type="text"
+            value={folio}
+            onChange={(e) => setFolio(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ej: EHSW-2026-FUM-001"
+            className="h-12 flex-1 rounded-lg border border-white/10 bg-navy-deep px-4 text-sm text-white outline-none transition-all duration-300 ease-out placeholder:text-[var(--color-text-muted)] focus:border-cyan"
+          />
+          <div className="flex gap-2 md:w-auto">
+            <button
+              onClick={handleSearch}
+              disabled={loading}
+              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-cyan px-4 text-sm font-semibold text-white transition-all duration-300 ease-out hover:bg-cyan-dark md:flex-none"
+            >
+              <Search className="h-4 w-4" />
+              <span>{loading ? "Buscando..." : "Buscar"}</span>
+            </button>
+            <Link
+              href="/certificado/EHSW-2026-FUM-001"
+              aria-label="Abrir ejemplo de certificado con QR"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-white/20 px-4 text-sm font-semibold text-white transition-all duration-300 ease-out hover:border-white hover:bg-white/5"
+            >
+              <QrCode className="h-5 w-5" />
+              <span>QR</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {result && resultConfig ? (
+        <div
+          className={`${resultConfig.containerClass} mt-6 rounded-xl p-6 animate-fade-in-up`}
+        >
+          <div className="mb-5 flex items-start gap-4">
+            <resultConfig.icon
+              className={`h-8 w-8 shrink-0 ${resultConfig.iconClass}`}
+            />
+            <div>
+              <p className="text-lg font-semibold text-white">
+                {resultConfig.title}
+              </p>
+              <p className="text-sm text-silver">
+                La información coincide con nuestros registros operativos.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {[
+              { label: "Folio", value: result.folio },
+              { label: "Empresa", value: result.company },
+              { label: "Servicio", value: result.serviceType },
+              {
+                label: "Fecha de emisión",
+                value: new Date(result.issueDate).toLocaleDateString("es-MX"),
+              },
+              {
+                label: "Vigencia",
+                value: new Date(result.expirationDate).toLocaleDateString(
+                  "es-MX"
+                ),
+              },
+              { label: "Estado", value: resultConfig.stateLabel },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="rounded-xl border border-white/5 bg-navy-card/80 p-4"
+              >
+                <p className="text-xs uppercase tracking-wider text-[var(--color-text-muted)]">
+                  {item.label}
+                </p>
+                <p className="mt-1 break-words text-sm font-semibold text-white">
+                  {item.value}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={() => router.push(`/certificado/${result.folio}`)}
+            className="btn-primary mt-5 w-full justify-center text-sm"
+          >
+            Ver detalle completo
+          </button>
+        </div>
+      ) : null}
+
+      {error ? (
+        <div className="cert-invalid mt-6 rounded-xl p-6 animate-fade-in-up">
+          <div className="flex items-start gap-4">
+            <CircleAlert className="h-8 w-8 shrink-0 text-silver" />
+            <div>
+              <p className="text-lg font-semibold text-white">
+                Certificado no encontrado
+              </p>
+              <p className="text-sm text-silver">
+                {error}. Verifique el folio e intente nuevamente.
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      <div className="mt-6 rounded-xl border border-white/10 bg-navy-deep/65 p-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            <div className="rounded-xl bg-white p-3 shadow-lg">
+              <Link href="/certificado/EHSW-2026-FUM-001" className="block">
+                <Image
+                  src="/qrcodes/EHSW-2026-FUM-001.png"
+                  alt="Código QR de ejemplo para validar certificado"
+                  width={96}
+                  height={96}
+                  className="block h-auto w-full max-w-[96px]"
+                />
+              </Link>
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.18em] text-cyan">
+                Folio de ejemplo
+              </p>
+              <p className="mt-2 text-sm font-semibold text-white">
+                EHSW-2026-FUM-001
+              </p>
+              <p className="mt-1 text-xs text-silver">Escanee para validar</p>
+            </div>
+          </div>
+
+          <div className="inline-flex items-center gap-2 text-xs text-silver/70">
+            <LockKeyhole className="h-3.5 w-3.5 text-cyan" />
+            Datos encriptados y verificados en tiempo real.
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -41,7 +41,7 @@ export default function Footer() {
           <div>
             <Image
               src="/logo-ehsw2.png"
-              alt="EHSW2"
+              alt="Logo de EHSW2"
               width={210}
               height={72}
               className="h-11 w-auto mb-4"
@@ -50,7 +50,7 @@ export default function Footer() {
               Especialistas en higiene, seguridad y medio ambiente para
               empresas de todos los giros.
             </p>
-            <div className="flex flex-col gap-2 text-sm text-[var(--color-text-subtle)]">
+            <div className="flex flex-col gap-2 text-sm text-silver/70">
               <span className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5" /> {siteConfig.contact.phone}
               </span>
@@ -95,10 +95,10 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-[var(--color-glass-border)] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[var(--color-text-subtle)]">
+          <p className="text-xs text-silver/70">
             © {new Date().getFullYear()} EHSW². Todos los derechos reservados.
           </p>
-          <p className="text-xs text-[var(--color-text-subtle)]">
+          <p className="text-xs text-silver/70">
             Certificación digital y servicios técnicos para cumplimiento EHS
           </p>
         </div>

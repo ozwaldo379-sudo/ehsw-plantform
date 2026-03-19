@@ -64,7 +64,7 @@ export default function CoverageSection() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(180deg, var(--color-bg-dark) 0%, #101b2e 60%, var(--color-bg-dark) 100%)",
+            "linear-gradient(180deg, var(--color-navy-deep) 0%, var(--color-navy) 60%, var(--color-navy-deep) 100%)",
         }}
       />
       <div className="section-divider mb-20" />
@@ -90,7 +90,7 @@ export default function CoverageSection() {
             </motion.h2>
             <motion.p
               variants={fadeUp}
-              className="text-[var(--color-text-muted)] leading-relaxed mb-10"
+              className="mb-10 leading-relaxed text-silver"
             >
               Contamos con ubicaciones estratégicas en toda la República para
               brindar respuesta rápida y servicio consistente sin importar dónde
@@ -111,27 +111,27 @@ export default function CoverageSection() {
                     ${
                       loc.primary
                         ? "bg-[var(--color-primary)]/10 border-[var(--color-primary)]/30"
-                        : "bg-[var(--color-bg-card)] border-[var(--color-glass-border)] hover:border-[var(--color-primary)]/30"
+                        : "bg-navy-card border-white/10 hover:border-cyan/30"
                     }`}
                 >
                   <span className="text-xl flex-shrink-0">{loc.flag}</span>
                   <MapPin
                     className={`w-4 h-4 flex-shrink-0 ${
                       loc.primary
-                        ? "text-[var(--color-primary)]"
-                        : "text-[var(--color-text-subtle)] group-hover:text-[var(--color-primary)] transition-colors"
+                        ? "text-cyan"
+                        : "text-silver/70 group-hover:text-cyan transition-colors"
                     }`}
                   />
                   <div className="flex-1 min-w-0">
                     <span className="font-semibold text-white text-sm">
                       {loc.zone}
                     </span>
-                    <span className="text-[var(--color-text-muted)] text-sm ml-2">
+                    <span className="ml-2 text-sm text-silver/80">
                       — {loc.cities}
                     </span>
                   </div>
                   {loc.primary && (
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-2 py-0.5 rounded-full flex-shrink-0">
+                    <span className="flex-shrink-0 rounded-full bg-cyan/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-cyan">
                       Principal
                     </span>
                   )}
@@ -149,13 +149,13 @@ export default function CoverageSection() {
             className="flex flex-col gap-6"
           >
             {/* Map placeholder */}
-            <div className="relative h-72 lg:h-80 rounded-3xl bg-[var(--color-bg-card)] border border-[var(--color-glass-border)] overflow-hidden">
+            <div className="relative h-72 overflow-hidden rounded-3xl border border-white/10 bg-navy-card lg:h-80">
               {/* Dot grid */}
               <div
                 className="absolute inset-0"
                 style={{
                   backgroundImage:
-                    "radial-gradient(circle, rgba(0,212,180,0.15) 1px, transparent 1px)",
+                    "radial-gradient(circle, rgba(0,188,212,0.15) 1px, transparent 1px)",
                   backgroundSize: "22px 22px",
                 }}
               />
@@ -165,7 +165,7 @@ export default function CoverageSection() {
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute inset-0 flex flex-col items-center justify-center"
               >
-                <Globe2 className="w-16 h-16 text-[var(--color-primary)]/40 mb-3" />
+                <Globe2 className="mb-3 h-16 w-16 text-cyan/40" />
                 <p className="text-white/60 text-sm font-medium">República Mexicana</p>
               </motion.div>
 
@@ -189,8 +189,8 @@ export default function CoverageSection() {
                     ease: "easeInOut",
                   }}
                 >
-                  <div className="w-full h-full rounded-full bg-[var(--color-primary)]" />
-                  <div className="absolute inset-0 rounded-full bg-[var(--color-primary)]/30 animate-ping" />
+                  <div className="h-full w-full rounded-full bg-cyan" />
+                  <div className="absolute inset-0 rounded-full bg-cyan/30 animate-ping" />
                 </motion.div>
               ))}
             </div>
@@ -206,7 +206,7 @@ export default function CoverageSection() {
                   <div className="text-2xl font-extrabold text-gradient leading-none mb-1">
                     {s.value}
                   </div>
-                  <div className="text-xs text-[var(--color-text-subtle)] leading-tight">
+                  <div className="text-xs leading-tight text-silver/70">
                     {s.label}
                   </div>
                 </motion.div>
@@ -219,20 +219,20 @@ export default function CoverageSection() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="flex items-center gap-4 p-5 rounded-2xl bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/20"
+              className="flex items-center gap-4 rounded-2xl border border-cyan/20 bg-cyan/10 p-5"
             >
-              <Zap className="w-7 h-7 text-[var(--color-primary)] flex-shrink-0" />
+              <Zap className="h-7 w-7 flex-shrink-0 text-cyan" />
               <div className="flex-1">
                 <p className="text-white font-semibold text-sm">
                   Respuesta rápida garantizada
                 </p>
-                <p className="text-xs text-[var(--color-text-muted)]">
+                <p className="text-xs text-silver/80">
                   Cotización en menos de 24 h, servicio en 48 h.
                 </p>
               </div>
               <a
                 href="#contacto"
-                className="text-[var(--color-primary)] flex items-center gap-1 text-sm font-semibold hover:gap-2 transition-all duration-200 flex-shrink-0"
+                className="flex flex-shrink-0 items-center gap-1 text-sm font-semibold text-cyan transition-all duration-200 hover:gap-2"
               >
                 Contactar <ArrowRight className="w-4 h-4" />
               </a>

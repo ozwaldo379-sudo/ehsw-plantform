@@ -5,18 +5,19 @@
 :root {
   --color-navy-deep: #0d1f2d;
   --color-navy: #143249;
-  --color-navy-light: #1e3a4f;
+  --color-navy-card: #1a2f45;
+  --color-navy-light: #1a2f45;
   --color-cyan: #00bcd4;
   --color-cyan-dark: #0097a7;
   --color-silver: #efedee;
+  --color-white: #ffffff;
   --color-text-primary: #ffffff;
   --color-text-muted: #94a3b8;
   --color-valid: #10b981;
-  --color-invalid: #ef4444;
 
   /* Compatibility aliases for existing components */
   --color-bg-dark: #0d1f2d;
-  --color-bg-card: #1e3a4f;
+  --color-bg-card: #1a2f45;
   --color-bg-elevated: #143249;
   --color-primary: #00bcd4;
   --color-primary-hover: #0097a7;
@@ -38,13 +39,13 @@
 @theme {
   --color-navy-deep: #0d1f2d;
   --color-navy: #143249;
-  --color-navy-light: #1e3a4f;
+  --color-navy-card: #1a2f45;
+  --color-navy-light: #1a2f45;
   --color-cyan: #00bcd4;
   --color-cyan-dark: #0097a7;
   --color-silver: #efedee;
   --color-white: #ffffff;
   --color-valid: #10b981;
-  --color-invalid: #ef4444;
   --color-muted: #94a3b8;
 
   --color-bg-dark: #0d1f2d;
@@ -118,7 +119,7 @@ button,
 }
 
 .glass-card {
-  background: rgba(20, 50, 73, 0.62);
+  background: rgba(26, 47, 69, 0.72);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--color-glass-border);
@@ -133,7 +134,7 @@ button,
 }
 
 .glass-card-glow {
-  background: rgba(20, 50, 73, 0.68);
+  background: rgba(26, 47, 69, 0.78);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(255, 255, 255, 0.09);
@@ -241,7 +242,7 @@ button,
 }
 
 .service-card {
-  background: rgba(30, 58, 79, 0.82);
+  background: rgba(26, 47, 69, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 1.25rem;
   border-radius: 1rem;
@@ -262,7 +263,7 @@ button,
   padding: 0.7rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 9999px;
-  background: rgba(30, 58, 79, 0.72);
+  background: rgba(26, 47, 69, 0.78);
   transition: all 0.3s ease;
   white-space: nowrap;
 }
@@ -300,10 +301,21 @@ button,
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse at center, black 32%, transparent 80%);
+    linear-gradient(rgba(0, 188, 212, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 188, 212, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.hero-grid-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(13, 31, 45, 0) 0%,
+    rgba(13, 31, 45, 0.28) 65%,
+    rgba(13, 31, 45, 0.72) 100%
+  );
 }
 
 .dot-grid-bg {
@@ -369,11 +381,14 @@ button,
   );
 }
 
-.animate-scroll {
-  animation: scroll 30s linear infinite;
+.carousel-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: scroll-logos 28s linear infinite;
 }
 
-.animate-scroll:hover {
+.client-carousel-mask:hover .carousel-track {
   animation-play-state: paused;
 }
 
@@ -381,7 +396,7 @@ button,
   background: linear-gradient(
     90deg,
     rgba(16, 185, 129, 0.08),
-    rgba(30, 58, 79, 0.9)
+    rgba(26, 47, 69, 0.9)
   );
   border-left: 4px solid var(--color-valid);
   color: #6ee7b7;
@@ -390,21 +405,21 @@ button,
 .cert-expired {
   background: linear-gradient(
     90deg,
-    rgba(245, 158, 11, 0.08),
-    rgba(30, 58, 79, 0.9)
+    rgba(239, 237, 238, 0.05),
+    rgba(26, 47, 69, 0.94)
   );
-  border-left: 4px solid #f59e0b;
-  color: #fbbf24;
+  border-left: 4px solid rgba(239, 237, 238, 0.24);
+  color: var(--color-silver);
 }
 
 .cert-invalid {
   background: linear-gradient(
     90deg,
-    rgba(239, 68, 68, 0.08),
-    rgba(30, 58, 79, 0.9)
+    rgba(239, 237, 238, 0.04),
+    rgba(26, 47, 69, 0.94)
   );
-  border-left: 4px solid var(--color-invalid);
-  color: #fca5a5;
+  border-left: 4px solid rgba(239, 237, 238, 0.18);
+  color: var(--color-silver);
 }
 
 .admin-sidebar {
