@@ -1,27 +1,62 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  Building2,
+  CalendarDays,
+  CheckCircle2,
+  FlaskConical,
+  Hash,
+  ShieldX,
+} from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import {
+  getCertificateState,
+  getCertificateStateLabel,
+  normalizeFolio,
+} from "@/lib/certificates";
 
-interface CertificateData {
-  folio: string;
-  clientName: string;
-  company: string;
-  address: string | null;
-  serviceType: string;
-  chemicalUsed: string;
-  issueDate: Date;
-  expirationDate: Date;
-  status: string;
-  qrCodeUrl: string | null;
+export const dynamic = "force-dynamic";
+
+async function getCertificate(rawFolio: string) {
+  const folio = normalizeFolio(rawFolio);
+
+  return prisma.certificate.findFirst({
+    where: {
+      folio: { equals: folio, mode: "insensitive" },
+    },
+  });
 }
 
-async function getCertificate(rawFolio: string): Promise<CertificateData | null> {
-  const normalizedFolio = decodeURIComponent(rawFolio).toUpperCase();
-
-  return prisma.certificate.findUnique({
-    where: { folio: normalizedFolio },
-  });
+function getStateConfig(status: "VALID" | "EXPIRING" | "EXPIRED") {
+  switch (status) {
+    case "EXPIRED":
+      return {
+        title: "CERTIFICADO VENCIDO",
+        description:
+          "El certificado es auténtico, pero su vigencia ya concluyó.",
+        classes: "border-red-500/25 bg-red-500/10 text-red-200",
+        icon: AlertTriangle,
+      };
+    case "EXPIRING":
+      return {
+        title: "CERTIFICADO VÁLIDO",
+        description:
+          "El certificado es auténtico y se encuentra próximo a vencer.",
+        classes: "border-amber-500/25 bg-amber-500/10 text-amber-200",
+        icon: AlertTriangle,
+      };
+    default:
+      return {
+        title: "CERTIFICADO VÁLIDO",
+        description:
+          "El certificado es auténtico y se encuentra vigente.",
+        classes: "border-valid/25 bg-valid/10 text-valid",
+        icon: CheckCircle2,
+      };
+  }
 }
 
 export async function generateMetadata({
@@ -30,220 +65,193 @@ export async function generateMetadata({
   params: Promise<{ folio: string }>;
 }): Promise<Metadata> {
   const { folio } = await params;
+  const normalizedFolio = normalizeFolio(folio);
+
   return {
-    title: `Verificación Folio ${folio} — EHSW²`,
-    description: `Sistema de validación oficial para el certificado ${folio} de EHSW².`,
+    title: `Certificado ${normalizedFolio} | EHSW²`,
+    description: `Validación pública del certificado ${normalizedFolio} emitido por EHSW².`,
   };
 }
 
-export default async function CertificadoPage({
+export default async function PublicCertificatePage({
   params,
 }: {
   params: Promise<{ folio: string }>;
 }) {
   const { folio } = await params;
-  const normalizedFolio = decodeURIComponent(folio).toUpperCase();
-  const data = await getCertificate(folio);
-  const now = new Date();
-  const isValid = data ? data.expirationDate > now : false;
+  const normalizedFolio = normalizeFolio(folio);
+  const certificate = await getCertificate(folio);
+
+  if (!certificate) {
+    return (
+      <main className="flex min-h-screen items-center justify-center px-4 py-12">
+        <div className="w-full max-w-2xl text-center">
+          <Link href="/" className="mb-8 inline-flex items-center justify-center">
+            <Image
+              src="/logo-ehsw2.png"
+              alt="Logo EHSW²"
+              width={220}
+              height={72}
+              className="h-14 w-auto"
+              priority
+            />
+          </Link>
+
+          <div className="glass-card overflow-hidden">
+            <div className="border-b border-red-500/20 bg-red-500/10 px-6 py-8">
+              <ShieldX className="mx-auto h-12 w-12 text-red-300" />
+              <h1 className="mt-4 font-heading text-3xl font-bold text-white">
+                Certificado no encontrado
+              </h1>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+                No existe un certificado con el folio{" "}
+                <span className="font-mono text-white">{normalizedFolio}</span> en
+                nuestro sistema.
+              </p>
+            </div>
+
+            <div className="px-6 py-8">
+              <p className="text-sm text-[var(--color-text-muted)]">
+                Verifique el número e intente nuevamente desde el módulo de
+                validación pública.
+              </p>
+              <Link href="/#certificados" className="btn-primary mt-6 justify-center">
+                <ArrowLeft className="h-4 w-4" />
+                <span>Volver al inicio</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  const status = getCertificateState(certificate.expirationDate);
+  const state = getStateConfig(status);
+  const StateIcon = state.icon;
+
+  const details = [
+    {
+      label: "Folio",
+      value: certificate.folio,
+      icon: Hash,
+    },
+    {
+      label: "Empresa",
+      value: certificate.company,
+      icon: Building2,
+    },
+    {
+      label: "Servicio",
+      value: certificate.serviceType,
+      icon: Building2,
+    },
+    {
+      label: "Producto",
+      value: certificate.chemicalUsed || "No especificado",
+      icon: FlaskConical,
+    },
+    {
+      label: "Fecha de Emisión",
+      value: new Date(certificate.issueDate).toLocaleDateString("es-MX"),
+      icon: CalendarDays,
+    },
+    {
+      label: "Vigencia",
+      value: new Date(certificate.expirationDate).toLocaleDateString("es-MX"),
+      icon: CalendarDays,
+    },
+  ];
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center px-4 py-20"
-      style={{
-        backgroundImage:
-          "radial-gradient(circle at 12% 18%, rgba(0, 188, 212, 0.12) 0%, transparent 36%), radial-gradient(circle at 90% 82%, rgba(239, 237, 238, 0.08) 0%, transparent 28%)",
-      }}
-    >
-      <div className="max-w-lg w-full">
-        <div className="text-center mb-8">
+    <main className="flex min-h-screen items-center justify-center px-4 py-12">
+      <div className="w-full max-w-2xl">
+        <div className="mb-8 text-center">
           <Link href="/" className="inline-flex items-center justify-center">
             <Image
               src="/logo-ehsw2.png"
-              alt="EHSW2"
+              alt="Logo EHSW²"
               width={220}
-              height={74}
+              height={72}
               className="h-14 w-auto"
+              priority
             />
           </Link>
-          <p className="text-[var(--color-text-muted)] text-sm mt-3">
-            Sistema de Verificación Digital
-          </p>
         </div>
 
-        {data ? (
-          <div className="glass-card overflow-hidden border border-white/10 shadow-2xl">
-            <div
-              className={`p-8 text-center ${
-                isValid
-                  ? "bg-gradient-to-r from-emerald-600/20 to-emerald-500/10 border-b border-emerald-500/30"
-                  : "bg-gradient-to-r from-orange-600/20 to-orange-500/10 border-b border-orange-500/30"
-              }`}
-            >
-              <i
-                className={`fa-solid text-6xl mb-4 block ${
-                  isValid
-                    ? "fa-circle-check text-emerald-400"
-                    : "fa-triangle-exclamation text-orange-400"
-                }`}
-              ></i>
-              <h1
-                className={`text-2xl font-bold tracking-widest ${
-                  isValid ? "text-emerald-400" : "text-orange-400"
-                }`}
-              >
-                {isValid ? "CERTIFICADO VÁLIDO" : "CERTIFICADO EXPIRADO"}
-              </h1>
-              <p className="text-white/70 text-sm mt-2 font-medium">
-                {isValid
-                  ? "Este documento es auténtico y se encuentra vigente."
-                  : "Este certificado es auténtico pero ha cumplido su periodo de vigencia."}
-              </p>
-            </div>
+        <div className="glass-card overflow-hidden">
+          <div className={`border-b px-6 py-8 text-center ${state.classes}`}>
+            <StateIcon className="mx-auto h-12 w-12" />
+            <h1 className="mt-4 font-heading text-3xl font-bold text-white">
+              {state.title}
+            </h1>
+            <p className="mt-3 text-sm leading-relaxed text-silver">
+              {state.description}
+            </p>
+            <p className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-silver">
+              Estado actual: {getCertificateStateLabel(status)}
+            </p>
+          </div>
 
-            <div className="p-8 space-y-4">
-              {[
-                {
-                  icon: "fa-hashtag",
-                  label: "Folio de Certificado",
-                  value: data.folio,
-                  mono: true,
-                },
-                {
-                  icon: "fa-user",
-                  label: "Nombre del Cliente / Responsable",
-                  value: data.clientName,
-                },
-                {
-                  icon: "fa-building",
-                  label: "Empresa / Establecimiento",
-                  value: data.company,
-                },
-                {
-                  icon: "fa-location-dot",
-                  label: "Dirección del Establecimiento",
-                  value: data.address || "No especificada",
-                },
-                {
-                  icon: "fa-vial",
-                  label: "Servicio Realizado",
-                  value: data.serviceType,
-                },
-                {
-                  icon: "fa-flask",
-                  label: "Producto Químico Utilizado",
-                  value: data.chemicalUsed,
-                },
-                {
-                  icon: "fa-calendar-check",
-                  label: "Fecha de Emisión",
-                  value: new Date(data.issueDate).toLocaleDateString("es-MX", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  }),
-                },
-                {
-                  icon: "fa-clock",
-                  label: "Válido hasta",
-                  value: new Date(data.expirationDate).toLocaleDateString("es-MX", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  }),
-                },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center shrink-0">
-                    <i
-                      className={`fa-solid ${item.icon} text-[var(--color-primary)]`}
-                    ></i>
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider mb-0.5">
-                      {item.label}
-                    </p>
-                    <p
-                      className={`text-white font-medium ${
-                        item.mono ? "font-mono" : ""
-                      }`}
-                    >
-                      {item.value}
+          <div className="space-y-6 px-6 py-8">
+            <div className="grid gap-4 sm:grid-cols-2">
+              {details.map((detail) => {
+                const Icon = detail.icon;
+
+                return (
+                  <div
+                    key={detail.label}
+                    className="rounded-2xl border border-white/8 bg-white/4 p-4"
+                  >
+                    <div className="mb-3 flex items-center gap-2 text-cyan">
+                      <Icon className="h-4 w-4" />
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">
+                        {detail.label}
+                      </p>
+                    </div>
+                    <p className="break-words text-sm font-medium text-white">
+                      {detail.value}
                     </p>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
-            <div className="p-8 bg-white/5 border-t border-white/10 flex items-center gap-4">
-              {data.qrCodeUrl ? (
-                <img
-                  src={data.qrCodeUrl}
-                  alt="QR verification"
-                  className="w-20 h-20 rounded-lg bg-white p-1"
+            <div className="rounded-2xl border border-white/8 bg-white/4 p-6 text-center">
+              <div className="mx-auto inline-flex rounded-2xl bg-white p-4 shadow-lg">
+                <Image
+                  src={`/api/qr/${encodeURIComponent(certificate.folio)}`}
+                  alt={`Código QR del certificado ${certificate.folio}`}
+                  width={180}
+                  height={180}
+                  unoptimized
+                  className="h-[180px] w-[180px]"
                 />
-              ) : (
-                <div className="w-20 h-20 rounded-lg bg-white/10 border border-white/10" />
-              )}
-              <div className="text-left">
-                <p className="text-xs font-bold text-white mb-1 uppercase tracking-tight">
-                  EHSW² Verification Service
-                </p>
-                <p className="text-[10px] text-[var(--color-text-muted)] leading-relaxed">
-                  Este sello digital confirma que la información mostrada
-                  coincide con nuestros registros internos.
-                </p>
               </div>
+              <p className="mt-4 font-mono text-sm font-semibold text-white">
+                {certificate.folio}
+              </p>
             </div>
           </div>
-        ) : (
-          <div className="glass-card overflow-hidden">
-            <div className="p-8 text-center bg-gradient-to-r from-red-600/20 to-red-500/10 border-b border-red-500/30">
-              <i className="fa-solid fa-shield-xmark text-5xl text-red-400 mb-3 block"></i>
-              <h1 className="text-2xl font-bold text-red-400">
-                CERTIFICADO NO VÁLIDO
-              </h1>
-              <p className="text-[var(--color-text-muted)] text-sm mt-2">
-                No encontramos un certificado con el folio:
-              </p>
-              <code className="text-white bg-[rgba(9,29,43,0.72)] px-3 py-1 rounded mt-2 inline-block">
-                {normalizedFolio}
-              </code>
-            </div>
-            <div className="p-6 text-center">
-              <p className="text-[var(--color-text-muted)] text-sm mb-4">
-                Si cree que esto es un error, verifique el folio e intente
-                nuevamente, o contáctenos directamente.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link href="/#certificados" className="btn-primary text-sm justify-center">
-                  <i className="fa-solid fa-magnifying-glass"></i> Buscar
-                  Certificado
-                </Link>
-                <Link href="/#contacto" className="btn-ghost text-sm justify-center">
-                  <i className="fa-solid fa-phone"></i> Contactar
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
 
-        <div className="text-center mt-6">
-          <p className="text-xs text-[var(--color-text-muted)] flex items-center justify-center gap-2">
-            <i className="fa-solid fa-shield-halved"></i>
-            Verificación oficial de EHSW² — Higiene y Seguridad Ambiental
-          </p>
-          <Link
-            href="/"
-            className="text-[var(--color-primary)] text-sm no-underline hover:underline mt-2 inline-block"
-          >
-            ← Volver al sitio principal
-          </Link>
+          <div className="border-t border-white/8 bg-white/3 px-6 py-6 text-center">
+            <p className="text-sm leading-relaxed text-[var(--color-text-muted)]">
+              Este certificado fue emitido por EHSW² y puede ser verificado en{" "}
+              <span className="font-semibold text-white">
+                ehsw-plantform.vercel.app
+              </span>
+              .
+            </p>
+            <Link
+              href="/"
+              className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-cyan no-underline hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span>Volver al inicio</span>
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -1,44 +1,63 @@
 import { NextRequest, NextResponse } from "next/server";
-import QRCode from "qrcode";
+import { prisma } from "@/lib/prisma";
+import { normalizeFolio } from "@/lib/certificates";
+import {
+  generateQrBase64,
+  writeQrToLocalFile,
+} from "@/lib/qr";
 
 export async function GET(
-    request: NextRequest,
-    { params }: { params: Promise<{ folio: string }> }
+  request: NextRequest,
+  { params }: { params: Promise<{ folio: string }> }
 ) {
-    try {
-        const { folio } = await params;
-        const forwardedHost = request.headers.get("x-forwarded-host");
-        const forwardedProto = request.headers.get("x-forwarded-proto") || "https";
-        const requestOrigin = forwardedHost
-            ? `${forwardedProto}://${forwardedHost}`
-            : request.nextUrl.origin;
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || requestOrigin;
-        const verificationUrl = `${siteUrl}/certificado/${encodeURIComponent(folio)}`;
+  try {
+    const { folio } = await params;
+    const normalizedFolio = normalizeFolio(folio);
+    const shouldRegenerate =
+      request.nextUrl.searchParams.get("regenerate") === "true";
 
-        const qrDataUrl = await QRCode.toDataURL(verificationUrl, {
-            width: 400,
-            margin: 2,
-            color: {
-                dark: "#0f172a",
-                light: "#ffffff",
-            },
-        });
+    const certificate = await prisma.certificate.findFirst({
+      where: {
+        folio: { equals: normalizedFolio, mode: "insensitive" },
+      },
+    });
 
-        // Convert data URL to buffer
-        const base64Data = qrDataUrl.replace(/^data:image\/png;base64,/, "");
-        const buffer = Buffer.from(base64Data, "base64");
-
-        return new NextResponse(buffer, {
-            headers: {
-                "Content-Type": "image/png",
-                "Cache-Control": "public, max-age=31536000",
-            },
-        });
-    } catch (error) {
-        console.error("QR generation error:", error);
-        return NextResponse.json(
-            { error: "Error generando QR" },
-            { status: 500 }
-        );
+    if (!certificate) {
+      return NextResponse.json(
+        { error: "Certificado no encontrado" },
+        { status: 404 }
+      );
     }
+
+    let qrBase64 = certificate.qrBase64;
+
+    if (!qrBase64 || shouldRegenerate) {
+      qrBase64 = await generateQrBase64(certificate.folio, request.nextUrl.origin);
+
+      await prisma.certificate.update({
+        where: { folio: certificate.folio },
+        data: {
+          qrBase64,
+          qrCodeUrl: `/api/qr/${encodeURIComponent(certificate.folio)}`,
+        },
+      });
+    }
+
+    await writeQrToLocalFile(certificate.folio, qrBase64);
+
+    return new NextResponse(Buffer.from(qrBase64, "base64"), {
+      headers: {
+        "Content-Type": "image/png",
+        "Cache-Control": shouldRegenerate
+          ? "no-store"
+          : "public, max-age=31536000, immutable",
+      },
+    });
+  } catch (error) {
+    console.error("QR generation error:", error);
+    return NextResponse.json(
+      { error: "Error generando QR" },
+      { status: 500 }
+    );
+  }
 }

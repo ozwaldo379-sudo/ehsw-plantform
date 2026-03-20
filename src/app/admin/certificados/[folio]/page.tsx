@@ -1,125 +1,253 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import {
+  ArrowLeft,
+  Copy,
+  Download,
+  Eye,
+  Pencil,
+  QrCode,
+  RefreshCcw,
+  Save,
+  Trash2,
+} from "lucide-react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import type { SerializedCertificate } from "@/lib/certificates";
 
-interface CertificateResponse {
-  folio: string;
-  clientName: string;
-  company: string;
-  address?: string | null;
-  serviceType: string;
-  chemicalUsed: string;
-  issueDate: string;
-  expirationDate: string;
-  status: string;
-  qrCodeUrl?: string | null;
-}
-
-async function renderCanvas(element: HTMLElement, scale = 2) {
-  const { default: html2canvas } = await import("html2canvas");
-  return html2canvas(element, {
-    scale,
-    useCORS: true,
-    allowTaint: true,
-    backgroundColor: "#ffffff",
-  });
+function getStatusClasses(status: string) {
+  switch (status) {
+    case "EXPIRED":
+      return "border border-red-500/25 bg-red-500/10 text-red-200";
+    case "EXPIRING":
+      return "border border-amber-500/25 bg-amber-500/10 text-amber-200";
+    default:
+      return "border border-valid/25 bg-valid/10 text-valid";
+  }
 }
 
 export default function CertificateDetailPage() {
+  const router = useRouter();
   const params = useParams<{ folio: string }>();
-  const folio = params?.folio;
-  const [certificate, setCertificate] = useState<CertificateResponse | null>(null);
+  const searchParams = useSearchParams();
+  const folio = useMemo(() => params?.folio ?? "", [params]);
+  const isEditRequested = searchParams.get("edit") === "true";
+  const wasCreated = searchParams.get("created") === "1";
+
+  const [certificate, setCertificate] = useState<SerializedCertificate | null>(null);
+  const [formData, setFormData] = useState({
+    company: "",
+    serviceType: "",
+    chemicalUsed: "",
+    expirationDate: "",
+    notes: "",
+  });
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [editing, setEditing] = useState(isEditRequested);
   const [error, setError] = useState("");
+  const [feedback, setFeedback] = useState(
+    wasCreated ? "Certificado creado correctamente." : ""
+  );
+  const [qrVersion, setQrVersion] = useState(0);
 
   useEffect(() => {
-    const fetchCertificate = async () => {
+    setEditing(isEditRequested);
+  }, [isEditRequested]);
+
+  useEffect(() => {
+    async function fetchCertificate() {
       if (!folio) return;
 
+      setLoading(true);
+      setError("");
+
       try {
-        const res = await fetch(`/api/certificados/${folio}`);
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.error || "Error al cargar el certificado");
+        const response = await fetch(`/api/certificados/${encodeURIComponent(folio)}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "No se pudo cargar el certificado");
         }
+
         setCertificate(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Error inesperado");
+        setFormData({
+          company: data.company ?? "",
+          serviceType: data.serviceType ?? "",
+          chemicalUsed: data.chemicalUsed ?? "",
+          expirationDate: data.expirationDate?.slice(0, 10) ?? "",
+          notes: data.notes ?? "",
+        });
+      } catch (fetchError) {
+        setError(
+          fetchError instanceof Error
+            ? fetchError.message
+            : "Error al cargar el certificado"
+        );
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     fetchCertificate();
   }, [folio]);
 
-  const downloadQR = async () => {
+  async function handleSave(event: React.FormEvent) {
+    event.preventDefault();
     if (!certificate) return;
 
-    const qrElement = document.getElementById("qr-code");
-    if (!qrElement) return;
+    setSaving(true);
+    setError("");
+    setFeedback("");
 
     try {
-      const canvas = await renderCanvas(qrElement, 2);
-      const link = document.createElement("a");
-      link.download = `QR-${certificate.folio}.png`;
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-    } catch (downloadError) {
-      console.error("Error generating QR:", downloadError);
-      alert("Error al generar la etiqueta QR.");
-    }
-  };
+      const response = await fetch(
+        `/api/certificados/${encodeURIComponent(certificate.folio)}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            company: formData.company,
+            serviceType: formData.serviceType,
+            chemicalUsed: formData.chemicalUsed,
+            expirationDate: formData.expirationDate,
+            notes: formData.notes,
+          }),
+        }
+      );
+      const data = await response.json();
 
-  const downloadPDF = async () => {
+      if (!response.ok) {
+        throw new Error(data.error || "No se pudo actualizar el certificado");
+      }
+
+      setCertificate(data);
+      setFormData({
+        company: data.company ?? "",
+        serviceType: data.serviceType ?? "",
+        chemicalUsed: data.chemicalUsed ?? "",
+        expirationDate: data.expirationDate?.slice(0, 10) ?? "",
+        notes: data.notes ?? "",
+      });
+      setEditing(false);
+      setFeedback("Cambios guardados correctamente.");
+      router.replace(`/admin/certificados/${encodeURIComponent(data.folio)}`);
+    } catch (saveError) {
+      setError(
+        saveError instanceof Error
+          ? saveError.message
+          : "Error al guardar los cambios"
+      );
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!certificate) return;
+    if (!confirm(`¿Desea eliminar el certificado ${certificate.folio}?`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `/api/certificados/${encodeURIComponent(certificate.folio)}`,
+        { method: "DELETE" }
+      );
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "No se pudo eliminar el certificado");
+      }
+
+      router.push("/admin/certificados");
+      router.refresh();
+    } catch (deleteError) {
+      setError(
+        deleteError instanceof Error
+          ? deleteError.message
+          : "No se pudo eliminar el certificado"
+      );
+    }
+  }
+
+  async function handleRegenerateQr() {
     if (!certificate) return;
 
-    const element = document.getElementById("certificado-view");
-    if (!element) return;
+    try {
+      const response = await fetch(
+        `/api/qr/${encodeURIComponent(certificate.folio)}?regenerate=true`
+      );
+
+      if (!response.ok) {
+        throw new Error("No se pudo regenerar el código QR");
+      }
+
+      setQrVersion((current) => current + 1);
+      setFeedback("Código QR regenerado correctamente.");
+    } catch (regenerateError) {
+      setError(
+        regenerateError instanceof Error
+          ? regenerateError.message
+          : "No se pudo regenerar el código QR"
+      );
+    }
+  }
+
+  async function handleCopyPublicLink() {
+    if (!certificate) return;
+
+    const publicUrl = `${window.location.origin}/certificado/${encodeURIComponent(
+      certificate.folio
+    )}`;
 
     try {
-      const canvas = await renderCanvas(element, 2);
-      const { jsPDF } = await import("jspdf");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 10, imgWidth, imgHeight);
-      pdf.save(`Constancia-EHSW-${certificate.folio}.pdf`);
-    } catch (downloadError) {
-      console.error("Error generating PDF:", downloadError);
-      alert("Error al generar el PDF.");
+      await navigator.clipboard.writeText(publicUrl);
+      setFeedback("Enlace público copiado al portapapeles.");
+    } catch {
+      setError("No se pudo copiar el enlace público.");
     }
-  };
+  }
+
+  async function handleDownloadQr() {
+    if (!certificate) return;
+
+    const response = await fetch(`/api/qr/${encodeURIComponent(certificate.folio)}`);
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = `QR-${certificate.folio}.png`;
+    link.click();
+    URL.revokeObjectURL(objectUrl);
+  }
 
   if (loading) {
     return (
-      <div className="flex flex-col lg:flex-row min-h-screen">
+      <div className="flex min-h-screen flex-col lg:flex-row">
         <AdminSidebar />
-        <main className="flex-1 p-6 lg:p-10 flex items-center justify-center">
-          <div className="text-center">
-            <i className="fa-solid fa-circle-notch fa-spin text-4xl text-[var(--color-primary)] mb-4"></i>
-            <p className="text-white">Cargando certificado...</p>
-          </div>
+        <main className="flex flex-1 items-center justify-center px-5 py-10 text-[var(--color-text-muted)]">
+          Cargando certificado...
         </main>
       </div>
     );
   }
 
-  if (error || !certificate) {
+  if (error && !certificate) {
     return (
-      <div className="flex flex-col lg:flex-row min-h-screen">
+      <div className="flex min-h-screen flex-col lg:flex-row">
         <AdminSidebar />
-        <main className="flex-1 p-6 lg:p-10 flex items-center justify-center">
-          <div className="text-center bg-red-500/10 border border-red-500/20 p-10 rounded-2xl max-w-md">
-            <i className="fa-solid fa-circle-exclamation text-5xl text-red-500 mb-4"></i>
-            <h2 className="text-2xl font-bold text-white mb-2">Error</h2>
-            <p className="text-[var(--color-text-muted)] mb-6">
-              {error || "No se pudo encontrar el certificado."}
-            </p>
-            <Link href="/admin/certificados" className="btn-primary w-full justify-center">
+        <main className="flex flex-1 items-center justify-center px-5 py-10">
+          <div className="glass-card max-w-lg p-8 text-center">
+            <p className="text-lg font-semibold text-white">No se pudo cargar el certificado</p>
+            <p className="mt-3 text-sm text-[var(--color-text-muted)]">{error}</p>
+            <Link
+              href="/admin/certificados"
+              className="btn-primary mt-6 justify-center"
+            >
               Volver a la lista
             </Link>
           </div>
@@ -128,202 +256,361 @@ export default function CertificateDetailPage() {
     );
   }
 
+  if (!certificate) {
+    return null;
+  }
+
+  const qrSrc = `/api/qr/${encodeURIComponent(certificate.folio)}?v=${qrVersion}`;
+
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen">
+    <div className="flex min-h-screen flex-col lg:flex-row">
       <AdminSidebar />
-      <main className="flex-1 p-6 lg:p-10 flex flex-col items-center">
-        <div className="max-w-4xl w-full">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <div>
-              <Link
-                href="/admin/certificados"
-                className="text-[var(--color-primary)] no-underline hover:underline text-sm mb-2 inline-block font-medium"
-              >
-                ← Volver a la lista
-              </Link>
-              <h1 className="text-2xl font-bold text-white">
-                Detalle de Certificado: {certificate.folio}
-              </h1>
-            </div>
-            <div className="flex flex-wrap gap-2 w-full md:w-auto">
-              <button
-                onClick={downloadQR}
-                className="btn-ghost text-sm flex-1 md:flex-none justify-center"
-              >
-                <i className="fa-solid fa-qrcode"></i> Descargar Etiqueta QR
-              </button>
-              <button
-                onClick={downloadPDF}
-                className="btn-ghost text-sm flex-1 md:flex-none justify-center"
-              >
-                <i className="fa-solid fa-file-pdf"></i> Descargar PDF
-              </button>
-            </div>
-          </div>
 
-          <div
-            id="certificado-view"
-            className="bg-white rounded-xl shadow-2xl overflow-hidden mb-10 text-slate-800"
-          >
-            <div className="p-12 relative border-[16px] border-slate-50 min-h-[600px] flex flex-col items-center">
-              <div className="absolute top-0 left-0 w-32 h-32 border-t-4 border-l-4 border-slate-200"></div>
-              <div className="absolute top-0 right-0 w-32 h-32 border-t-4 border-r-4 border-slate-200"></div>
-              <div className="absolute bottom-0 left-0 w-32 h-32 border-b-4 border-l-4 border-slate-200"></div>
-              <div className="absolute bottom-0 right-0 w-32 h-32 border-b-4 border-r-4 border-slate-200"></div>
-
-              <div className="text-center mb-12 z-10">
-                <h1 className="text-4xl font-bold text-slate-900 tracking-widest uppercase mb-2">
-                  Constancia de Servicio
-                </h1>
-                <div className="h-1 w-24 bg-slate-800 mx-auto"></div>
-                <p className="mt-4 text-slate-500 font-medium">
-                  EHSW² — Higiene y Seguridad Ambiental
-                </p>
-              </div>
-
-              <div className="text-center space-y-4 max-w-3xl z-10 text-lg">
-                <p className="text-slate-600">Por medio de la presente se certifica que:</p>
-                <p className="text-3xl font-bold text-slate-800 py-4 border-b-2 border-slate-200">
-                  {certificate.clientName}
-                </p>
-                <p className="text-slate-600">Representante de:</p>
-                <p className="text-2xl font-bold text-slate-800">{certificate.company}</p>
-                <p className="text-slate-600">
-                  Ha completado satisfactoriamente el servicio de:
-                </p>
-                <p className="text-2xl font-bold text-slate-800">
-                  {certificate.serviceType}
-                </p>
-                <p className="text-slate-600 mt-2">Producto Químico Utilizado:</p>
-                <p className="text-xl font-bold text-slate-800">
-                  {certificate.chemicalUsed}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-x-20 gap-y-6 mt-12 text-left z-10 w-full max-w-3xl">
-                <div>
-                  <p className="text-xs uppercase text-slate-500 font-bold tracking-wider mb-1">
-                    Folio
-                  </p>
-                  <p className="text-lg font-mono font-medium text-slate-800">
-                    {certificate.folio}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase text-slate-500 font-bold tracking-wider mb-1">
-                    Estado
-                  </p>
-                  <p className="text-lg font-bold text-emerald-600 font-mono tracking-tight">
-                    {certificate.status}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase text-slate-500 font-bold tracking-wider mb-1">
-                    Fecha de Emisión
-                  </p>
-                  <p className="text-lg text-slate-800">
-                    {new Date(certificate.issueDate).toLocaleDateString("es-MX")}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase text-slate-500 font-bold tracking-wider mb-1">
-                    Vigencia Hasta
-                  </p>
-                  <p className="text-lg text-slate-800">
-                    {new Date(certificate.expirationDate).toLocaleDateString("es-MX")}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-auto pt-12 flex justify-between items-end w-full max-w-3xl z-10">
-                <div className="text-left">
-                  <div className="w-48 h-px bg-slate-400 mb-2"></div>
-                  <p className="text-sm font-bold text-slate-800">Firma Autorizada</p>
-                  <p className="text-xs text-slate-500">Dirección Técnica EHSW²</p>
-                </div>
-                <div className="text-center rounded-xl border border-slate-200 bg-white p-3">
-                  {certificate.qrCodeUrl ? (
-                    <img
-                      src={certificate.qrCodeUrl}
-                      alt="QR Code"
-                      className="w-24 h-24 mb-2 border border-slate-100 p-1"
-                    />
-                  ) : null}
-                  <p className="text-[10px] text-slate-400 font-mono">
-                    VALIDACIÓN DIGITAL
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="absolute top-[-9999px] left-[-9999px]">
-            <div
-              id="qr-code"
-              className="w-[800px] h-[450px] bg-white text-slate-900 p-8 flex items-center border-[12px] border-slate-900"
+      <main className="flex-1 px-5 py-6 sm:px-6 lg:px-10 lg:py-10">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8">
+            <Link
+              href="/admin/certificados"
+              className="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-cyan no-underline hover:text-white"
             >
-              <div className="w-1/3 flex flex-col items-center justify-center border-r-4 border-slate-200 pr-8">
-                {certificate.qrCodeUrl ? (
-                  <img
-                    src={certificate.qrCodeUrl}
-                    alt="QR Code"
-                    className="w-full h-auto mb-4"
-                  />
-                ) : null}
-                <h2 className="text-3xl font-black tracking-widest text-center">EHSW²</h2>
-                <p className="text-sm font-bold mt-2 tracking-widest text-center">
-                  VALIDACIÓN OFICIAL
+              <ArrowLeft className="h-4 w-4" />
+              <span>Volver a la lista</span>
+            </Link>
+            <p className="section-label mb-3">Detalle del Certificado</p>
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+              <div>
+                <h1 className="font-heading text-3xl font-bold text-white">
+                  {certificate.folio}
+                </h1>
+                <p className="mt-2 text-sm text-[var(--color-text-muted)]">
+                  Consulta, actualiza y comparte la validación pública del
+                  certificado.
                 </p>
               </div>
-              <div className="w-2/3 pl-8 flex flex-col justify-center space-y-6">
+
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditing(true);
+                    setFeedback("");
+                    router.replace(
+                      `/admin/certificados/${encodeURIComponent(
+                        certificate.folio
+                      )}?edit=true`
+                    );
+                  }}
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-silver/20 bg-white/5 px-4 py-3 text-sm font-semibold text-silver transition-colors hover:bg-white/10"
+                >
+                  <Pencil className="h-4 w-4" />
+                  <span>Editar</span>
+                </button>
+                <Link
+                  href={`/certificado/${encodeURIComponent(certificate.folio)}`}
+                  target="_blank"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-cyan/30 bg-cyan/10 px-4 py-3 text-sm font-semibold text-cyan no-underline transition-colors hover:bg-cyan/15"
+                >
+                  <Eye className="h-4 w-4" />
+                  <span>Ver público</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {feedback ? (
+            <div className="mb-6 rounded-xl border border-valid/25 bg-valid/10 px-4 py-3 text-sm text-valid">
+              {feedback}
+            </div>
+          ) : null}
+
+          {error ? (
+            <div className="mb-6 rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+              {error}
+            </div>
+          ) : null}
+
+          <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_360px]">
+            <section className="glass-card p-6">
+              <div className="mb-6 flex flex-col gap-4 border-b border-white/8 pb-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-sm font-bold uppercase text-slate-500 tracking-wider">
-                    Folio
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan">
+                    Datos del certificado
                   </p>
-                  <p className="text-4xl font-black font-mono">{certificate.folio}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-bold uppercase text-slate-500 tracking-wider">
-                    Razón Social
-                  </p>
-                  <p className="text-2xl font-bold uppercase">{certificate.company}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-bold uppercase text-slate-500 tracking-wider">
-                    Dirección
-                  </p>
-                  <p className="text-xl font-medium uppercase">
-                    {certificate.address || "N/A"}
+                  <p className="mt-2 text-sm text-[var(--color-text-muted)]">
+                    Folio generado y trazabilidad del servicio emitido.
                   </p>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs font-bold uppercase text-slate-500 tracking-wider">
-                      Fecha Servicio
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(certificate.folio);
+                    setFeedback("Folio copiado al portapapeles.");
+                  }}
+                  className="inline-flex items-center gap-2 rounded-lg border border-cyan/20 bg-cyan/8 px-4 py-2 text-sm font-semibold text-cyan transition-colors hover:bg-cyan/12"
+                >
+                  <Copy className="h-4 w-4" />
+                  <span>Copiar Folio</span>
+                </button>
+              </div>
+
+              <form onSubmit={handleSave} className="space-y-6">
+                <div className="grid gap-5 md:grid-cols-2">
+                  <div className="md:col-span-2">
+                    <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+                      Folio
                     </p>
-                    <p className="text-xl font-bold">
+                    <p className="mt-2 font-heading text-3xl font-bold text-cyan">
+                      {certificate.folio}
+                    </p>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="mb-2 block text-sm font-medium text-silver">
+                      Empresa
+                    </label>
+                    {editing ? (
+                      <input
+                        type="text"
+                        value={formData.company}
+                        onChange={(event) =>
+                          setFormData((current) => ({
+                            ...current,
+                            company: event.target.value,
+                          }))
+                        }
+                        className="contact-input"
+                        required
+                      />
+                    ) : (
+                      <p className="rounded-xl border border-white/8 bg-white/4 px-4 py-3 text-white">
+                        {certificate.company}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-silver">
+                      Servicio
+                    </label>
+                    {editing ? (
+                      <input
+                        type="text"
+                        value={formData.serviceType}
+                        onChange={(event) =>
+                          setFormData((current) => ({
+                            ...current,
+                            serviceType: event.target.value,
+                          }))
+                        }
+                        className="contact-input"
+                        required
+                      />
+                    ) : (
+                      <p className="rounded-xl border border-white/8 bg-white/4 px-4 py-3 text-white">
+                        {certificate.serviceType}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-silver">
+                      Producto
+                    </label>
+                    {editing ? (
+                      <input
+                        type="text"
+                        value={formData.chemicalUsed}
+                        onChange={(event) =>
+                          setFormData((current) => ({
+                            ...current,
+                            chemicalUsed: event.target.value,
+                          }))
+                        }
+                        className="contact-input"
+                      />
+                    ) : (
+                      <p className="rounded-xl border border-white/8 bg-white/4 px-4 py-3 text-white">
+                        {certificate.chemicalUsed || "No especificado"}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <p className="mb-2 text-sm font-medium text-silver">
+                      Fecha de Emisión
+                    </p>
+                    <p className="rounded-xl border border-white/8 bg-white/4 px-4 py-3 text-white">
                       {new Date(certificate.issueDate).toLocaleDateString("es-MX")}
                     </p>
                   </div>
+
                   <div>
-                    <p className="text-xs font-bold uppercase text-slate-500 tracking-wider">
+                    <label className="mb-2 block text-sm font-medium text-silver">
                       Vigencia
-                    </p>
-                    <p className="text-xl font-bold">
-                      {new Date(certificate.expirationDate).toLocaleDateString("es-MX")}
-                    </p>
+                    </label>
+                    {editing ? (
+                      <input
+                        type="date"
+                        value={formData.expirationDate}
+                        onChange={(event) =>
+                          setFormData((current) => ({
+                            ...current,
+                            expirationDate: event.target.value,
+                          }))
+                        }
+                        className="contact-input"
+                        required
+                      />
+                    ) : (
+                      <p className="rounded-xl border border-white/8 bg-white/4 px-4 py-3 text-white">
+                        {new Date(certificate.expirationDate).toLocaleDateString(
+                          "es-MX"
+                        )}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <p className="mb-2 text-sm font-medium text-silver">Estado</p>
+                    <span
+                      className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${getStatusClasses(
+                        certificate.status
+                      )}`}
+                    >
+                      {certificate.statusLabel}
+                    </span>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="mb-2 block text-sm font-medium text-silver">
+                      Notas
+                    </label>
+                    {editing ? (
+                      <textarea
+                        value={formData.notes}
+                        onChange={(event) =>
+                          setFormData((current) => ({
+                            ...current,
+                            notes: event.target.value,
+                          }))
+                        }
+                        className="contact-input min-h-[130px] resize-y"
+                      />
+                    ) : (
+                      <p className="rounded-xl border border-white/8 bg-white/4 px-4 py-3 text-white">
+                        {certificate.notes || "Sin notas registradas."}
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className="pt-4 border-t-2 border-slate-200">
-                  <p className="text-xs font-bold uppercase text-slate-500 tracking-wider">
-                    Producto Químico Utilizado
-                  </p>
-                  <p className="text-lg font-medium text-slate-800 uppercase">
-                    {certificate.chemicalUsed}
+
+                <div className="flex flex-col gap-3 border-t border-white/8 pt-6 sm:flex-row sm:justify-between">
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    {editing ? (
+                      <button
+                        type="submit"
+                        disabled={saving}
+                        className="btn-primary justify-center"
+                      >
+                        <Save className="h-4 w-4" />
+                        <span>{saving ? "Guardando..." : "Guardar cambios"}</span>
+                      </button>
+                    ) : null}
+
+                    {editing ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditing(false);
+                          setFormData({
+                            company: certificate.company,
+                            serviceType: certificate.serviceType,
+                            chemicalUsed: certificate.chemicalUsed,
+                            expirationDate: certificate.expirationDate.slice(0, 10),
+                            notes: certificate.notes ?? "",
+                          });
+                          router.replace(
+                            `/admin/certificados/${encodeURIComponent(
+                              certificate.folio
+                            )}`
+                          );
+                        }}
+                        className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition-colors hover:border-cyan/30 hover:bg-cyan/10"
+                      >
+                        Cancelar
+                      </button>
+                    ) : null}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleDelete}
+                    className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    <span>Eliminar</span>
+                  </button>
+                </div>
+              </form>
+            </section>
+
+            <aside className="glass-card p-6">
+              <div className="mb-6 flex items-center gap-3">
+                <div className="rounded-2xl border border-cyan/20 bg-cyan/10 p-3">
+                  <QrCode className="h-5 w-5 text-cyan" />
+                </div>
+                <div>
+                  <h2 className="font-heading text-xl font-bold text-white">
+                    QR del certificado
+                  </h2>
+                  <p className="text-sm text-[var(--color-text-muted)]">
+                    Validación pública y descarga inmediata.
                   </p>
                 </div>
               </div>
-            </div>
+
+              <div className="rounded-2xl border border-white/8 bg-white p-5 shadow-lg">
+                <Image
+                  src={qrSrc}
+                  alt={`Código QR del certificado ${certificate.folio}`}
+                  width={250}
+                  height={250}
+                  unoptimized
+                  className="mx-auto h-[250px] w-[250px]"
+                />
+              </div>
+
+              <p className="mt-4 text-center font-mono text-sm font-semibold text-white">
+                {certificate.folio}
+              </p>
+
+              <div className="mt-6 space-y-3">
+                <button
+                  type="button"
+                  onClick={handleDownloadQr}
+                  className="btn-primary w-full justify-center"
+                >
+                  <Download className="h-4 w-4" />
+                  <span>Descargar QR</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleRegenerateQr}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition-colors hover:border-cyan/30 hover:bg-cyan/10"
+                >
+                  <RefreshCcw className="h-4 w-4" />
+                  <span>Regenerar QR</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCopyPublicLink}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-cyan/30 bg-cyan/10 px-4 py-3 text-sm font-semibold text-cyan transition-colors hover:bg-cyan/15"
+                >
+                  <Copy className="h-4 w-4" />
+                  <span>Copiar Link Público</span>
+                </button>
+              </div>
+            </aside>
           </div>
         </div>
       </main>

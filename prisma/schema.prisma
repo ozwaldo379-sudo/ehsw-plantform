@@ -20,12 +20,14 @@ model Certificate {
   folio          String   @unique
   clientName     String
   company        String
-  address        String?
   serviceType    String
   chemicalUsed   String
   issueDate      DateTime
   expirationDate DateTime
   status         String   @default("VALID")
   qrCodeUrl      String?
+  qrBase64       String?
+  notes          String?
   createdAt      DateTime @default(now())
+  address        String?
 }

@@ -1,190 +1,384 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  Eye,
+  FileSearch,
+  Pencil,
+  PlusCircle,
+  Search,
+  Trash2,
+} from "lucide-react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import type { SerializedCertificate } from "@/lib/certificates";
+
+interface CertificatesResponse {
+  certificados: SerializedCertificate[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+const FILTERS = [
+  { id: "todos", label: "Todos", value: "" },
+  { id: "vigente", label: "Vigentes", value: "vigente" },
+  { id: "por_vencer", label: "Por Vencer", value: "por_vencer" },
+  { id: "vencido", label: "Vencidos", value: "vencido" },
+];
+
+function getStatusClasses(status: string) {
+  switch (status) {
+    case "EXPIRED":
+      return "border border-red-500/25 bg-red-500/10 text-red-200";
+    case "EXPIRING":
+      return "border border-amber-500/25 bg-amber-500/10 text-amber-200";
+    default:
+      return "border border-valid/25 bg-valid/10 text-valid";
+  }
+}
 
 export default function CertificadosListPage() {
-    const [certificates, setCertificates] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [search, setSearch] = useState("");
+  const [certificates, setCertificates] = useState<SerializedCertificate[]>([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(20);
+  const [searchDraft, setSearchDraft] = useState("");
+  const [search, setSearch] = useState("");
+  const [estado, setEstado] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [deletingFolio, setDeletingFolio] = useState<string | null>(null);
+  const totalPages = Math.max(Math.ceil(total / pageSize), 1);
 
-    const fetchCertificates = async (query = "") => {
-        setLoading(true);
-        try {
-            const res = await fetch(`/api/certificados?search=${encodeURIComponent(query)}`);
-            const data = await res.json();
-            setCertificates(data);
-        } catch (error) {
-            console.error("Error fetching certificates:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+  async function fetchCertificates() {
+    setLoading(true);
 
-    useEffect(() => {
-        fetchCertificates();
-    }, []);
+    try {
+      const params = new URLSearchParams({
+        page: String(page),
+        pageSize: String(pageSize),
+      });
 
-    const handleDelete = async (folio: string) => {
-        if (!confirm(`¿Estás seguro de eliminar el certificado ${folio}?`)) return;
+      if (search) params.set("search", search);
+      if (estado) params.set("estado", estado);
 
-        try {
-            const res = await fetch(`/api/certificados/${folio}`, {
-                method: "DELETE",
-            });
-            if (res.ok) {
-                setCertificates(certificates.filter((c) => c.folio !== folio));
-            } else {
-                alert("Error al eliminar el certificado");
-            }
-        } catch (error) {
-            console.error("Error deleting certificate:", error);
-        }
-    };
+      const response = await fetch(`/api/certificados?${params.toString()}`);
+      const data: CertificatesResponse | { error?: string } = await response.json();
 
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        fetchCertificates(search);
-    };
+      if (!response.ok || !("certificados" in data)) {
+        throw new Error(
+          ("error" in data ? data.error : undefined) ||
+            "No se pudieron cargar los certificados"
+        );
+      }
 
-    const now = new Date();
+      setCertificates(data.certificados);
+      setTotal(data.total);
+    } catch (error) {
+      console.error("Error fetching certificates:", error);
+      setCertificates([]);
+      setTotal(0);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-    return (
-        <div className="flex flex-col lg:flex-row min-h-screen">
-            <AdminSidebar />
-            
-            {/* Main Content */}
-            <main className="flex-1 p-6 lg:p-10">
-                <div className="max-w-6xl mx-auto">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                        <div>
-                            <h1 className="text-2xl font-bold text-white">Administrar Certificados</h1>
-                            <p className="text-[var(--color-text-muted)] text-sm">Lista total de certificados emitidos por EHSW²</p>
-                        </div>
-                        <Link href="/admin/certificados/nuevo" className="btn-primary w-full md:w-auto justify-center">
-                            <i className="fa-solid fa-plus"></i> Nuevo Certificado
-                        </Link>
-                    </div>
+  useEffect(() => {
+    fetchCertificates();
+  }, [page, pageSize, search, estado]);
 
-                    {/* Search Bar */}
-                    <form onSubmit={handleSearch} className="mb-8 flex flex-col md:flex-row gap-3">
-                        <div className="relative flex-1">
-                            <i className="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]"></i>
-                            <input
-                                type="text"
-                                placeholder="Buscar por folio, cliente o empresa..."
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                className="w-full pl-12 pr-4 py-3 bg-navy-light/70 border border-white/10 rounded-xl text-white outline-none focus:border-cyan/60 transition-colors"
-                            />
-                        </div>
-                        <button type="submit" className="btn-ghost px-6 md:w-auto w-full">
-                            Buscar
-                        </button>
-                        {search && (
-                            <button
-                                type="button"
-                                onClick={() => { setSearch(""); fetchCertificates(""); }}
-                                className="bg-white/5 hover:bg-white/10 text-white px-4 py-3 rounded-xl border border-white/10 transition-colors"
+  function handleSearch(event: React.FormEvent) {
+    event.preventDefault();
+    setPage(1);
+    setSearch(searchDraft.trim());
+  }
+
+  async function handleDelete(folio: string) {
+    if (!confirm(`¿Desea eliminar el certificado ${folio}?`)) {
+      return;
+    }
+
+    setDeletingFolio(folio);
+
+    try {
+      const response = await fetch(`/api/certificados/${encodeURIComponent(folio)}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "No se pudo eliminar el certificado");
+      }
+
+      await fetchCertificates();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Ocurrió un error al eliminar";
+      alert(message);
+    } finally {
+      setDeletingFolio(null);
+    }
+  }
+
+  function handleDownloadQr(folio: string) {
+    const link = document.createElement("a");
+    link.href = `/api/qr/${encodeURIComponent(folio)}`;
+    link.download = `QR-${folio}.png`;
+    link.click();
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col lg:flex-row">
+      <AdminSidebar />
+
+      <main className="flex-1 px-5 py-6 sm:px-6 lg:px-10 lg:py-10">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="section-label mb-3">Gestión Operativa</p>
+              <h1 className="font-heading text-3xl font-bold text-white">
+                Certificados
+              </h1>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--color-text-muted)]">
+                Consulte, filtre y administre todos los certificados emitidos por
+                EHSW² desde un solo panel.
+              </p>
+            </div>
+
+            <Link
+              href="/admin/certificados/nuevo"
+              className="btn-primary justify-center"
+            >
+              <PlusCircle className="h-4 w-4" />
+              <span>Nuevo Certificado</span>
+            </Link>
+          </div>
+
+          <section className="glass-card mb-6 p-5">
+            <div className="mb-5 flex flex-wrap gap-3">
+              {FILTERS.map((filter) => (
+                <button
+                  key={filter.id}
+                  type="button"
+                  onClick={() => {
+                    setPage(1);
+                    setEstado(filter.value);
+                  }}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 ${
+                    estado === filter.value
+                      ? "bg-cyan text-white"
+                      : "border border-white/10 bg-white/5 text-silver hover:border-cyan/30 hover:text-white"
+                  }`}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+
+            <form
+              onSubmit={handleSearch}
+              className="flex flex-col gap-3 md:flex-row md:items-center"
+            >
+              <div className="relative flex-1">
+                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-text-muted)]" />
+                <input
+                  type="text"
+                  value={searchDraft}
+                  onChange={(event) => setSearchDraft(event.target.value)}
+                  className="contact-input pl-11"
+                  placeholder="Buscar por folio o empresa"
+                />
+              </div>
+
+              <button type="submit" className="btn-primary justify-center">
+                <FileSearch className="h-4 w-4" />
+                <span>Buscar</span>
+              </button>
+
+              {(search || searchDraft) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchDraft("");
+                    setSearch("");
+                    setPage(1);
+                  }}
+                  className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition-colors hover:border-cyan/30 hover:bg-cyan/10"
+                >
+                  Limpiar
+                </button>
+              )}
+            </form>
+          </section>
+
+          <section className="glass-card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-left text-sm">
+                <thead className="bg-white/3">
+                  <tr className="border-b border-white/8">
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+                      Folio
+                    </th>
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+                      Empresa
+                    </th>
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+                      Servicio
+                    </th>
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+                      Emisión
+                    </th>
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+                      Vigencia
+                    </th>
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+                      Estado
+                    </th>
+                    <th className="px-5 py-4 text-right text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+                      Acciones
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading ? (
+                    <tr>
+                      <td
+                        colSpan={7}
+                        className="px-5 py-16 text-center text-[var(--color-text-muted)]"
+                      >
+                        Cargando certificados...
+                      </td>
+                    </tr>
+                  ) : certificates.length ? (
+                    certificates.map((certificate) => (
+                      <tr
+                        key={certificate.folio}
+                        className="border-b border-white/6 transition-colors hover:bg-white/3"
+                      >
+                        <td className="px-5 py-4 font-mono text-sm font-semibold text-white">
+                          {certificate.folio}
+                        </td>
+                        <td className="px-5 py-4 text-silver">
+                          {certificate.company}
+                        </td>
+                        <td className="px-5 py-4 text-silver">
+                          {certificate.serviceType}
+                        </td>
+                        <td className="px-5 py-4 text-silver">
+                          {new Date(certificate.issueDate).toLocaleDateString("es-MX")}
+                        </td>
+                        <td className="px-5 py-4 text-silver">
+                          {new Date(certificate.expirationDate).toLocaleDateString(
+                            "es-MX"
+                          )}
+                        </td>
+                        <td className="px-5 py-4">
+                          <span
+                            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getStatusClasses(
+                              certificate.status
+                            )}`}
+                          >
+                            {certificate.statusLabel}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4">
+                          <div className="flex flex-wrap justify-end gap-2">
+                            <Link
+                              href={`/admin/certificados/${encodeURIComponent(
+                                certificate.folio
+                              )}`}
+                              className="inline-flex items-center gap-2 rounded-md border border-cyan/40 bg-transparent px-3 py-2 text-sm font-medium text-cyan transition-colors hover:bg-cyan/10"
+                              title="Ver detalle"
                             >
-                                Limpiar
+                              <Eye className="h-4 w-4" />
+                              <span className="hidden md:inline">Ver</span>
+                            </Link>
+                            <Link
+                              href={`/admin/certificados/${encodeURIComponent(
+                                certificate.folio
+                              )}?edit=true`}
+                              className="inline-flex items-center gap-2 rounded-md border border-silver/20 bg-transparent px-3 py-2 text-sm font-medium text-silver transition-colors hover:bg-white/10"
+                              title="Editar"
+                            >
+                              <Pencil className="h-4 w-4" />
+                              <span className="hidden md:inline">Editar</span>
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => handleDownloadQr(certificate.folio)}
+                              className="inline-flex items-center gap-2 rounded-md bg-cyan px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-cyan-dark"
+                              title="Descargar QR"
+                            >
+                              <Download className="h-4 w-4" />
+                              <span className="hidden md:inline">Descargar QR</span>
                             </button>
-                        )}
-                    </form>
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(certificate.folio)}
+                              disabled={deletingFolio === certificate.folio}
+                              className="inline-flex items-center gap-2 rounded-md border border-red-500/40 bg-transparent px-3 py-2 text-sm font-medium text-red-200 transition-colors hover:bg-red-500/10"
+                              title="Eliminar"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              <span className="hidden md:inline">
+                                {deletingFolio === certificate.folio
+                                  ? "Eliminando..."
+                                  : "Eliminar"}
+                              </span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan={7}
+                        className="px-5 py-16 text-center text-[var(--color-text-muted)]"
+                      >
+                        No se encontraron certificados con los filtros actuales.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
 
-                    <div className="glass-card overflow-hidden">
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left border-collapse">
-                                <thead>
-                                    <tr className="border-b border-[var(--color-glass-border)] bg-[rgba(255,255,255,0.03)] font-medium">
-                                        <th className="p-4 text-white text-sm uppercase tracking-wider">Folio</th>
-                                        <th className="p-4 text-white text-sm uppercase tracking-wider">Cliente</th>
-                                        <th className="p-4 text-white text-sm uppercase tracking-wider">Empresa</th>
-                                        <th className="p-4 text-white text-sm uppercase tracking-wider">Servicio</th>
-                                        <th className="p-4 text-white text-sm uppercase tracking-wider">Vencimiento</th>
-                                        <th className="p-4 text-white text-sm uppercase tracking-wider">Estado</th>
-                                        <th className="p-4 text-white text-sm uppercase tracking-wider text-right">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {loading ? (
-                                        <tr>
-                                            <td colSpan={7} className="p-10 text-center text-[var(--color-text-muted)]">
-                                                <i className="fa-solid fa-circle-notch fa-spin text-2xl mb-2"></i>
-                                                <p>Cargando certificados...</p>
-                                            </td>
-                                        </tr>
-                                    ) : certificates.length === 0 ? (
-                                        <tr>
-                                            <td colSpan={7} className="p-10 text-center text-[var(--color-text-muted)]">
-                                                <div className="py-10 flex flex-col items-center">
-                                                    <i className="fa-solid fa-inbox text-4xl text-[var(--color-text-muted)] mb-3"></i>
-                                                    <p>No se encontraron certificados.</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        certificates.map((cert) => {
-                                            const isExpired = new Date(cert.expirationDate) < now;
-                                            return (
-                                                <tr key={cert.id} className="border-b border-[var(--color-glass-border)] hover:bg-[rgba(255,255,255,0.02)] transition-colors group">
-                                                    <td className="p-4 text-white font-mono font-medium text-sm">{cert.folio}</td>
-                                                    <td className="p-4 text-[var(--color-text-muted)] text-sm">{cert.clientName}</td>
-                                                    <td className="p-4 text-[var(--color-text-muted)] text-sm">{cert.company}</td>
-                                                    <td className="p-4">
-                                                        <span className="text-[10px] bg-white/5 px-2 py-1 rounded text-white/70 uppercase font-medium">
-                                                            {cert.serviceType}
-                                                        </span>
-                                                    </td>
-                                                    <td className="p-4 text-[var(--color-text-muted)] text-xs font-mono">
-                                                        {new Date(cert.expirationDate).toLocaleDateString("es-MX")}
-                                                    </td>
-                                                    <td className="p-4">
-                                                        <span className={`px-2 py-1 rounded-md text-[10px] font-bold tracking-tight uppercase border ${isExpired ? "bg-red-500/10 text-red-500 border-red-500/20" : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                                                            }`}>
-                                                            {isExpired ? "Expirado" : "Validado"}
-                                                        </span>
-                                                    </td>
-                                                    <td className="p-4 text-right">
-                                                        <div className="flex flex-wrap gap-2 justify-end">
-                                                            <Link
-                                                                href={`/admin/certificados/${cert.folio}`}
-                                                                className="border border-cyan/40 text-cyan bg-transparent hover:bg-cyan/10 px-3 py-1.5 rounded-md text-sm transition-colors inline-flex items-center gap-2"
-                                                                title="Ver"
-                                                            >
-                                                                <i className="fa-solid fa-eye text-xs"></i>
-                                                                <span className="hidden md:inline">Ver</span>
-                                                            </Link>
-                                                            <Link
-                                                                href={`/certificado/${cert.folio}`}
-                                                                target="_blank"
-                                                                className="bg-cyan text-white hover:bg-cyan-dark px-3 py-1.5 rounded-md text-sm transition-colors inline-flex items-center gap-2"
-                                                                title="Ver público"
-                                                            >
-                                                                <i className="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                                                                <span className="hidden md:inline">Ver publico</span>
-                                                            </Link>
-                                                            <button
-                                                                onClick={() => handleDelete(cert.folio)}
-                                                                className="border border-invalid/40 text-invalid bg-transparent hover:bg-invalid/10 px-3 py-1.5 rounded-md text-sm transition-colors inline-flex items-center gap-2"
-                                                                title="Eliminar"
-                                                            >
-                                                                <i className="fa-solid fa-trash-can text-xs"></i>
-                                                                <span className="hidden md:inline">Eliminar</span>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            {totalPages > 1 ? (
+              <div className="flex flex-col gap-3 border-t border-white/8 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-[var(--color-text-muted)]">
+                  Mostrando página {page} de {totalPages} con {total} registros.
+                </p>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setPage((current) => Math.max(current - 1, 1))}
+                    disabled={page === 1}
+                    className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition-colors hover:border-cyan/30 hover:bg-cyan/10 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    <span>Anterior</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setPage((current) => Math.min(current + 1, totalPages))
+                    }
+                    disabled={page === totalPages}
+                    className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition-colors hover:border-cyan/30 hover:bg-cyan/10 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <span>Siguiente</span>
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
                 </div>
-            </main>
+              </div>
+            ) : null}
+          </section>
         </div>
-    );
+      </main>
+    </div>
+  );
 }

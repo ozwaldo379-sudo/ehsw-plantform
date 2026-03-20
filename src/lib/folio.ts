@@ -3,10 +3,11 @@ import { prisma } from "./prisma";
 const SERVICE_CODES: Record<string, string> = {
     "Fumigación": "FUM",
     "Control de Plagas": "FUM",
+    "Desinfección": "DES",
     "Extintores": "EXT",
     "Seguridad Industrial": "SEG",
     "Gestión Ambiental": "AMB",
-    "Protección Civil": "PRC",
+    "Protección Civil": "PC",
 };
 
 export function getServiceCode(serviceType: string): string {
