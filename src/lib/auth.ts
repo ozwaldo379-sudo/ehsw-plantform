@@ -14,11 +14,11 @@ export interface SessionPayload {
   iat?: number;
 }
 
-function getJwtSecret() {
-  const secret = process.env.JWT_SECRET;
+function getSessionSecret() {
+  const secret = process.env.SESSION_SECRET;
 
   if (!secret) {
-    throw new Error("JWT_SECRET no está configurado");
+    throw new Error("SESSION_SECRET no está configurado");
   }
 
   return secret;
@@ -52,14 +52,14 @@ export async function verifyCredentials(email: string, password: string) {
 }
 
 export function generateToken(email: string) {
-  return jwt.sign({ email: email.trim().toLowerCase() }, getJwtSecret(), {
+  return jwt.sign({ email: email.trim().toLowerCase() }, getSessionSecret(), {
     expiresIn: SESSION_MAX_AGE,
   });
 }
 
 export function verifyToken(token: string): SessionPayload | null {
   try {
-    const payload = jwt.verify(token, getJwtSecret());
+    const payload = jwt.verify(token, getSessionSecret());
 
     if (typeof payload === "string") {
       return null;

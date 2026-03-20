@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Certificate } from "@prisma/client";
 import {
   AlertTriangle,
   ArrowRight,
@@ -185,7 +186,7 @@ export default async function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {recentCertificates.map((certificate) => {
+                    {recentCertificates.map((certificate: Certificate) => {
                       const status = getCertificateState(certificate.expirationDate, now);
 
                       return (

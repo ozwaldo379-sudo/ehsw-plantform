@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import type { Certificate } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getCertificateState, getStatusFilter, serializeCertificate } from "@/lib/certificates";
 import { generateFolio } from "@/lib/folio";
@@ -50,7 +51,7 @@ export async function GET(request: NextRequest) {
     ]);
 
     return NextResponse.json({
-      certificados: certificates.map((certificate) =>
+      certificados: certificates.map((certificate: Certificate) =>
         serializeCertificate(certificate)
       ),
       total,
