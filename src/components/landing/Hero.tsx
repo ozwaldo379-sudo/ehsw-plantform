@@ -40,20 +40,22 @@ export default function Hero() {
           </div>
 
           <h1
-            className="hero-reveal mb-6 font-heading text-3xl font-bold leading-tight text-white md:text-4xl lg:text-5xl"
+            className="hero-reveal mb-6 font-heading leading-tight"
             style={{ animationDelay: "0.16s" }}
           >
-            Soluciones Integrales en
-            <span className="block text-cyan">Seguridad &amp; Medio Ambiente</span>
+            <span className="block text-white font-bold text-4xl md:text-6xl">
+              Protegemos tu empresa.
+            </span>
+            <span className="block text-cyan font-bold text-4xl md:text-6xl mt-2">
+              Certificamos tu cumplimiento.
+            </span>
           </h1>
 
           <p
-            className="hero-reveal mb-8 max-w-xl text-base leading-relaxed text-silver"
+            className="hero-reveal mb-8 max-w-xl text-lg leading-relaxed text-silver"
             style={{ animationDelay: "0.24s" }}
           >
-            Especialistas en <strong>Control de Plagas</strong>, Gestión
-            Ambiental y Seguridad Industrial. Protegemos su empresa cumpliendo
-            estrictamente con COFEPRIS, STPS y Protección Civil.
+            Control de Plagas &middot; Gestión Ambiental &middot; Seguridad Industrial &middot; Extintores NOM-154
           </p>
 
           <div
