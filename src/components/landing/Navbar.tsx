@@ -51,7 +51,7 @@ export default function Navbar() {
             aria-label="EHSW2 Inicio"
           >
             <Image
-              src="/logo-ehsw2-sinfondo.png"
+              src="/logo-ehsw2-sinfondo.svg"
               alt="EHSW2"
               width={240}
               height={80}

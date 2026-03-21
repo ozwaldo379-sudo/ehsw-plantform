@@ -49,7 +49,7 @@ export default function AdminLoginPage() {
         <div className="mb-8 text-center">
           <div className="mb-5 inline-flex items-center justify-center rounded-3xl border border-cyan/20 bg-cyan/8 p-5 shadow-[0_0_40px_rgba(0,188,212,0.08)]">
             <Image
-              src="/logo-ehsw2.png"
+              src="/logo-ehsw2-sinfondo.svg"
               alt="Logo EHSW²"
               width={164}
               height={52}

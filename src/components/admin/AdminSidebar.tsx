@@ -50,7 +50,7 @@ export default function AdminSidebar() {
       <div className="mb-8 rounded-2xl border border-white/8 bg-white/4 p-5">
         <Link href="/admin" className="flex items-center gap-3 no-underline">
           <Image
-            src="/logo-ehsw2.png"
+            src="/logo-ehsw2-sinfondo.svg"
             alt="Logo EHSW²"
             width={120}
             height={40}

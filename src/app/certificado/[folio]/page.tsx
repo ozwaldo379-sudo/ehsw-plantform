@@ -88,7 +88,7 @@ export default async function PublicCertificatePage({
         <div className="w-full max-w-2xl text-center">
           <Link href="/" className="mb-8 inline-flex items-center justify-center">
             <Image
-              src="/logo-ehsw2.png"
+              src="/logo-ehsw2-sinfondo.svg"
               alt="Logo EHSW²"
               width={220}
               height={72}
