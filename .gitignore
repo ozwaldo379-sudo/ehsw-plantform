@@ -5,6 +5,8 @@
 
 # testing
 /coverage
+test-results/
+.last-run.json
 
 # next.js
 /.next/

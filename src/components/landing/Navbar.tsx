@@ -73,6 +73,12 @@ export default function Navbar() {
               </a>
             ))}
             <a
+              href="/admin/login"
+              className="text-sm font-medium text-[var(--color-text-muted)] transition-colors duration-300 hover:text-white"
+            >
+              Admin
+            </a>
+            <a
               href={siteConfig.contact.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
@@ -122,6 +128,17 @@ export default function Navbar() {
               </motion.a>
             ))}
             <motion.a
+              href="/admin/login"
+              onClick={() => setMobileOpen(false)}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ delay: navLinks.length * 0.06, duration: 0.4 }}
+              className="text-2xl font-semibold text-white hover:text-[var(--color-primary)] transition-colors"
+            >
+              Admin
+            </motion.a>
+            <motion.a
               href={siteConfig.contact.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
@@ -129,7 +146,7 @@ export default function Navbar() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              transition={{ delay: navLinks.length * 0.06, duration: 0.4 }}
+              transition={{ delay: (navLinks.length + 1) * 0.06, duration: 0.4 }}
               className="btn-primary mt-4"
             >
               Cotizar
