@@ -59,7 +59,7 @@ export default function AdminMobileHeader() {
           onClick={() => setMobileOpen(false)}
         >
           <Image
-            src="/logo-ehsw2-sinfondo.svg"
+            src="/logo-ehsw2-white-transparent.png"
             alt="Logo EHSW²"
             width={112}
             height={36}

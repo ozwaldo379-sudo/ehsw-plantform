@@ -40,7 +40,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Image
-              src="/logo-ehsw2-sinfondo.svg"
+              src="/logo-ehsw2-white-transparent.png"
               alt="Logo de EHSW2"
               width={210}
               height={72}
