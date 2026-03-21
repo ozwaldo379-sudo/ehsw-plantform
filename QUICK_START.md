@@ -8,10 +8,12 @@
 
 ```bash
 # Create folder for your page
-mkdir -p src/app/(marketing)/my-campaign
+mkdir -p src/app/my-campaign
 ```
 
-Create `src/app/(marketing)/my-campaign/page.tsx`:
+> **Nota:** El proyecto no usa un grupo de rutas `(marketing)/`. Las páginas públicas van directamente bajo `src/app/`.
+
+Create `src/app/my-campaign/page.tsx`:
 
 ```tsx
 import { createMetadata } from "@/lib/metadata";
@@ -90,7 +92,7 @@ export default function MyCampaignPage() {
 npm run dev
 ```
 
-Visit `http://localhost:3000/my-campaign`
+Visita `http://localhost:3000/my-campaign`
 
 ---
 

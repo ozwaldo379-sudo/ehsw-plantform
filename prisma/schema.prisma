@@ -26,8 +26,8 @@ model Certificate {
   expirationDate DateTime
   status         String   @default("VALID")
   qrCodeUrl      String?
-  qrBase64       String?
-  notes          String?
   createdAt      DateTime @default(now())
   address        String?
+  notes          String?
+  qrBase64       String?
 }

@@ -12,7 +12,7 @@
 | React | 19.2.4 | UI library (Actions, useOptimistic) |
 | TypeScript | 5.9.3 | Strict type safety |
 | Tailwind CSS | 4.2.1 | Utility-first CSS (v4 PostCSS approach) |
-| Prisma | 5.22.0 | ORM → SQLite (dev) / PostgreSQL (prod) |
+| Prisma | 6.19.2 | ORM → SQLite (dev) / PostgreSQL (prod) |
 | Framer Motion | latest | Declarative animations & transitions |
 | Lenis | latest | Smooth scrolling |
 | Embla Carousel | latest | Touch-friendly carousels |
@@ -34,7 +34,7 @@ src/
 ├── components/
 │   ├── landing/   → Original EHSW² landing components
 │   ├── sections/  → Reusable section templates (Hero ×3, Features, Testimonials, CTA, Footer)
-│   └── ui/        → shadcn/ui components (ready for init)
+│   └── admin/     → Componentes del panel de administración (sidebar, header)
 ├── lib/
 │   ├── utils.ts       → cn() class merging utility
 │   ├── fonts.ts       → Google Fonts config (Inter, Outfit, Playfair Display)

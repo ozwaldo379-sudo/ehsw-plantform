@@ -1,8 +1,10 @@
-# PERFORMANCE REPORT — EHSW² Platform
+# PERFORMANCE GOALS — EHSW² Platform
+
+> **Nota:** Este documento describe metas y optimizaciones aplicadas, **no métricas medidas en producción**. Para ver métricas reales, consulta el dashboard de Vercel Analytics y Speed Insights una vez desplegado.
 
 ---
 
-## Expected Lighthouse Scores
+## Lighthouse Scores Esperados (Objetivos)
 
 | Category | Expected Score | Rationale |
 |---|---|---|
@@ -67,9 +69,9 @@ Applied via `next.config.ts headers()`:
 
 ---
 
-## Recommended Next Steps
+## Backlog de Mejoras Pendientes
 
-1. **Remove Font Awesome CDN** — Migrate existing landing components to Lucide React
-2. **Add Bundle Analyzer** — `npm install @next/bundle-analyzer` and review top 5 modules
-3. **Deploy to Vercel** — Run Lighthouse on deployed URL for real scores
-4. **Add Service Worker** — PWA support for offline capability
+1. **Remover Font Awesome CDN** — Migrar componentes de landing existentes a Lucide React
+2. **Agregar Bundle Analyzer** — `npm install @next/bundle-analyzer` y revisar los 5 módulos más pesados
+3. **Medir en producción** — Correr Lighthouse sobre la URL de Vercel para obtener scores reales
+4. **Service Worker** — Soporte PWA para capacidades offline
