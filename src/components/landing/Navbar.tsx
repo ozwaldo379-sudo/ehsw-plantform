@@ -66,15 +66,15 @@ export default function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                className="relative text-sm font-medium text-[var(--color-text-muted)] hover:text-white transition-colors duration-300 group"
+                className="relative text-sm font-medium text-(--color-text-muted) hover:text-white transition-colors duration-300 group"
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[var(--color-primary)] transition-all duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-(--color-primary) transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
             <a
               href="/admin/login"
-              className="text-sm font-medium text-[var(--color-text-muted)] transition-colors duration-300 hover:text-white"
+              className="text-sm font-medium text-(--color-text-muted) transition-colors duration-300 hover:text-white"
             >
               Admin
             </a>
@@ -82,7 +82,7 @@ export default function Navbar() {
               href={siteConfig.contact.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary text-sm !py-2 !px-5"
+              className="btn-primary text-sm py-2! px-5!"
             >
               Cotizar
             </a>
@@ -111,7 +111,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-[var(--color-bg-dark)]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-6"
+            className="fixed inset-0 z-40 bg-(--color-bg-dark)/95 backdrop-blur-xl flex flex-col items-center justify-center gap-6"
           >
             {navLinks.map((link, i) => (
               <motion.a
@@ -122,7 +122,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ delay: i * 0.06, duration: 0.4 }}
-                className="text-2xl font-semibold text-white hover:text-[var(--color-primary)] transition-colors"
+                className="text-2xl font-semibold text-white hover:text-(--color-primary) transition-colors"
               >
                 {link.label}
               </motion.a>
@@ -134,7 +134,7 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
               transition={{ delay: navLinks.length * 0.06, duration: 0.4 }}
-              className="text-2xl font-semibold text-white hover:text-[var(--color-primary)] transition-colors"
+              className="text-2xl font-semibold text-white hover:text-(--color-primary) transition-colors"
             >
               Admin
             </motion.a>

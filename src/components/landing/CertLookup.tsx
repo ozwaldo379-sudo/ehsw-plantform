@@ -90,7 +90,7 @@ export default function CertLookup() {
             onChange={(event) => setFolio(event.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ej: EHSW-2026-FUM-001"
-            className="h-12 flex-1 rounded-lg border border-white/10 bg-navy-deep px-4 text-sm text-white outline-none transition-all duration-300 ease-out placeholder:text-[var(--color-text-muted)] focus:border-cyan"
+            className="h-12 flex-1 rounded-lg border border-white/10 bg-navy-deep px-4 text-sm text-white outline-none transition-all duration-300 ease-out placeholder:text-(--color-text-muted) focus:border-cyan"
           />
 
           <div className="flex gap-2 md:w-auto">
@@ -148,10 +148,10 @@ export default function CertLookup() {
                 key={item.label}
                 className="rounded-xl border border-white/5 bg-navy-card/80 p-4"
               >
-                <p className="text-xs uppercase tracking-wider text-[var(--color-text-muted)]">
+                <p className="text-xs uppercase tracking-wider text-(--color-text-muted)">
                   {item.label}
                 </p>
-                <p className="mt-1 break-words text-sm font-semibold text-white">
+                <p className="mt-1 wrap-break-word text-sm font-semibold text-white">
                   {item.value}
                 </p>
               </div>
@@ -201,11 +201,11 @@ export default function CertLookup() {
                 key={item.label}
                 className="rounded-xl border border-white/5 bg-navy-card/80 p-4"
               >
-                <p className="text-xs uppercase tracking-wider text-[var(--color-text-muted)]">
+                <p className="text-xs uppercase tracking-wider text-(--color-text-muted)">
                   {item.label}
                 </p>
                 <p
-                  className={`mt-1 break-words text-sm font-semibold ${
+                  className={`mt-1 wrap-break-word text-sm font-semibold ${
                     item.label === "Vigencia" ? "text-red-200" : "text-white"
                   }`}
                 >
@@ -247,12 +247,12 @@ export default function CertLookup() {
             <div className="rounded-xl bg-white p-3 shadow-lg">
               <Link href="/certificado/EHSW-2026-FUM-001" className="block">
                 <Image
-                  src="/api/qr/EHSW-2026-FUM-001"
+                  src="/qrcodes/EHSW-2026-FUM-001.png"
                   alt="Código QR de ejemplo para validar un certificado"
                   width={96}
                   height={96}
                   unoptimized
-                  className="block h-auto w-full max-w-[96px]"
+                  className="block h-auto w-full max-w-24"
                 />
               </Link>
             </div>

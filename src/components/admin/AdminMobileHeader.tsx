@@ -68,7 +68,7 @@ export default function AdminMobileHeader() {
           />
           <div>
             <p className="text-sm font-semibold text-white">Panel EHSW²</p>
-            <p className="text-[11px] text-[var(--color-text-muted)]">
+            <p className="text-[11px] text-(--color-text-muted)">
               Gestión certificada
             </p>
           </div>
@@ -117,12 +117,12 @@ export default function AdminMobileHeader() {
               <span>Ver Sitio</span>
             </Link>
 
-            <div className="rounded-2xl border border-cyan/15 bg-[var(--color-navy-card)]/80 p-4">
+            <div className="rounded-2xl border border-cyan/15 bg-(--color-navy-card)/80 p-4">
               <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
                 <ShieldCheck className="h-4.5 w-4.5 text-cyan" />
                 <span>Sesión protegida</span>
               </div>
-              <p className="mb-4 text-xs text-[var(--color-text-muted)]">
+              <p className="mb-4 text-xs text-(--color-text-muted)">
                 Gestiona certificados con acceso validado.
               </p>
               <button

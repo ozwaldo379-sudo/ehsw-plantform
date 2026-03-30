@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail } from "lucide-react";
 import { siteConfig } from "@/config/site";
 
 const footerLinks = [
@@ -34,7 +34,7 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[var(--color-glass-border)] pt-12 lg:pt-16 pb-8">
+    <footer className="border-t border-(--color-glass-border) pt-12 lg:pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-10 mb-14">
           {/* Brand */}
@@ -57,9 +57,7 @@ export default function Footer() {
               <span className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5" /> {siteConfig.contact.email}
               </span>
-              <span className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5" /> México, zona centro
-              </span>
+
             </div>
             <a
               href={siteConfig.contact.whatsapp}
@@ -94,7 +92,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-[var(--color-glass-border)] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="border-t border-(--color-glass-border) pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-silver/70">
             © {new Date().getFullYear()} EHSW². Todos los derechos reservados.
           </p>

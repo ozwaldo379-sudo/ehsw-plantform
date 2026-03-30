@@ -64,7 +64,7 @@ export default function AdminLoginPage() {
           <h1 className="font-heading text-3xl font-bold text-white">
             Panel de Administración EHSW²
           </h1>
-          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+          <p className="mt-3 text-sm leading-relaxed text-(--color-text-muted)">
             Inicie sesión para gestionar certificados, validar emisiones y
             generar nuevos folios operativos.
           </p>
@@ -80,7 +80,7 @@ export default function AdminLoginPage() {
                 Correo electrónico
               </label>
               <div className="relative">
-                <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-text-muted)]" />
+                <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-(--color-text-muted)" />
                 <input
                   id="admin-email"
                   type="email"
@@ -102,7 +102,7 @@ export default function AdminLoginPage() {
                 Contraseña
               </label>
               <div className="relative">
-                <LockKeyhole className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-text-muted)]" />
+                <LockKeyhole className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-(--color-text-muted)" />
                 <input
                   id="admin-password"
                   type="password"

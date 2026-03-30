@@ -1,8 +1,8 @@
 import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
+import PillarsSection from "@/components/landing/PillarsSection";
 import AboutSection from "@/components/landing/AboutSection";
 import ClientCarousel from "@/components/landing/ClientCarousel";
-import ServicesSection from "@/components/landing/ServicesSection";
 import NormatividadSection from "@/components/landing/NormatividadSection";
 import CoberturaSection from "@/components/landing/CoberturaSection";
 import ContactSection from "@/components/landing/ContactSection";
@@ -16,7 +16,7 @@ export default function Home() {
                 <Hero />
                 <AboutSection />
                 <ClientCarousel />
-                <ServicesSection />
+                <PillarsSection />
                 <NormatividadSection />
                 <CoberturaSection />
                 <ContactSection />

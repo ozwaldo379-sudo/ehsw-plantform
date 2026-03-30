@@ -59,7 +59,7 @@ export default function AdminSidebar() {
           />
           <div>
             <p className="text-sm font-semibold text-white">Panel EHSW²</p>
-            <p className="text-xs text-[var(--color-text-muted)]">
+            <p className="text-xs text-(--color-text-muted)">
               Administración certificada
             </p>
           </div>
@@ -77,7 +77,7 @@ export default function AdminSidebar() {
               className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium no-underline transition-all duration-200 ${
                 link.active
                   ? "active text-cyan"
-                  : "text-[var(--color-text-muted)] hover:text-white"
+                  : "text-(--color-text-muted) hover:text-white"
               }`}
             >
               <Icon className="h-4.5 w-4.5" />
@@ -89,19 +89,19 @@ export default function AdminSidebar() {
         <Link
           href="/"
           target="_blank"
-          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-[var(--color-text-muted)] no-underline transition-all duration-200 hover:bg-cyan/8 hover:text-white"
+          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-(--color-text-muted) no-underline transition-all duration-200 hover:bg-cyan/8 hover:text-white"
         >
           <Globe className="h-4.5 w-4.5" />
           <span>Ver Sitio</span>
         </Link>
       </nav>
 
-      <div className="mt-auto rounded-2xl border border-cyan/15 bg-[var(--color-navy-card)]/80 p-4">
+      <div className="mt-auto rounded-2xl border border-cyan/15 bg-(--color-navy-card)/80 p-4">
         <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
           <ShieldCheck className="h-4.5 w-4.5 text-cyan" />
           <span>Sesión protegida</span>
         </div>
-        <p className="mb-4 text-xs leading-relaxed text-[var(--color-text-muted)]">
+        <p className="mb-4 text-xs leading-relaxed text-(--color-text-muted)">
           El panel administrativo requiere una sesión válida para gestionar
           certificados y validaciones.
         </p>

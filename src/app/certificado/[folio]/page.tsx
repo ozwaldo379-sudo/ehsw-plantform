@@ -103,7 +103,7 @@ export default async function PublicCertificatePage({
               <h1 className="mt-4 font-heading text-3xl font-bold text-white">
                 Certificado no encontrado
               </h1>
-              <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+              <p className="mt-3 text-sm leading-relaxed text-(--color-text-muted)">
                 No existe un certificado con el folio{" "}
                 <span className="font-mono text-white">{normalizedFolio}</span> en
                 nuestro sistema.
@@ -111,7 +111,7 @@ export default async function PublicCertificatePage({
             </div>
 
             <div className="px-6 py-8">
-              <p className="text-sm text-[var(--color-text-muted)]">
+              <p className="text-sm text-(--color-text-muted)">
                 Verifique el número e intente nuevamente desde el módulo de
                 validación pública.
               </p>
@@ -205,11 +205,11 @@ export default async function PublicCertificatePage({
                   >
                     <div className="mb-3 flex items-center gap-2 text-cyan">
                       <Icon className="h-4 w-4" />
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-(--color-text-muted)">
                         {detail.label}
                       </p>
                     </div>
-                    <p className="break-words text-sm font-medium text-white">
+                    <p className="wrap-break-word text-sm font-medium text-white">
                       {detail.value}
                     </p>
                   </div>
@@ -225,7 +225,7 @@ export default async function PublicCertificatePage({
                   width={180}
                   height={180}
                   unoptimized
-                  className="h-[180px] w-[180px]"
+                  className="h-45 w-45"
                 />
               </div>
               <p className="mt-4 font-mono text-sm font-semibold text-white">
@@ -235,7 +235,7 @@ export default async function PublicCertificatePage({
           </div>
 
           <div className="border-t border-white/8 bg-white/3 px-6 py-6 text-center">
-            <p className="text-sm leading-relaxed text-[var(--color-text-muted)]">
+            <p className="text-sm leading-relaxed text-(--color-text-muted)">
               Este certificado fue emitido por EHSW² y puede ser verificado en{" "}
               <span className="font-semibold text-white">
                 ehsw-plantform.vercel.app
