@@ -120,7 +120,7 @@ export default function CoberturaSection() {
                      {/* Pulse effect */}
                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                        <span className="relative flex h-3 w-3 sm:h-4 sm:w-4">
-                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan opacity-80 decoration-slice"></span>
+                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan opacity-80 box-decoration-slice"></span>
                          <span className="relative inline-flex rounded-full h-3 w-3 sm:h-4 sm:w-4 bg-cyan/90 border border-navy-deep"></span>
                        </span>
                      </div>

@@ -11,17 +11,17 @@ const columns = [
       {
         title: "Desinfección",
         description: "Contamos con el alta en el padrón de proveedores y cumplimiento de todos los estándares sanitarios.",
-        image: "/images/servicios/desinfeccion.png",
+        image: "/Images/Servicios/desinfeccion.png",
       },
       {
         title: "Control Integral de Plagas",
         description: "Manejo Integrado de Plagas (MIP) para industrias, hospitales, hoteles y comercio. Licencia COFEPRIS.",
-        image: "/images/servicios/control-integral-de-plagas.png",
+        image: "/Images/Servicios/control-integral-de-plagas.png",
       },
       {
         title: "Fumigación Especializada",
         description: "Servicios especializados de aspersión y nebulización para asegurar espacios libres de vectores.",
-        image: "/images/servicios/fumigacion_2.jpeg",
+        image: "/Images/Servicios/fumigacion_2.jpeg",
       },
     ],
   },
@@ -32,22 +32,22 @@ const columns = [
       {
         title: "Protección Civil",
         description: "Elaboración de Programas Internos y formación de brigadas de emergencia.",
-        image: "/images/servicios/proteccion-civil.png",
+        image: "/Images/Servicios/proteccion-civil.png",
       },
       {
         title: "Seguridad Industrial",
         description: "Consultoría STPS, análisis de riesgos (NOM-002, NOM-017) y estrategias corporativas.",
-        image: "/images/servicios/seguridad-industrial.png",
+        image: "/Images/Servicios/seguridad-industrial.png",
       },
       {
         title: "Capacitación DC-3",
         description: "Capacitación especializada con emisión de constancias de habilidades DC-3 STPS.",
-        image: "/images/servicios/capacitacion_ehsw2.jpeg",
+        image: "/Images/Servicios/capacitacion_ehsw2.jpeg",
       },
       {
         title: "Extintores y Equipos",
         description: "Mantenimiento, recarga y pruebas hidrostáticas certificadas. Collarín y holograma oficial.",
-        image: "/images/servicios/extintores.png",
+        image: "/Images/Servicios/extintores.png",
       },
     ],
   },
@@ -58,12 +58,12 @@ const columns = [
       {
         title: "Impacto Ambiental",
         description: "Manifestación de impacto ambiental, estudio de riesgo, ruido perimetral y flora silvestre.",
-        image: "/images/servicios/impacto-ambiental.png",
+        image: "/Images/Servicios/impacto-ambiental.png",
       },
       {
         title: "Gestión Ambiental",
         description: "Asesoría ISO 14001, estudios de medio ambiente y trámites ante SEMARNAT y PROFEPA.",
-        image: "/images/servicios/gestion-ambiental.png",
+        image: "/Images/Servicios/gestion-ambiental.png",
       },
     ],
   },
