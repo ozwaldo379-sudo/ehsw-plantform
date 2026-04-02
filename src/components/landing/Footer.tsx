@@ -34,7 +34,7 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-(--color-glass-border) pt-12 lg:pt-16 pb-8">
+    <footer className="bg-[#28232A] border-t border-white/8 pt-12 lg:pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-10 mb-14">
           {/* Brand */}
@@ -46,18 +46,17 @@ export default function Footer() {
               height={72}
               className="h-11 w-auto mb-4"
             />
-            <p className="text-sm text-silver leading-relaxed mb-5">
+            <p className="text-sm text-[#9EA1A0] leading-relaxed mb-5">
               Especialistas en higiene, seguridad y medio ambiente para
               empresas de todos los giros.
             </p>
-            <div className="flex flex-col gap-2 text-sm text-silver/70">
+            <div className="flex flex-col gap-2 text-sm text-[#9EA1A0]/70">
               <span className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5" /> {siteConfig.contact.phone}
               </span>
               <span className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5" /> {siteConfig.contact.email}
               </span>
-
             </div>
             <a
               href={siteConfig.contact.whatsapp}
@@ -80,7 +79,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-sm text-silver hover:text-white transition-colors"
+                      className="text-sm text-[#9EA1A0] hover:text-white transition-colors"
                     >
                       {link.label}
                     </a>
@@ -92,11 +91,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-(--color-glass-border) pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-silver/70">
+        <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-[#9EA1A0]/70">
             © {new Date().getFullYear()} EHSW². Todos los derechos reservados.
           </p>
-          <p className="text-xs text-silver/70">
+          <p className="text-xs text-[#9EA1A0]/70">
             Certificación digital y servicios técnicos para cumplimiento EHS
           </p>
         </div>

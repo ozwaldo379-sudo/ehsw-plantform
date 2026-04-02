@@ -26,7 +26,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lock body scroll when mobile nav is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => {
@@ -39,8 +38,8 @@ export default function Navbar() {
       <nav
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
           scrolled
-            ? "glass-nav py-3 shadow-lg shadow-black/20"
-            : "py-4 bg-transparent"
+            ? "glass-nav py-3 shadow-sm"
+            : "py-4 bg-[#FEFEFE]/80 backdrop-blur-sm border-b border-[#28232A]/5"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
@@ -51,7 +50,7 @@ export default function Navbar() {
             aria-label="EHSW2 Inicio"
           >
             <Image
-              src="/logo-ehsw2-white-transparent.png"
+              src="/logo-ehsw2-transparent.png"
               alt="EHSW2"
               width={240}
               height={80}
@@ -66,15 +65,15 @@ export default function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                className="relative text-sm font-medium text-(--color-text-muted) hover:text-white transition-colors duration-300 group"
+                className="relative text-sm font-medium text-[#9EA1A0] hover:text-[#28232A] transition-colors duration-300 group"
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-(--color-primary) transition-all duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#0078B0] transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
             <a
               href="/admin/login"
-              className="text-sm font-medium text-(--color-text-muted) transition-colors duration-300 hover:text-white"
+              className="text-sm font-medium text-[#9EA1A0] transition-colors duration-300 hover:text-[#28232A]"
             >
               Admin
             </a>
@@ -90,7 +89,7 @@ export default function Navbar() {
 
           {/* ─── Hamburger ─── */}
           <button
-            className="md:hidden p-2 text-white"
+            className="md:hidden p-2 text-[#28232A]"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
           >
@@ -111,7 +110,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-(--color-bg-dark)/95 backdrop-blur-xl flex flex-col items-center justify-center gap-6"
+            className="fixed inset-0 z-40 bg-[#FEFEFE]/98 backdrop-blur-xl flex flex-col items-center justify-center gap-6"
           >
             {navLinks.map((link, i) => (
               <motion.a
@@ -122,7 +121,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ delay: i * 0.06, duration: 0.4 }}
-                className="text-2xl font-semibold text-white hover:text-(--color-primary) transition-colors"
+                className="text-2xl font-semibold text-[#28232A] hover:text-[#0078B0] transition-colors"
               >
                 {link.label}
               </motion.a>
@@ -134,7 +133,7 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
               transition={{ delay: navLinks.length * 0.06, duration: 0.4 }}
-              className="text-2xl font-semibold text-white hover:text-(--color-primary) transition-colors"
+              className="text-2xl font-semibold text-[#28232A] hover:text-[#0078B0] transition-colors"
             >
               Admin
             </motion.a>

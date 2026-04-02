@@ -4,52 +4,57 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import CertBadge from "@/components/landing/CertBadge";
 
-const topServices = [
-  {
-    title: "Desinfección",
-    description:
-      "Contamos con el alta en el padrón de proveedores. Registro 871.",
-    image: "/Images/Servicios/desinfeccion.png",
-    alt: "Servicio de desinfección industrial realizado por técnico especializado",
-  },
-  {
-    title: "Impacto Ambiental",
-    description:
-      "Manifestación de impacto ambiental, estudio de riesgo, ruido perimetral y flora silvestre.",
-    image: "/Images/Servicios/impacto-ambiental.png",
-    alt: "Especialista realizando evaluación de impacto ambiental en campo",
-  },
+/*
+ * Orden estricto (definido por el negocio):
+ *  1. Protección civil
+ *  2. Control de plagas
+ *  3. Desinfección
+ *  4. Recarga de extintores
+ *  5. Seguridad industrial
+ *  6. Estudios de medio ambiente
+ *
+ * "Impacto ambiental" fue ELIMINADO.
+ */
+
+const services = [
   {
     title: "Protección Civil",
     description:
       "Elaboración de Programas Internos y formación de brigadas de emergencia.",
     image: "/Images/Servicios/proteccion-civil.png",
     alt: "Brigada de protección civil en capacitación operativa",
+    badge: {
+      label: "PC",
+      tooltip:
+        "Programa Interno de Protección Civil — Formación de brigadas y simulacros",
+    },
   },
-];
-
-const largeService = {
-  title: "Control Integral de Plagas",
-  description:
-    "Manejo Integrado de Plagas (MIP) para industrias, hospitales, hoteles y comercio. Licencia COFEPRIS.",
-  image: "/Images/Servicios/control-integral-de-plagas.png",
-  alt: "Panel informativo de control integral de plagas con técnico EHSW2",
-  badge: {
-    label: "COFEPRIS",
-    tooltip:
-      "Comisión Federal para la Protección contra Riesgos Sanitarios — Registro de proveedor autorizado",
-  },
-  techniques: [
-    "Nebulizaciones en frío y termonebulización",
-    "Aspersión de alta y baja presión",
-    "Micro-inyección y aplicación de gel",
-    "Control de roedores (cebado táctico)",
-  ],
-};
-
-const supportServices = [
   {
-    title: "Extintores",
+    title: "Control Integral de Plagas",
+    description:
+      "Manejo Integrado de Plagas (MIP) para industrias, hospitales, hoteles y comercio. Licencia COFEPRIS.",
+    image: "/Images/Servicios/control-integral-de-plagas.png",
+    alt: "Panel informativo de control integral de plagas con técnico EHSW2",
+    badge: {
+      label: "COFEPRIS",
+      tooltip:
+        "Comisión Federal para la Protección contra Riesgos Sanitarios — Registro de proveedor autorizado",
+    },
+  },
+  {
+    title: "Desinfección",
+    description:
+      "Contamos con el alta en el padrón de proveedores. Registro 871.",
+    image: "/Images/Servicios/desinfeccion.png",
+    alt: "Servicio de desinfección industrial realizado por técnico especializado",
+    badge: {
+      label: "COFEPRIS",
+      tooltip:
+        "Comisión Federal para la Protección contra Riesgos Sanitarios — Registro de proveedor autorizado",
+    },
+  },
+  {
+    title: "Recarga de Extintores",
     description:
       "Mantenimiento, recarga y pruebas hidrostáticas certificadas. Collarín y holograma oficial.",
     image: "/Images/Servicios/extintores.png",
@@ -73,7 +78,7 @@ const supportServices = [
     },
   },
   {
-    title: "Gestión Ambiental",
+    title: "Estudios de Medio Ambiente",
     description:
       "Estudios de Impacto Ambiental, Ruido Perimetral y trámites ante dependencias.",
     image: "/Images/Servicios/gestion-ambiental.png",
@@ -82,18 +87,6 @@ const supportServices = [
       label: "ISO 14001",
       tooltip:
         "Sistema de Gestión Ambiental — Estándar internacional para cumplimiento ambiental",
-    },
-  },
-  {
-    title: "Protección Civil",
-    description:
-      "Elaboración de Programas Internos y formación de brigadas de emergencia.",
-    image: "/Images/Servicios/proteccion-civil.png",
-    alt: "Equipo de protección civil coordinando respuesta de emergencia",
-    badge: {
-      label: "PC",
-      tooltip:
-        "Programa Interno de Protección Civil — Formación de brigadas y simulacros",
     },
   },
 ];
@@ -106,34 +99,6 @@ const fadeUp = {
     transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
   },
 };
-
-function ServiceCard({
-  title,
-  description,
-  image,
-  alt,
-}: (typeof topServices)[number]) {
-  return (
-    <motion.article
-      variants={fadeUp}
-      whileHover={{ y: -4 }}
-      className="group overflow-hidden rounded-xl border border-transparent bg-navy-card transition-all duration-300 ease-out hover:border-cyan/40 hover:shadow-[0_20px_40px_-24px_rgba(0,188,212,0.28)]"
-    >
-      <div className="relative h-[200px] overflow-hidden">
-        <Image
-          src={image}
-          alt={alt}
-          fill
-          className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
-        />
-      </div>
-      <div className="p-4">
-        <h3 className="mb-2 text-xl font-bold text-white">{title}</h3>
-        <p className="text-sm leading-relaxed text-silver">{description}</p>
-      </div>
-    </motion.article>
-  );
-}
 
 export default function ServicesSection() {
   return (
@@ -162,85 +127,38 @@ export default function ServicesSection() {
           </p>
         </motion.div>
 
-        <div className="mb-5 grid gap-5 lg:grid-cols-3">
-          {topServices.map((service) => (
-            <ServiceCard key={service.title} {...service} />
-          ))}
-        </div>
-
-        <div className="grid gap-5 lg:grid-cols-3 lg:auto-rows-[260px]">
-          <motion.article
-            variants={fadeUp}
-            whileHover={{ y: -4 }}
-            className="group flex h-full flex-col overflow-hidden rounded-xl border border-transparent bg-navy-card transition-all duration-300 ease-out hover:border-cyan/40 hover:shadow-[0_24px_44px_-24px_rgba(0,188,212,0.3)] lg:row-span-2"
-          >
-            <div className="relative h-[240px] overflow-hidden lg:flex-1">
-              <Image
-                src={largeService.image}
-                alt={largeService.alt}
-                fill
-                className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
-              />
-              <div className="absolute right-3 top-3">
-                <CertBadge
-                  label={largeService.badge.label}
-                  tooltip={largeService.badge.tooltip}
+        {/* Grid simétrico: 1 col mobile → 2 cols tablet → 3 cols desktop */}
+        <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((service) => (
+            <motion.article
+              key={service.title}
+              variants={fadeUp}
+              whileHover={{ y: -4 }}
+              className="group flex flex-col overflow-hidden rounded-xl border border-transparent bg-navy-card transition-all duration-300 ease-out hover:border-cyan/40 hover:shadow-[0_20px_40px_-24px_rgba(0,188,212,0.28)]"
+            >
+              <div className="relative h-[200px] overflow-hidden">
+                <Image
+                  src={service.image}
+                  alt={service.alt}
+                  fill
+                  className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
                 />
-              </div>
-            </div>
-
-            <div className="p-4">
-              <h3 className="mb-3 text-2xl font-bold text-white">
-                {largeService.title}
-              </h3>
-              <p className="mb-4 text-sm leading-relaxed text-silver">
-                {largeService.description}
-              </p>
-              <ul className="space-y-2 text-sm leading-relaxed text-silver">
-                {largeService.techniques.map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-cyan" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.article>
-
-          <div className="grid gap-5 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-2 lg:grid-rows-2">
-            {supportServices.map((service) => (
-              <motion.article
-                key={service.title + service.badge.label}
-                variants={fadeUp}
-                whileHover={{ y: -4 }}
-                className="group flex h-full flex-col overflow-hidden rounded-xl border border-transparent bg-navy-card transition-all duration-300 ease-out hover:border-cyan/40 hover:shadow-[0_20px_40px_-24px_rgba(0,188,212,0.28)]"
-              >
-                <div className="relative h-[200px] overflow-hidden">
-                  <Image
-                    src={service.image}
-                    alt={service.alt}
-                    fill
-                    className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                <div className="absolute right-3 top-3">
+                  <CertBadge
+                    label={service.badge.label}
+                    tooltip={service.badge.tooltip}
                   />
-                  <div className="absolute right-3 top-3">
-                    <CertBadge
-                      label={service.badge.label}
-                      tooltip={service.badge.tooltip}
-                    />
-                  </div>
                 </div>
+              </div>
 
-                <div className="p-4">
-                  <h4 className="mb-2 text-xl font-bold text-white">
-                    {service.title}
-                  </h4>
-                  <p className="text-sm leading-relaxed text-silver">
-                    {service.description}
-                  </p>
-                </div>
-              </motion.article>
-            ))}
-          </div>
+              <div className="p-4 flex-1 flex flex-col">
+                <h3 className="mb-2 text-xl font-bold text-white">{service.title}</h3>
+                <p className="text-sm leading-relaxed text-silver flex-1">
+                  {service.description}
+                </p>
+              </div>
+            </motion.article>
+          ))}
         </div>
       </motion.div>
     </section>

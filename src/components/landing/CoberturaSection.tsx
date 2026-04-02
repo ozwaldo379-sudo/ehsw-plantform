@@ -48,16 +48,18 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
-const cities = [
-  "CDMX", "Toluca", "Puebla", "Querétaro", "Cuernavaca",
-  "Pachuca", "Tlaxcala", "Estado de México", "Mérida", "Veracruz", "Oaxaca", "Guanajuato",
+const zones = [
+  { name: "ZONA CENTRO", cities: "Puebla, CDMX, Tlaxcala, Estado de México, Pachuca, Acapulco" },
+  { name: "ZONA BAJÍO", cities: "Querétaro, Guanajuato, Aguascalientes, San Luis Potosí" },
+  { name: "ZONA SURESTE", cities: "Yucatán, Quintana Roo, Veracruz, Tabasco" },
+  { name: "ZONA OCCIDENTE", cities: "Guadalajara, Jalisco, Michoacán" },
 ];
 
 export default function CoberturaSection() {
   const [hoveredState, setHoveredState] = useState<string | null>(null);
 
   return (
-    <section id="cobertura" className="py-12 lg:py-20 relative">
+    <section id="cobertura" className="py-12 lg:py-20 relative bg-[#F5F5F5]">
       <div className="section-divider mb-16" />
       <div className="max-w-5xl mx-auto px-6">
         <motion.div
@@ -78,7 +80,7 @@ export default function CoberturaSection() {
             </motion.h2>
             <motion.p
               variants={fadeUp}
-              className="text-silver max-w-xl mx-auto leading-relaxed"
+              className="text-[#9EA1A0] max-w-xl mx-auto leading-relaxed"
             >
               Operamos en las principales ciudades de México con atención
               personalizada y tiempos de respuesta rápidos.
@@ -87,17 +89,20 @@ export default function CoberturaSection() {
 
           <motion.div variants={fadeUp} className="glass-card-glow p-8 md:p-10">
             <div className="flex items-center gap-3 mb-8">
-              <MapPin className="w-6 h-6 text-cyan" />
-              <h3 className="text-xl font-bold text-white">Áreas de Servicio</h3>
+              <MapPin className="w-6 h-6 text-[#0078B0]" />
+              <h3 className="text-xl font-bold text-[#28232A]">Zonas</h3>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {cities.map((city) => (
+            <div className="grid gap-6 sm:grid-cols-2">
+              {zones.map((zone) => (
                 <div
-                  key={city}
-                  className="flex items-center gap-2 rounded-xl border border-white/10 bg-navy-card p-3"
+                  key={zone.name}
+                  className="flex flex-col gap-2 rounded-xl border border-[#28232A]/10 bg-white p-4 transition-all duration-300 hover:border-[#0078B0]/30 hover:shadow-[0_4px_20px_rgba(0,120,176,0.06)]"
                 >
-                  <CheckCircle className="w-4 h-4 text-valid shrink-0" />
-                  <span className="text-sm font-medium text-white">{city}</span>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5 text-[#A8B02D] shrink-0" />
+                    <span className="text-sm font-bold text-[#0078B0] tracking-wider">{zone.name}</span>
+                  </div>
+                  <span className="text-sm font-medium text-[#28232A] pl-7 leading-relaxed">{zone.cities}</span>
                 </div>
               ))}
             </div>
@@ -105,14 +110,14 @@ export default function CoberturaSection() {
 
           {/* Interactive SVG Map */}
           <motion.div variants={fadeUp} className="relative mt-12 w-full">
-            <div className="relative w-full rounded-3xl bg-navy-card/30 p-4 sm:p-8 border border-white/5 shadow-2xl overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,188,212,0.06)_0%,transparent_70%)] pointer-events-none" />
+            <div className="relative w-full rounded-3xl bg-[rgba(0,120,176,0.04)] p-4 sm:p-8 border border-[#0078B0]/10 shadow-[0_4px_24px_rgba(0,120,176,0.08)] overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,120,176,0.06)_0%,transparent_70%)] pointer-events-none" />
 
               {/* Tooltip */}
               {hoveredState && (
                 <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-                  <div className="bg-navy-deep text-white text-sm font-semibold px-4 py-2 rounded-xl border border-cyan/40 shadow-[0_4px_24px_rgba(0,188,212,0.35)] whitespace-nowrap backdrop-blur-sm">
-                    <span className="text-cyan mr-1">●</span>
+                  <div className="bg-white text-[#28232A] text-sm font-semibold px-4 py-2 rounded-xl border border-[#0078B0]/30 shadow-[0_4px_24px_rgba(0,120,176,0.15)] whitespace-nowrap backdrop-blur-sm">
+                    <span className="text-[#0078B0] mr-1">●</span>
                     {states.find(s => s.id === hoveredState)?.name}
                   </div>
                 </div>
@@ -139,7 +144,8 @@ export default function CoberturaSection() {
                 </defs>
 
                 {states.map((state) => {
-                  const isCovered = state.covered;
+                  const activeStates = new Set(["pue", "cmx", "tla", "mex", "hid", "gro", "que", "gua", "agu", "slp", "yuc", "roo", "ver", "tab", "jal", "mic"]);
+                  const isCovered = activeStates.has(state.id);
                   const isHovered = hoveredState === state.id;
 
                   return (
@@ -149,17 +155,17 @@ export default function CoberturaSection() {
                       d={state.path}
                       fill={
                         isHovered
-                          ? "#00d4ef"
+                          ? "#0A6DA8"
                           : isCovered
-                          ? "#0e3a4a"
-                          : "#0d1f35"
+                          ? "#0078B0"
+                          : "rgba(158,161,160,0.15)"
                       }
                       stroke={
                         isHovered
-                          ? "rgba(0,212,239,0.9)"
+                          ? "rgba(10,109,168,0.8)"
                           : isCovered
-                          ? "rgba(0,188,212,0.4)"
-                          : "rgba(255,255,255,0.08)"
+                          ? "rgba(0,120,176,0.5)"
+                          : "rgba(40,35,42,0.08)"
                       }
                       strokeWidth={isHovered ? "0.8" : isCovered ? "0.6" : "0.4"}
                       filter={isHovered ? "url(#glow-hover)" : undefined}
@@ -176,14 +182,10 @@ export default function CoberturaSection() {
               </svg>
 
               {/* Legend */}
-              <div className="flex items-center justify-center gap-6 mt-4">
+              <div className="flex items-center justify-center gap-6 mt-6">
                 <div className="flex items-center gap-2">
-                  <span className="inline-block w-3 h-3 rounded-sm bg-[#0e3a4a] border border-cyan/40" />
-                  <span className="text-xs text-silver">Con cobertura</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="inline-block w-3 h-3 rounded-sm bg-[#0d1f35] border border-white/10" />
-                  <span className="text-xs text-silver">Sin cobertura</span>
+                  <span className="inline-block w-3 h-3 rounded-sm bg-[#0078B0] border border-[#0A6DA8]/50" />
+                  <span className="text-xs font-semibold text-[#28232A]">Zona Activa</span>
                 </div>
               </div>
             </div>

@@ -8,8 +8,7 @@ import { siteConfig } from "@/config/site";
 const contactInfo = [
   { icon: Phone, label: "Teléfono", value: siteConfig.contact.phone },
   { icon: Mail, label: "Email", value: siteConfig.contact.email },
-  { icon: MapPin, label: "Ubicación", value: "México, zona centro" },
-  { icon: Clock, label: "Horario", value: "Lun–Vie 8:00–18:00" },
+  { icon: Clock, label: "Horario", value: "09:00 a 17:00 hrs." },
 ];
 
 const fadeUp = {
@@ -29,14 +28,13 @@ export default function ContactSection() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("sending");
-    // Simulate API call
     await new Promise((r) => setTimeout(r, 1500));
     setStatus("sent");
     setTimeout(() => setStatus("idle"), 3000);
   };
 
   return (
-    <section id="contacto" className="py-12 lg:py-20 relative">
+    <section id="contacto" className="py-12 lg:py-20 relative bg-[#F5F5F5]">
       <div className="section-divider mb-16" />
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
@@ -55,14 +53,14 @@ export default function ContactSection() {
             </motion.p>
             <motion.h2
               variants={fadeUp}
-              className="text-3xl md:text-4xl font-extrabold leading-tight mb-4"
+              className="text-3xl md:text-4xl font-extrabold leading-tight mb-4 text-[#28232A]"
             >
               ¿Listo para <span className="text-gradient">proteger</span> su
               empresa?
             </motion.h2>
             <motion.p
               variants={fadeUp}
-              className="text-silver max-w-xl mx-auto"
+              className="text-[#9EA1A0] max-w-xl mx-auto"
             >
               Contáctenos para una cotización sin compromiso. Respondemos en
               menos de 24 horas.
@@ -91,20 +89,20 @@ export default function ContactSection() {
                   className="glass-card-glow p-5 flex items-center gap-4"
                 >
                   <div className="w-10 h-10 rounded-lg gradient-main flex items-center justify-center flex-shrink-0">
-                    <c.icon className="w-4 h-4 text-[var(--color-bg-dark)]" />
+                    <c.icon className="w-4 h-4 text-white" />
                   </div>
                   <div>
-                    <div className="mb-0.5 text-xs text-silver/70">
+                    <div className="mb-0.5 text-xs text-[#9EA1A0]">
                       {c.label}
                     </div>
-                    <div className="text-sm font-semibold text-white">
+                    <div className="text-sm font-semibold text-[#28232A]">
                       {c.value}
                     </div>
                   </div>
                 </div>
               ))}
               <div className="glass-card p-5">
-                <p className="text-sm text-silver leading-relaxed">
+                <p className="text-sm text-[#9EA1A0] leading-relaxed">
                   También podemos apoyar con seguimiento de folios, validación
                   de constancias y programación de visitas técnicas.
                 </p>
@@ -121,7 +119,7 @@ export default function ContactSection() {
                   <div>
                     <label
                       htmlFor="name"
-                      className="mb-2 block text-xs font-medium text-silver/70"
+                      className="mb-2 block text-xs font-medium text-[#9EA1A0]"
                     >
                       Nombre
                     </label>
@@ -136,7 +134,7 @@ export default function ContactSection() {
                   <div>
                     <label
                       htmlFor="company"
-                      className="mb-2 block text-xs font-medium text-silver/70"
+                      className="mb-2 block text-xs font-medium text-[#9EA1A0]"
                     >
                       Empresa
                     </label>
@@ -152,7 +150,7 @@ export default function ContactSection() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="mb-2 block text-xs font-medium text-silver/70"
+                      className="mb-2 block text-xs font-medium text-[#9EA1A0]"
                     >
                       Email
                     </label>
@@ -167,7 +165,7 @@ export default function ContactSection() {
                   <div>
                     <label
                       htmlFor="phone"
-                      className="mb-2 block text-xs font-medium text-silver/70"
+                      className="mb-2 block text-xs font-medium text-[#9EA1A0]"
                     >
                       Teléfono
                     </label>
@@ -182,7 +180,7 @@ export default function ContactSection() {
                 <div>
                   <label
                     htmlFor="service"
-                    className="mb-2 block text-xs font-medium text-silver/70"
+                    className="mb-2 block text-xs font-medium text-[#9EA1A0]"
                   >
                     Servicio de Interés
                   </label>
@@ -201,7 +199,7 @@ export default function ContactSection() {
                 <div>
                   <label
                     htmlFor="message"
-                    className="mb-2 block text-xs font-medium text-silver/70"
+                    className="mb-2 block text-xs font-medium text-[#9EA1A0]"
                   >
                     Mensaje
                   </label>

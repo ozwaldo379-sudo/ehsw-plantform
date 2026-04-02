@@ -63,26 +63,26 @@ export default function CertLookup() {
     <div className="relative">
       <div className="mb-6 flex flex-col gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan/20 bg-cyan/10">
-            <ShieldCheck className="h-6 w-6 text-cyan" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#0078B0]/20 bg-[#0078B0]/8">
+            <ShieldCheck className="h-6 w-6 text-[#0078B0]" />
           </div>
           <div>
-            <h2 className="font-heading text-2xl font-bold text-white">
+            <h2 className="font-heading text-2xl font-bold text-[#28232A]">
               Validación de Certificados
             </h2>
-            <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-valid/10 px-3 py-1 text-xs font-semibold text-valid">
-              <span className="h-2 w-2 rounded-full bg-valid animate-pulse" />
+            <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-[#10b981]/10 px-3 py-1 text-xs font-semibold text-[#10b981]">
+              <span className="h-2 w-2 rounded-full bg-[#10b981] animate-pulse" />
               Sistema Online
             </div>
           </div>
         </div>
-        <p className="text-sm leading-relaxed text-silver">
+        <p className="text-sm leading-relaxed text-[#9EA1A0]">
           Garantice la autenticidad de sus servicios. Ingrese el folio o escanee
           el código QR.
         </p>
       </div>
 
-      <div className="rounded-xl border border-white/10 bg-navy-deep/80 p-2 transition-all duration-300 ease-out focus-within:border-cyan focus-within:ring-2 focus-within:ring-cyan/30">
+      <div className="rounded-xl border border-[#28232A]/10 bg-[#F5F5F5] p-2 transition-all duration-300 ease-out focus-within:border-[#0078B0] focus-within:ring-2 focus-within:ring-[#0078B0]/20">
         <div className="flex flex-col gap-2 md:flex-row">
           <input
             type="text"
@@ -90,7 +90,7 @@ export default function CertLookup() {
             onChange={(event) => setFolio(event.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ej: EHSW-2026-FUM-001"
-            className="h-12 flex-1 rounded-lg border border-white/10 bg-navy-deep px-4 text-sm text-white outline-none transition-all duration-300 ease-out placeholder:text-(--color-text-muted) focus:border-cyan"
+            className="h-12 flex-1 rounded-lg border border-[#28232A]/12 bg-white px-4 text-sm text-[#28232A] outline-none transition-all duration-300 ease-out placeholder:text-[#9EA1A0] focus:border-[#0078B0]"
           />
 
           <div className="flex gap-2 md:w-auto">
@@ -98,7 +98,7 @@ export default function CertLookup() {
               type="button"
               onClick={handleSearch}
               disabled={loading}
-              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-cyan px-4 text-sm font-semibold text-white transition-all duration-300 ease-out hover:bg-cyan-dark md:flex-none"
+              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-[#0078B0] px-4 text-sm font-semibold text-white transition-all duration-300 ease-out hover:bg-[#0A6DA8] md:flex-none"
             >
               <Search className="h-4 w-4" />
               <span>{loading ? "Buscando..." : "Buscar"}</span>
@@ -106,7 +106,7 @@ export default function CertLookup() {
             <Link
               href="/certificado/EHSW-2026-FUM-001"
               aria-label="Abrir ejemplo público"
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-white/20 px-4 text-sm font-semibold text-white transition-all duration-300 ease-out hover:border-white hover:bg-white/5"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border-2 border-[#0078B0]/50 px-4 text-sm font-semibold text-[#0078B0] transition-all duration-300 ease-out hover:border-[#0078B0] hover:bg-[#0078B0]/6"
             >
               <QrCode className="h-5 w-5" />
               <span>QR</span>
@@ -118,12 +118,12 @@ export default function CertLookup() {
       {isValid && result ? (
         <div className="cert-valid mt-6 rounded-xl p-6 animate-fade-in-up">
           <div className="mb-5 flex items-start gap-4">
-            <CircleCheckBig className="h-8 w-8 shrink-0 text-valid" />
+            <CircleCheckBig className="h-8 w-8 shrink-0 text-[#10b981]" />
             <div>
-              <p className="text-lg font-semibold text-white">
+              <p className="text-lg font-semibold text-[#065f46]">
                 ✅ CERTIFICADO VÁLIDO
               </p>
-              <p className="text-sm text-silver">
+              <p className="text-sm text-[#047857]">
                 La información coincide con nuestros registros operativos.
               </p>
             </div>
@@ -146,12 +146,12 @@ export default function CertLookup() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="rounded-xl border border-white/5 bg-navy-card/80 p-4"
+                className="rounded-xl border border-[#28232A]/8 bg-white p-4"
               >
-                <p className="text-xs uppercase tracking-wider text-(--color-text-muted)">
+                <p className="text-xs uppercase tracking-wider text-[#9EA1A0]">
                   {item.label}
                 </p>
-                <p className="mt-1 wrap-break-word text-sm font-semibold text-white">
+                <p className="mt-1 wrap-break-word text-sm font-semibold text-[#28232A]">
                   {item.value}
                 </p>
               </div>
@@ -169,14 +169,14 @@ export default function CertLookup() {
       ) : null}
 
       {isExpired && result ? (
-        <div className="mt-6 rounded-xl border-l-4 border-red-500 bg-[linear-gradient(90deg,rgba(239,68,68,0.08),rgba(26,47,69,0.95))] p-6 animate-fade-in-up">
+        <div className="mt-6 rounded-xl border-l-4 border-red-500 bg-[linear-gradient(90deg,rgba(239,68,68,0.07),rgba(254,254,254,0.98))] p-6 animate-fade-in-up">
           <div className="mb-5 flex items-start gap-4">
-            <AlertTriangle className="h-8 w-8 shrink-0 text-red-300" />
+            <AlertTriangle className="h-8 w-8 shrink-0 text-red-500" />
             <div>
-              <p className="text-lg font-semibold text-white">
+              <p className="text-lg font-semibold text-red-700">
                 ⚠️ CERTIFICADO VENCIDO
               </p>
-              <p className="text-sm text-silver">
+              <p className="text-sm text-red-600/80">
                 El certificado existe, pero su vigencia ya expiró.
               </p>
             </div>
@@ -199,14 +199,14 @@ export default function CertLookup() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="rounded-xl border border-white/5 bg-navy-card/80 p-4"
+                className="rounded-xl border border-[#28232A]/8 bg-white p-4"
               >
-                <p className="text-xs uppercase tracking-wider text-(--color-text-muted)">
+                <p className="text-xs uppercase tracking-wider text-[#9EA1A0]">
                   {item.label}
                 </p>
                 <p
                   className={`mt-1 wrap-break-word text-sm font-semibold ${
-                    item.label === "Vigencia" ? "text-red-200" : "text-white"
+                    item.label === "Vigencia" ? "text-red-600" : "text-[#28232A]"
                   }`}
                 >
                   {item.value}
@@ -228,12 +228,12 @@ export default function CertLookup() {
       {error ? (
         <div className="cert-invalid mt-6 rounded-xl p-6 animate-fade-in-up">
           <div className="flex items-start gap-4">
-            <CircleAlert className="h-8 w-8 shrink-0 text-silver" />
+            <CircleAlert className="h-8 w-8 shrink-0 text-[#9EA1A0]" />
             <div>
-              <p className="text-lg font-semibold text-white">
+              <p className="text-lg font-semibold text-[#28232A]">
                 ❌ CERTIFICADO NO ENCONTRADO
               </p>
-              <p className="text-sm text-silver">
+              <p className="text-sm text-[#9EA1A0]">
                 {error}
               </p>
             </div>
@@ -241,10 +241,10 @@ export default function CertLookup() {
         </div>
       ) : null}
 
-      <div className="mt-6 rounded-xl border border-white/10 bg-navy-deep/65 p-4">
+      <div className="mt-6 rounded-xl border border-[#28232A]/10 bg-[#F5F5F5] p-4">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <div className="rounded-xl bg-white p-3 shadow-lg">
+            <div className="rounded-xl bg-white p-3 shadow-sm border border-[#28232A]/8">
               <Link href="/certificado/EHSW-2026-FUM-001" className="block">
                 <Image
                   src="/qrcodes/EHSW-2026-FUM-001.png"
@@ -257,18 +257,18 @@ export default function CertLookup() {
               </Link>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-[0.18em] text-cyan">
+              <p className="text-xs uppercase tracking-[0.18em] text-[#0078B0]">
                 Folio de ejemplo
               </p>
-              <p className="mt-2 text-sm font-semibold text-white">
+              <p className="mt-2 text-sm font-semibold text-[#28232A]">
                 EHSW-2026-FUM-001
               </p>
-              <p className="mt-1 text-xs text-silver">Escanee para validar</p>
+              <p className="mt-1 text-xs text-[#9EA1A0]">Escanee para validar</p>
             </div>
           </div>
 
-          <div className="inline-flex items-center gap-2 text-xs text-silver/70">
-            <LockKeyhole className="h-3.5 w-3.5 text-cyan" />
+          <div className="inline-flex items-center gap-2 text-xs text-[#9EA1A0]">
+            <LockKeyhole className="h-3.5 w-3.5 text-[#0078B0]" />
             Datos encriptados y verificados en tiempo real.
           </div>
         </div>
